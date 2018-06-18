@@ -1,11 +1,13 @@
 function ProjectTable () {}
 
 ProjectTable.USER = 'user';
+ProjectTable.USER_SIDEBAR = $('#my-project-table-body-side');
 ProjectTable.SHARED = 'shared';
 ProjectTable.WORLD_SHARED = 'world_shared';
 ProjectTable.SEARCH = 'search';
 
 ProjectTable.my_table_body = $('#my-project-table-body');
+ProjectTable.my_table_body_side = $('#my-project-table-body-side');
 ProjectTable.shared_table_body = $('#shared-project-table-body');
 ProjectTable.world_table_body = $('#world-project-table-body');
 ProjectTable.search_table_body = $('#search-project-table-body');
@@ -66,6 +68,7 @@ ProjectTable.initialize = function () {
 
 ProjectTable.loadTables = function (projects) {
     ProjectTable.clearUserTable();
+    ProjectTable.clearUserSideTable();
     ProjectTable.clearSharedTable();
     ProjectTable.clearWorldShareTable();
     ProjectTable.clearSearchTable();
@@ -77,14 +80,21 @@ ProjectTable.loadTables = function (projects) {
             ProjectTable.addToWorldSharedTable(projects[i]);
         } else {
             ProjectTable.addToUserTable(projects[i]);
+            ProjectTable.addToUserSideTable(projects[i]);
+
         }
 
         ProjectTable.addToSearchTable(projects[i]);
+
     }
 };
 
 ProjectTable.clearUserTable = function () {
     ProjectTable.my_table_body.empty();
+};
+
+ProjectTable.clearUserSideTable = function () {
+    ProjectTable.my_table_body_side.empty();
 };
 
 ProjectTable.clearSharedTable = function () {
@@ -165,11 +175,55 @@ ProjectTable.buildTableRow = function (table, project) {
     return project_row;
 };
 
+ProjectTable.buildSideTableRow = function (table, project) {
+    var project_row = new ProjectTableRow();
+    var tr = $('<tr></tr>');
+    project_row.setTableRow(tr);
+
+    td = $('<td></td>');
+    var title = $('<a></a>');
+    title.attr('href', project.getURL());
+    title.attr('target', '_blank');
+    title.append(project.getTitle());
+    td.addClass(ProjectTable.title_column_classes);
+    td.append(title);
+    tr.append(td);
+    project_row.setTitleColumn(title);
+
+    td = $('<td></td>');
+    var owner = $('<span></span>');
+    owner.append(project.getOwners()[0]);
+    td.addClass(ProjectTable.owner_column_classes);
+    td.append(owner);
+    tr.append(td);
+    project_row.setOwnerColumn(owner);
+
+    td = $('<td></td>');
+    var date_created = $('<span></span>');
+    date_created.append(project.getCreatedDateString());
+    td.addClass(ProjectTable.date_column_classes);
+    td.append(date_created);
+    tr.append(td);
+    project_row.setDateCreatedColumn(date_created);
+
+    project.addTableRow(table, project_row);
+
+    return project_row;
+};
+
+ProjectTable.addToUserSideTable = function (project) {
+  var row = project.getTableRow(ProjectTable.USER_SIDEBAR);
+  if (!row)
+      row = ProjectTable.buildSideTableRow(ProjectTable.USER, project);
+    ProjectTable.my_table_body_side.append(row.getTableRow());
+}
+
 ProjectTable.addToUserTable = function (project) {
     var row = project.getTableRow(ProjectTable.USER);
     if (!row)
         row = ProjectTable.buildTableRow(ProjectTable.USER, project);
     ProjectTable.my_table_body.append(row.getTableRow());
+
 };
 
 ProjectTable.addToSharedTable = function (project) {
