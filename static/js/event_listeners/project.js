@@ -100,14 +100,14 @@ ProjectEventListener.upvoteCollab = function (user, message) {
     ProjectEventListener.upvote(Project.getProject(), transaction.getActionData().project_score, false);
 };
 
-ProjectEventListener.upvote = function (project, project_score, notifyServer) {
+ProjectEventListener.upvote = function (project, project_score, call_back, notifyServer) {
     if (notifyServer) {
         comms.post({
-            url: ARTIFACT_URLS.project + Project.getRequestId(),
+            url: ARTIFACT_URLS.project + project.getRequestId(),
             data: {up_vote: true},
             success: function (data) {
                 project.setProjectScore(data.project_score);
-                // Update UI here
+                call_back();
             }
         })
     } else {
@@ -137,14 +137,14 @@ ProjectEventListener.downvoteCollab = function (user, message) {
     ProjectEventListener.downvote(Project.getProject(), transaction.getActionData().project_score, false);
 };
 
-ProjectEventListener.downvote = function (project, project_score, notifyServer) {
+ProjectEventListener.downvote = function (project, project_score, call_back, notifyServer) {
     if (notifyServer) {
         comms.post({
-            url: ARTIFACT_URLS.project + Project.getRequestId(),
+            url: ARTIFACT_URLS.project + project.getRequestId(),
             data: {down_vote: true},
             success: function (data) {
                 project.setProjectScore(data.project_score);
-                // Update UI here
+                call_back();
             }
         })
     } else {

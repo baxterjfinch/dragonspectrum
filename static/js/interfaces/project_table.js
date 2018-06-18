@@ -182,7 +182,18 @@ ProjectTable.buildSideTableRow = function (table, project) {
     var tr = $('<tr></tr>');
     project_row.setTableRow(tr);
 
-    var td = $('<td><i class="fas fa-chevron-circle-up" onclick="ProjectEventListener.upvoteMouseClick()"></i><br><i class="fas fa-chevron-circle-down" onclick="ProjectEventListener.downvoteMouseClick()></i></td>');
+    var td = $('<td></td>');
+
+    var upvote_icon = $('<i></i>');
+    upvote_icon.addClass('fas fa-chevron-circle-up');
+    td.append(upvote_icon);
+
+    td.append($('<br>'));
+
+    var downvote_icon = $('<i></i>');
+    downvote_icon.addClass('fas fa-chevron-circle-down');
+    td.append(downvote_icon);
+
     var vote = $('<a></a>');
     vote.attr('type', 'checkbox');
     td.addClass(ProjectTable.voter_column_classes);
@@ -193,7 +204,7 @@ ProjectTable.buildSideTableRow = function (table, project) {
     var score = $('<a></a>');
     score.attr('href', project.getURL()); //This needs to be changed
     score.attr('target', '_blank');       //This needs to be changed
-    score.append(project.setProjectScore());
+    score.append(project.getProjectScore());
     td.addClass(ProjectTable.score_column_classes);
     td.append(score);
     tr.append(td);
@@ -226,6 +237,19 @@ ProjectTable.buildSideTableRow = function (table, project) {
     project_row.setDateCreatedColumn(date_created);
 
     project.addTableRow(table, project_row);
+
+    upvote_icon.click(function (){
+        ProjectEventListener.upvote(project, null, function () {
+            score.empty();
+            score.append(project.getProjectScore());
+        }, true);
+    });
+    downvote_icon.click(function (){
+        ProjectEventListener.downvote(project, null, function () {
+            score.empty();
+            score.append(project.getProjectScore());
+        }, true);
+    });
 
     return project_row;
 };
