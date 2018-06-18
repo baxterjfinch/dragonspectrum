@@ -24,6 +24,8 @@ ACTIONS = [
     'pro_attr_add',
     'pro_attr_chg',
     'pro_attr_rmv',
+    'pro_up_vote',
+    'pro_down_vote',
 
     # Document
     'doc_new',

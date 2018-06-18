@@ -410,11 +410,13 @@ class ProjectHandler(AuthorizationRequestHanlder):
     @cerberus_handlers.exception_callback
     def post(self, project_id=None):
         self.get_channel_token()
+
         if not project_id and not Project.valid_id(project_id):
             raise HttpErrorException.bad_request('no project id')
         self.project = Project.get_by_id(project_id)
         if not self.project:
             raise HttpErrorException.bad_request('invalid project id')
+
         self.get_analytic_session()
         if self.json_request.get('permission'):
             self._add_perm()
@@ -426,10 +428,17 @@ class ProjectHandler(AuthorizationRequestHanlder):
             self._add_attribute()
         if self.json_request.get('title'):
             self._set_title()
+        if self.json_request.get('up_vote'):
+            self._up_vote()
+        if self.json_request.get('down_vote'):
+            self._down_vote()
         if self.json_request.get('shared'):
             self._shared()
+
         self.project.pw_modified_ts = datetime.datetime.now()
         self.project.put()
+
+        self.write_json_response(self.project.to_dict(self.user))
 
     def _add_perm(self):
         group, required = self.project.validate_add_perm_request(self.json_request, self.user)
@@ -649,6 +658,44 @@ class ProjectHandler(AuthorizationRequestHanlder):
 
         action_data = {'title': title}
         trans = Transaction(action='pro_title', user=self.user.key, artifact=self.project.key,
+                            project=self.project.key, action_data=action_data)
+        trans.put()
+
+        self.get_channel_token()
+        channel_tokens = ChannelToken.get_by_project_key(self.project.key, self.user_channel_token)
+        channel_tokens = ChannelToken.remove_unauthorized_users(channel_tokens, [self.project])
+        message = {
+            'user': self.get_user_channel_data(),
+            'transaction': trans.to_dict(self.user)
+        }
+        ChannelToken.broadcast_message(channel_tokens, message)
+
+    def _up_vote(self):
+        if not self.project.has_permission_write(self.user):
+            raise HttpErrorException.forbidden()
+        self.project.project_score += 1
+
+        action_data = {'project_score': self.project.project_score}
+        trans = Transaction(action='pro_up_vote', user=self.user.key, artifact=self.project.key,
+                            project=self.project.key, action_data=action_data)
+        trans.put()
+
+        self.get_channel_token()
+        channel_tokens = ChannelToken.get_by_project_key(self.project.key, self.user_channel_token)
+        channel_tokens = ChannelToken.remove_unauthorized_users(channel_tokens, [self.project])
+        message = {
+            'user': self.get_user_channel_data(),
+            'transaction': trans.to_dict(self.user)
+        }
+        ChannelToken.broadcast_message(channel_tokens, message)
+
+    def _down_vote(self):
+        if not self.project.has_permission_write(self.user):
+            raise HttpErrorException.forbidden()
+        self.project.project_score -= 1
+
+        action_data = {'project_score': self.project.project_score}
+        trans = Transaction(action='pro_down_vote', user=self.user.key, artifact=self.project.key,
                             project=self.project.key, action_data=action_data)
         trans.put()
 
