@@ -24,6 +24,8 @@ ProjectTable.world_tab = $('#world-tab');
 ProjectTable.search_tab = $('#search-tab');
 
 ProjectTable.checkbox_column_classes = 'project-checkbox';
+ProjectTable.voter_column_classes = 'project-voter';
+ProjectTable.score_column_classes = 'project-score';
 ProjectTable.title_column_classes = 'project-title';
 ProjectTable.owner_column_classes = 'project-owner';
 ProjectTable.date_column_classes = 'project-date';
@@ -179,6 +181,23 @@ ProjectTable.buildSideTableRow = function (table, project) {
     var project_row = new ProjectTableRow();
     var tr = $('<tr></tr>');
     project_row.setTableRow(tr);
+
+    var td = $('<td><i class="fas fa-chevron-circle-up" onclick="ProjectEventListener.upvoteMouseClick()"></i><br><i class="fas fa-chevron-circle-down" onclick="ProjectEventListener.downvoteMouseClick()></i></td>');
+    var vote = $('<a></a>');
+    vote.attr('type', 'checkbox');
+    td.addClass(ProjectTable.voter_column_classes);
+    tr.append(td);
+    project_row.setVoterColumn(vote);
+
+    td = $('<td></td>');
+    var score = $('<a></a>');
+    score.attr('href', project.getURL()); //This needs to be changed
+    score.attr('target', '_blank');       //This needs to be changed
+    score.append(project.setProjectScore());
+    td.addClass(ProjectTable.score_column_classes);
+    td.append(score);
+    tr.append(td);
+    project_row.setScoreColumn(score);
 
     td = $('<td></td>');
     var title = $('<a></a>');
@@ -342,6 +361,8 @@ ProjectTable.deleteCheckedProjects = function () {
 function ProjectTableRow () {
     this.tr = null;
     this.checkbox_td = null;
+    this.vote_td = null;
+    this.score_td = null;
     this.title_td = null;
     this.owner_td = null;
     this.last_modified_td = null;
@@ -362,6 +383,21 @@ ProjectTableRow.prototype.setCheckboxColumn = function (checkbox) {
 
 ProjectTableRow.prototype.getCheckbox = function () {
     return this.checkbox_td;
+};
+
+ProjectTableRow.prototype.setVoterColumn = function (vote) {
+    this.vote_td = vote;
+};
+
+ProjectTableRow.prototype.getVoterColumn = function () {
+    return this.vote_td;
+};
+ProjectTableRow.prototype.setScoreColumn = function (score) {
+    this.score_td = score;
+};
+
+ProjectTableRow.prototype.getScoreColumn = function () {
+    return this.score_td;
 };
 
 ProjectTableRow.prototype.setTitleColumn = function (name) {

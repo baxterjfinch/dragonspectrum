@@ -79,6 +79,10 @@
     margin-left: 16%;
 }
 
+.my_project_table_side_container {
+  padding-left: 5px;
+}
+
 .project-table .project-checkbox {
     width: 25px;
 }
@@ -99,12 +103,8 @@
     width: 25px;
 }
 
-.project-table-side .project-title {
-    font-size: 12px;
-}
-
-#sidetitle {
-    font-size: 12px;
+.project-table-side .project-score {
+    width: 35px;
 }
 
 #my-project-table-body-side {
@@ -115,12 +115,16 @@
   font-size: 15px;
 }
 
+.project-table-side .project-score {
+    max-width: 40px;
+}
+
 .project-table-side .project-owner {
-    width: 160px;
+    max-width: 50px;
 }
 
 .project-table-side .project-date {
-    width: 160px;
+    max-width: 60px;
 }
 
 #search-form {
@@ -246,7 +250,6 @@ a {
 
 /* The navigation menu links */
 .sidenav a {
-    padding: 6px 8px 6px 16px;
     text-decoration: none;
     font-size: 17px;
     color: #818181;
@@ -255,7 +258,7 @@ a {
 
 /* When you mouse over the navigation links, change their color */
 .sidenav a:hover {
-    color: #f1f1f1;
+    color: pink;
 }
 
 /* Style page content */
