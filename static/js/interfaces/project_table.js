@@ -182,7 +182,7 @@ ProjectTable.buildSideTableRow = function (table, project) {
     var tr = $('<tr></tr>');
     project_row.setTableRow(tr);
 
-    var td = $('<td><i class="fas fa-chevron-circle-up" onclick="ProjectEventListener.upvoteMouseClick()"></i><br><i class="fas fa-chevron-circle-down" onclick="ProjectEventListener.downvoteMouseClick()></i></td>');
+    var td = $('<td><i class="fas fa-chevron-circle-up" onclick="ProjectEventListener.upvoteMouseClick()"></i><br><i class="fas fa-chevron-circle-down" onclick="ProjectEventListener.downvoteMouseClick()"></i></td>');
     var vote = $('<a></a>');
     vote.attr('type', 'checkbox');
     td.addClass(ProjectTable.voter_column_classes);
