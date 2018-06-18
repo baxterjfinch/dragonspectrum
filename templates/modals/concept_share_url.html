@@ -1,0 +1,44 @@
+<!-- Concept Share URL popup -->
+<div class="modal fade" id="concept-share-url-modal" tabindex="-1" role="dialog" aria-labelledby="concept-share-url-label"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <h3 class="modal-title" id="concept-share-url-label">Concept Share URL</h3>
+            </div>
+            <div class="modal-body">
+                <form role="form">
+                    <div class="form-group">
+                        <label for="url">URL</label>
+                        <input type="text" class="form-control" id="concept-share-url-url" disabled>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" id="concept-share-url-navigation"> Navigation
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" id="concept-share-url-limit-depth"> Limit Depth
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <select id="concept-share-url-depth">
+                            <option>max</option>
+                            <option>0</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" id="concept-share-url-copy-btn" class="btn btn-primary">Copy</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,190 @@
+<!-- Main Publish popup -->
+<div class="modal fade" id="publish-modal" tabindex="-1" role="dialog" aria-labelledby="publish-label"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <h3 class="modal-title" id="publish-label">Publish Document</h3>
+            </div>
+            <div class="modal-body">
+                <div id="publish-warning-message" class="alert alert-warning hidden" role="alert"></div>
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="publish-version" class="col-sm-2 control-label">Version Name</label>
+
+                        <div class="col-sm-10">
+                            <input id="publish-version" type="text" class="form-control"
+                                   placeholder="Valid Characters: A-Z a-z 0-9 . _ -">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="publish-group-search" class="col-sm-2 control-label">Group</label>
+
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="publish-group-search" placeholder="Search">
+                            <button id="publish-world" class="btn btn-primary btn-sm">World</button>
+                            <button id="publish-org" class="btn btn-primary btn-sm hidden">Org</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button id="publish-btn" class="btn btn-success">Publish</button>
+                        </div>
+                    </div>
+                </form>
+
+                <div id="publish-table" class="hidden">
+                    <hr>
+                    <table class="table table-striped table-hover table-condensed">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th>Shared To</th>
+                            <th>Version Name</th>
+                            <th>Published Date</th>
+                        </tr>
+                        </thead>
+                        <tbody id="publish-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Summary Publish popup -->
+<div class="modal fade" id="summary-publish-modal" tabindex="-1" role="dialog" aria-labelledby="summary-publish-label"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h3 class="modal-title" id="summary-publish-label">Publish Summary</h3>
+            </div>
+            <div class="modal-body">
+                <div id="summary-publish-warning-message" class="alert alert-warning hidden" role="alert"></div>
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="summary-publish-version" class="col-sm-2 control-label">Version Name</label>
+
+                        <div class="col-sm-10">
+                            <input id="summary-publish-version" type="text" class="form-control"
+                                   placeholder="Valid Characters: A-Z a-z 0-9 . _ -">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="summary-publish-group-search" class="col-sm-2 control-label">Group</label>
+
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="summary-publish-group-search"
+                                   placeholder="Search">
+                            <button id="summary-publish-world" class="btn btn-primary btn-sm">World</button>
+                            <button id="summary-publish-org" class="btn btn-primary btn-sm hidden">Org</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button id="sum-publish-btn" class="btn btn-success">Publish</button>
+                        </div>
+                    </div>
+                </form>
+
+                <div id="summary-publish-table" class="hidden">
+                    <hr>
+                    <table class="table table-striped table-hover table-condensed">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th>Shared To</th>
+                            <th>Version</th>
+                            <th>Word Count</th>
+                            <th>Published Date</th>
+                        </tr>
+                        </thead>
+                        <tbody id="summary-publish-tbody"></tbody>
+                    </table>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Presentation Publish popup -->
+<div class="modal fade" id="presentation-publish-modal" tabindex="-1" role="dialog"
+     aria-labelledby="presentation-publish-label"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div id="presentation-publish-warning-message" class="alert alert-warning hidden" role="alert"></div>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h3 class="modal-title" id="presentation-publish-label">Publish Presentation</h3>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="presentation-publish-version" class="col-sm-2 control-label">Version
+                            Name</label>
+
+                        <div class="col-sm-10">
+                            <input id="presentation-publish-version" type="text" class="form-control"
+                                   placeholder="Valid Characters: A-Z a-z 0-9 . _ -">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="presentation-publish-group-search" class="col-sm-2 control-label">Group</label>
+
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="presentation-publish-group-search"
+                                   placeholder="Search">
+                            <button id="presentation-publish-world" class="btn btn-primary btn-sm">World</button>
+                            <button id="presentation-publish-org" class="btn btn-primary btn-sm hidden">Org</button>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button id="presentation-publish-btn" class="btn btn-success">Publish</button>
+                        </div>
+                    </div>
+
+                </form>
+
+                <div id="presentation-publish-table" class="hidden">
+                    <table class="table table-striped table-hover table-condensed">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th>Shared To</th>
+                            <th>Version</th>
+                            <th>Slide_count</th>
+                            <th>Min Bullet</th>
+                            <th>Max Bullet</th>
+                            <th>Published Date</th>
+                        </tr>
+                        </thead>
+                        <tbody id="presentation-publish-tbody"></tbody>
+                    </table>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

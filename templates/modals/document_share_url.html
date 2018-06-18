@@ -1,0 +1,30 @@
+<!-- Document Share URL popup -->
+<div class="modal fade" id="document-share-url-modal" tabindex="-1" role="dialog" aria-labelledby="document-share-url-label"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <h3 class="modal-title" id="document-share-url-label">Document Share URL</h3>
+            </div>
+            <div class="modal-body">
+                <form role="form">
+                    <div class="form-group">
+                        <label for="url">URL</label>
+                        <input type="text" class="form-control" id="document-share-url-url" disabled>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" id="document-share-url-navigation" checked> Navigation
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" id="document-share-url-copy-btn" class="btn btn-primary">Copy</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,31 @@
+<!-- Summary Settings popup -->
+<div class="modal fade" id="summery-modal" tabindex="-1" role="dialog" aria-labelledby="summery-label"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <h3 class="modal-title" id="summery-label">Summary</h3>
+            </div>
+            <div class="modal-body">
+                <label for="edit_phrase" class="col-lg-2 control-label">Word Count:</label>
+                <select id="word_count_select">
+                    <option>250</option>
+                    <option>500</option>
+                    <option>750</option>
+                    <option>1000</option>
+                    <option>1250</option>
+                    <option>1500</option>
+                </select>
+                <span id="current_word_count"></span>
+                <span id="abstract_loading_spinner"></span>
+                <hr>
+                <div id="abstract-content" style="word-wrap: break-word;"></div>
+            </div>
+            <div id="summery-modal-footer" class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

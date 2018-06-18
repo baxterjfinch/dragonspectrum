@@ -1,0 +1,3 @@
+function ProjectInportPopover () {}
+
+ProjectInportPopover.popover = $('#');

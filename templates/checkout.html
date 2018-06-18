@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ title }}</title>
+    {% include 'head_links.html' %}
+    <link href="/css/register.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+
+    <div id="logos" class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-3">
+            <img src="/images/corpus-logo-m.png" alt="corpus.io logo">
+        </div>
+        <div class="col-md-3">
+            <img src="/images/tt-logo.png" alt="thinkTank logo">
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <div id="alert-error" class="alert alert-danger hidden"></div>
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+
+            <form role="form">
+                <div class="form-group">
+                    <label>Checkout</label>
+                </div>
+
+                <table class="table table-condensed">
+                    <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Description</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>{{ payment_plan.name }}</td>
+                        <td>{{ payment_plan.discription }}</td>
+                        <td>{{ payment_plan.rec_price_formatted }}</td>
+                    </tr>
+
+                    {% if adjusted_plan is defined %}
+                    <tr>
+                        <td>Coupon</td>
+                        <td>{{ adjusted_plan.discription }}</td>
+                        <td></td>
+                    </tr>
+
+                    <tr>
+                        <td></td>
+                        <td class="text-danger"><strong>Discount</strong></td>
+                        <td class="text-danger"><strong>{{ adjusted_plan.amount_saved_formatted }}</strong></td>
+                    </tr>
+
+                    <tr>
+                        <td></td>
+                        <td><strong>Total</strong></td>
+                        <td><strong>{{ adjusted_plan.rec_price_formatted }}</strong></td>
+                    </tr>
+
+                    {% endif %}
+                    </tbody>
+                </table>
+
+                <div class="row">
+                    <div class="col-xs-12 col-md-3"><a href="/" class="btn btn-block btn-default">Cancel</a></div>
+                    <div class="col-xs-12 col-md-9">
+                        <button class="btn btn-primary btn-block" id="purchase">
+                            Purchase
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+</div>
+{% include 'scripts.html' %}
+{% if true %}
+<script src="https://wallet.google.com/inapp/lib/buy.js"></script>
+{% else %}
+<script src="https://sandbox.google.com/checkout/inapp/lib/buy.js"></script>
+{% endif %}
+<script>
+    var jwt_token;
+    function set_jwt_token(token) {
+        jwt_token = token;
+    }
+    set_jwt_token('{{ jwt_token|safe  }}');
+
+    $("#purchase").click(function (e) {
+        e.stopPropagation();
+        google.payments.inapp.buy({
+            'jwt': jwt_token,
+            'success': successHandler,
+            'failure': failureHandler
+        });
+        return false;
+    });
+
+    //Success handler
+    var successHandler = function (purchaseAction) {
+        if (window.console != undefined) {
+            console.log("Purchase completed successfully: %O", purchaseAction);
+        }
+        window.location.replace('/');
+    }
+
+    //Failure handler
+    var failureHandler = function (purchaseActionError) {
+        if (window.console != undefined) {
+            console.log("Purchase did not complete: %O", purchaseActionError);
+        }
+    }
+
+</script>
+</body>
+</html>

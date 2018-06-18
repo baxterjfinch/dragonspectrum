@@ -1,0 +1,28 @@
+html {
+    overflow: auto;
+}
+
+.container {
+    padding: 50px 0 50px 0;
+}
+
+#terms {
+    margin-top: 8px
+}
+
+#agree {
+    margin-left: 4px;
+}
+
+#agree > .checkbox {
+    margin-bottom: 0px;
+}
+
+#logos {
+    margin-bottom: 30px;
+}
+
+#logos img {
+    padding: 10px;
+    height: 75px;
+}

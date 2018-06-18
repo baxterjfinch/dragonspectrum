@@ -1,0 +1,36 @@
+<!-- Keybindings popup -->
+<div class="modal fade" id="presentation-gen-modal" tabindex="-1" role="dialog" aria-labelledby="presentation-gen-label"
+        data-backdrop="static" data-keyboard="false" aria-hidden="true">
+    <div class="modal-dialog" style="margin-top: 12%">
+        <div class="modal-content">
+{#            <div class="modal-header">#}
+{#                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span#}
+{#                        class="sr-only">Close</span></button>#}
+{#                <h3 class="modal-title" id="keybindings-label">Keyboard Shortcuts</h3>#}
+{#            </div>#}
+            <div class="modal-body">
+                <div class="row">
+                    <div id="presentation-gen-modal-text" class="col-md-10">
+                        <i class="fa fa-file-powerpoint-o"></i> Generating Presentation <span id="presentation-progress" class="color-pulse"> Loading, Please wait... <i class="fa fa-spinner fa-spin"></i></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="progress">
+                            <div id="presentation-gen-modal-prog" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60"
+                                    aria-valuemin="0" aria-valuemax="100" style="width: 2%;">
+                                <span class="presentation-gen-modal-prog-span">
+                                    <span class="presentation-current-slide-count">0</span> of
+                                    <span class="presentation-slide-count">15</span> slides
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="presentation-gen-modal-cancel" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

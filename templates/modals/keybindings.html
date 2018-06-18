@@ -1,0 +1,146 @@
+<!-- Keybindings popup -->
+<div class="modal fade" id="keybindings-modal" tabindex="-1" role="dialog" aria-labelledby="keybindings-label"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <h3 class="modal-title" id="keybindings-label">Keyboard Shortcuts</h3>
+            </div>
+            <div class="modal-body">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Navigation</h3>
+                    </div>
+                    <div class="panel-body">
+                        <dl class="dl-horizontal tt-keybindings">
+                            <dt><i class="fa fa-arrow-up"></i><i class="fa fa-arrow-down"></i></dt>
+                            <dd>Navigate up and down through the Concepts</dd>
+
+                            <dt><i class="fa fa-arrow-right"></i></dt>
+                            <dd>Expand a Concept to show its children (or click on the blue arrow icon <i
+                                    class="fa fa-angle-double-right" style="color: cornflowerblue"></i> with your
+                                mouse).
+                            </dd>
+
+                            <dt><i class="fa fa-arrow-left"></i></dt>
+                            <dd>Collapse a Concept to hide its children</dd>
+                        </dl>
+                    </div>
+                </div>
+
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Concept Edits</h3>
+                    </div>
+                    <div class="panel-body">
+
+                        <dl class="dl-horizontal tt-keybindings">
+                            <dt>ENTER</dt>
+                            <dd>Create a new Concept</dd>
+
+                            <dt>DELETE</dt>
+                            <dd>Delete current Concept</dd>
+
+                            <dt>CTRL+ <i class="fa fa-arrow-up"></i></dt>
+                            <dd>Move Concept up</dd>
+                            <dt>CTRL+ <i class="fa fa-arrow-down"></i></dt>
+                            <dd>Move Concept down</dd>
+                            <dt>CTRL+ <i class="fa fa-arrow-left"></i></dt>
+                            <dd>Move Concept left (outdent)</dd>
+                            <dt>CTRL+ <i class="fa fa-arrow-right"></i></dt>
+                            <dd>Move Concept right (indent)</dd>
+                            <br>
+                            <dt>TAB</dt>
+                            <dd>Move Concept right (indent)</dd>
+                            <dt>SHIFT+TAB</dt>
+                            <dd>Move Concept left (outdent)</dd>
+                        </dl>
+                    </div>
+                </div>
+
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Phrasing and Document</h3>
+                    </div>
+                    <div class="panel-body">
+                        <dl class="dl-horizontal tt-keybindings">
+                            <dt>ESCAPE</dt>
+                            <dd>Edit phrasing</dd>
+
+                            <dt>SHIFT+ENTER</dt>
+                            <dd>Create new phrasing (and select it)</dd>
+
+                            <dt>SHIFT+ <i class="fa fa-arrow-up"></i></dt>
+                            <dd>Change selected phrasing (for the current document) to previous phrasing in list</dd>
+
+                            <dt>SHIFT+ <i class="fa fa-arrow-down"></i></dt>
+                            <dd>Change selected phrasing (for the current document) to next phrasing in list</dd>
+
+                            <dt>BACKSPACE</dt>
+                            <dd>Delete phrasing</dd>
+
+                            <dt>CTRL+ALT+D</dt>
+                            <dd>Create new Document</dd>
+
+                            <dt>SHIFT+LEFT</dt>
+                            <dd>Change active Document one tab to the left</dd>
+
+                            <dt>SHIFT+RIGHT</dt>
+                            <dd>Change active Document one tab to the right</dd>
+
+                            <br>
+
+                            <dt>CTRL+U</dt>
+                            <dd>Toggle unordered list (i.e. bullets) on current Concept</dd>
+                            <dt>CTRL+O</dt>
+                            <dd>Toggle ordered list (i.e. numbers) on current Concept</dd>
+
+                            <dt>CTRL+H</dt>
+                            <dd>Toggle current Concept as heading</dd>
+
+                            <dt>CTRL+I</dt>
+                            <dd>Toggle image view (thumbnail, normal, icon) for entire project</dd>
+
+                            <br>
+
+                            <dt>CTRL+ALT+C</dt>
+                            <dd>Add a new comment on the current Concept and in the current Document</dd>
+
+                        </dl>
+                    </div>
+                </div>
+
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">General</h3>
+                    </div>
+                    <div class="panel-body">
+
+                        <dl class="dl-horizontal tt-keybindings">
+                            <dt>CTRL+P</dt>
+                            <dd>Print current Document</dd>
+
+                            <dt>CTRL+ALT+X</dt>
+                            <dd>Open/Close Properties View (PVs)</dd>
+
+                            <dt>CTRL+ALT+N</dt>
+                            <dd>Create new Project</dd>
+
+                            <dt>CTRL+ALT+I</dt>
+                            <dd>Import Project</dd>
+
+                            <dt>CTRL+K</dt>
+                            <dd>Show Keyboard Shortcuts</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+            </div>
+        </div>
+    </div>
+</div>

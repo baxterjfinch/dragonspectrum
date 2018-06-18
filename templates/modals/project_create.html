@@ -1,0 +1,108 @@
+<!-- Project Create popup -->
+<div class="modal fade" id="project-create-modal" tabindex="-1" role="dialog" aria-labelledby="project-create-label"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <h3 class="modal-title" id="project-create-label">Create New Project</h3>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <div>
+                            <input class="form-control" type="text" id="project-create-title-input"
+                                   placeholder="Enter a title for the new project.">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" id="project-create-create-btn" class="btn btn-primary" data-dismiss="modal">
+                    Create
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Project Create popup -->
+<div class="modal fade" id="project-properties-modal" tabindex="-1" role="dialog" aria-labelledby="project-properties-label"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <h3 class="modal-title" id="project-properties-label">Edit Properties</h3>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <div>
+                            <input class="form-control" type="text" id="project-properties-title-input"
+                                   placeholder="Enter a title for the new project.">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" id="project-properties-btn" class="btn btn-primary" data-dismiss="modal">
+                    Save
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Project Import popup -->
+<div class="modal fade" id="project-import-modal" tabindex="-1" role="dialog" aria-labelledby="project-import-label"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <h3 class="modal-title" id="project-import-label">Import New Project</h3>
+            </div>
+            <div class="modal-body">
+                <div id="project-import-error-message" class="alert alert-danger text-center hidden"></div>
+                <div id="project-import-success-message" class="alert alert-success text-center hidden"></div>
+                <form class="form-horizontal" role="form" id="project-import-form">
+                    <div class="form-group">
+                        <div>
+                            <input class="form-control" type="text" id="project-import-url" placeholder="Enter a URL"
+                                   value="">
+                        </div>
+                    </div>
+                    <hr/>
+                    <div class="form-group">
+                        <div class="fileinput fileinput-new" data-provides="fileinput">
+                            <span class="btn btn-default btn-file"><span class="fileinput-new">Select file</span><span
+                                    class="fileinput-exists">Change</span><input type="file" name="..."></span>
+                            <span class="fileinput-filename"></span>
+                            <a href="#" class="close fileinput-exists" data-dismiss="fileinput"
+                               style="float: none">&times;</a>
+                        </div>
+                    </div>
+                </form>
+                <div id="project-import-status" class="hidden">
+                    <div class="progress">
+                        <div id="project-import-progress-bar" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40"
+                             aria-valuemin="0" aria-valuemax="100" style="width: 2%">
+                            <span class="sr-only"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" id="project-import-btn" class="btn btn-primary" data-dismiss="modal">Import</button>
+                <button type="button" id="project-open-btn" class="btn btn-primary hidden" data-dismiss="modal">Open</button>
+            </div>
+        </div>
+    </div>
+</div>

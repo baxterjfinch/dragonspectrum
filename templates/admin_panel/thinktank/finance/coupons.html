@@ -1,0 +1,172 @@
+{#<div class="row">#}
+{#    <div class="col-sm-12">#}
+{#        <div class="well">#}
+{#            <center><h1 class="semi-bold">This page is not currently implemented</h1></center>#}
+{#        </div>#}
+{#    </div>#}
+{#</div>#}
+
+
+<div class="row">
+    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+        <h1 class="page-title txt-color-blueDark">
+            <i class="fa fa-university "></i>
+            Coupons
+        </h1>
+    </div>
+</div>
+
+<!-- widget grid -->
+<section id="widget-grid" class="">
+
+<!-- row -->
+<div class="row">
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="well">
+            <div id="server_settings">
+                <div class="row">
+                    <div class="col-md-6">
+                        <form role="form">
+                            <select id="coupon_engines_sel" class="form-control"></select>
+                            <table class="table table-condensed">
+                                <thead>
+                                <tr>
+                                    <th><input type="checkbox" id="check_all_plans"></th>
+                                    <th>Payment Plan</th>
+                                </tr>
+                                </thead>
+                                <tbody id="payment_plan_table_body"></tbody>
+                            </table>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="coupon_type_radios" id="flat_fee" value="flat_fee"
+                                           checked>
+                                    Flat Fee
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="coupon_type_radios" id="discount_percentage"
+                                           value="discount_percentage">
+                                    Discount Percentage
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="coupon_type_radios" id="discount_amount"
+                                           value="discount_amount">
+                                    Discount Amount
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="coupon_code" maxlength="50" placeholder="Coupon Code">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="discription" maxlength="100" placeholder="Description">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="init_price" placeholder="Initial Price">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="rec_price" placeholder="Recurring Price">
+                            </div>
+                            <div class="form-group">
+                                <label>Days till recurring payment starts, 0 for never</label>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="effective_period" placeholder="Effective Period" value="30">
+                            </div>
+                            <div class="form-group">
+                                <label>The end date must be at least one hour after start date to be counted, otherwise there is no time limit</label>
+                            </div>
+                            <div class="form-group">
+                                <div class='input-group date' id='start_picker1'>
+                                    <input type='text' class="form-control" placeholder="Start Date/Time"/>
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class='input-group date' id='end_picker1'>
+                                    <input type='text' class="form-control" placeholder="End Date/Time"/>
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                                </div>
+                            </div>
+                            <select id="activation_limit" class="form-control">
+                                <option>Unlimited</option>
+                                <option>1</option>
+                                <option>5</option>
+                                <option>10</option>
+                                <option>20</option>
+                                <option>50</option>
+                                <option>75</option>
+                                <option>100</option>
+                                <option>150</option>
+                                <option>200</option>
+                                <option>250</option>
+                                <option>300</option>
+                                <option>400</option>
+                                <option>500</option>
+                                <option>1000</option>
+                            </select>
+                            <button class="btn btn-primary" id="save_coupon">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</section>
+
+<script type="text/javascript">
+
+    // DO NOT REMOVE : GLOBAL FUNCTIONS!
+    pageSetUp();
+
+    // PAGE RELATED SCRIPTS
+
+    /* remove previous elems */
+
+    if($('.DTTT_dropdown.dropdown-menu').length){
+        $('.DTTT_dropdown.dropdown-menu').remove();
+    }
+
+    loadDataTableScripts();
+    function loadDataTableScripts() {
+        loadScript('/lib/bootstrap/js/moment.min.js', function () {
+            loadScript('/lib/bootstrap/js/bootstrap-datetimepicker.min.js', function () {
+                loadScript("/js/admin/thinktank/finance/coupon.js", init_settings_page)
+            });
+        });
+    }
+
+    function init_settings_page() {
+        var start_date = new Date();
+        var start_picker = $('#start_picker1');
+        var end_picker = $('#end_picker1');
+        start_picker.datetimepicker();
+        start_picker.data("DateTimePicker").setStartDate(start_date);
+        end_picker.datetimepicker();
+        end_picker.data("DateTimePicker").setStartDate(start_date);
+        start_picker.on("change.dp",function (e) {
+            end_picker.data("DateTimePicker").setStartDate(e.date);
+        });
+        end_picker.on("change.dp",function (e) {
+            start_picker.data("DateTimePicker").setEndDate(e.date);
+        });
+
+        get_from_server('GET', PAYMENT_URLS.coupon_admin, {'coupon_types': true}, fill_coupon_engine_select, null);
+        get_from_server('GET', PAYMENT_URLS.paymentplan, null, fill_payment_plan_table, null);
+        $("#save_coupon").click(function (e) {
+            e.stopPropagation();
+            create_coupon();
+            return false;
+        });
+    }
+
+</script>

@@ -1,0 +1,111 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <title>thinkTank</title>
+    {% include 'head_links.html' %}
+    <link href="/css/world.css" rel="stylesheet">
+</head>
+
+<body>
+<!-- container @ full width -->
+<div class="container-liquid">
+    <div id="content-pane" class="row">
+        <!-- TVs -->
+        <div class="col-sm-2 col-md-2 col-lg-2">
+            <div class="hidden" id="tree"></div>
+        </div>
+        <!-- right pane -->
+        <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+            <!-- DVs -->
+            <div class="row">
+                <div class="col-lg-*">
+                    <div id="scrollbar-dv" class="dvs">
+                        <span class="powered-by"><a href="https://thinktank.corpus.io">Powered By thinkTank™</a></span>
+                        {% if nav %}
+                        <div class="alert world-instruct">
+                            <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                            <p>Hello and Welcome to the <em><strong>thinkTank™ Concept Viewer!</strong></em></p>
+                            <p>Use your keyboard and mouse to navigate the Concepts in this document...</p>
+                            <p><i class="fa fa-arrow-up"></i><i class="fa fa-arrow-down"></i> Navigate up and down through the Concepts.</p>
+                            <p><i class="fa fa-arrow-right"></i> Expand a Concept to show its children (or click on the blue arrow icon <i class="fa fa-angle-double-right" style="color: cornflowerblue"></i> with your mouse).</p>
+                            <p><i class="fa fa-arrow-left"></i> Collapse a Concept to hide its children.</p>
+                        </div>
+                        {% endif %}
+                        <div id="document_text">
+                        </div>
+                        <span class="powered-by"><a href="https://thinktank.corpus.io">Powered By thinkTank™</a> a <a href="http://www.corpus.io">corpus.io</a> technology - <em>Patent Pending</em></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2 col-md-2 col-lg-2">
+        </div>
+    </div>
+</div>
+{% include 'scripts.html' %}
+{% include 'project_scripts.html' %}
+<script type="text/javascript">
+    var server_data;
+    function set_server_data(data) {
+        server_data = data;
+    }
+    set_server_data({{ data|safe }});
+
+    function initialize(server_data) {
+        Page.initialize(server_data);
+        console.debug(server_data);
+        Shortcut.initialize();
+        Concept.image_status = 'large';
+
+        var user = new User();
+        user.initCurrentUser(server_data.user);
+
+        var project = new Project();
+        project.initProject(server_data.project, server_data.loader_configs, true);
+
+        Page.sendAnalytics();
+        NavigationBar.initialize();
+        if (Page.navActive())
+            Shortcut.set('dvs');
+        Project.setupPage(server_data.project.children);
+{#        DVS.resizeDVS();#}
+    }
+
+
+    function logout() {
+        comms.post({
+            url: ACCOUNT_URLS.login,
+            data: JSON.stringify({"status": "logout", "user": get_user().username}),
+            success: function (data, textStatus, jqXHR) {
+                $.removeCookie('auth_token', {path: STATIC_URLS.root});
+                $.removeCookie('auth_user', {path: STATIC_URLS.root});
+                $.removeCookie('user', {path: STATIC_URLS.root});
+                $(location).attr('href', ARTIFACT_URLS.project_library);
+            }
+        });
+    }
+
+    $(window).resize(function () {
+{#        DVS.resizeDVS();#}
+    });
+
+    window.onerror = function (message, url, line) {
+        console.error('Error:', '\nmessage: ', message, '\nurl: ', url, '\nline: ', line);
+        if (Page.getDebugLevel() >= 4) {
+            alert('There was an error, please check your console for logs');
+        }
+    };
+
+    window.onbeforeunload = function () {
+        if (!_synced)
+            return 'Still syncing changes to server';
+        return null;
+    };
+
+    window.onload = function () {
+        initialize(server_data);
+    };
+</script>
+</body>
+</html>

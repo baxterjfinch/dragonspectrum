@@ -1,0 +1,150 @@
+<!DOCTYPE HTML>
+{% autoescape true %}
+    <html>
+    <head>
+
+        <title>{{ title }}</title>
+        {% include 'head_links.html' %}
+    </head>
+
+    <body>
+    <div id="notification" class='notifications bottom-right'></div>
+
+    <!-- Nav bar -->
+    <div id="nav_bar">
+        <nav class="navbar navbar-inverse" role="navigation">
+            <div class="navbar-header">
+                <a id="show_properties_view" class="navbar-brand" href="#">{{ nav_bar_title }}</a>
+            </div>
+            <div id="navbar-collapse-1" class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li><a id="projects_nav">Projects</a></li>
+{#                    <li><a id="billing_nav">Billing</a></li>#}
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a id="user_dropdown" class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <span>{{ display_name }}</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <div id="alert-error" class="alert alert-danger hidden"></div>
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <form role="form">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6 col-md-6">
+                            <div class="form-group">
+                                <input type="text" class="form-control input-lg" id="first-name"
+                                       value="{{ first_name }}">
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-6">
+                            <div class="form-group">
+                                <input type="text" class="form-control input-lg" id="last-name"
+                                       value="{{ last_name }}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6 col-md-6">
+                            <div id="password-div" class="form-group">
+                                <input type="password" class="form-control input-lg" id="password"
+                                       placeholder="Change Password">
+                            </div>
+                        </div>
+                        <div id="confirm-pass-div" class="col-xs-12 col-sm-6 col-md-6">
+                            <div class="form-group">
+                                <input type="password" class="form-control input-lg" id="confirm-password"
+                                       placeholder="Confirm Password Change">
+                            </div>
+                        </div>
+                    </div>
+                    <div id="email-div" class="form-group">
+                        <input type="email" class="form-control input-lg" id="email" value="{{ email }}">
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6 col-md-6">
+                            <div id="phone-number-div" class="form-group">
+                                <input type="text" class="form-control input-lg" id="phone_number"
+                                       value="{{ main_phone }}">
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-6">
+                            <div id="cell-phone-number-div" class="form-group">
+                                <input type="text" class="form-control input-lg" id="cell_phone"
+                                       value="{{ cell_phone }}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" onfocus="(this.type='date')" class="form-control input-lg" id="birthday"
+                               value="{{ birthday }}">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control input-lg" id="street-address1"
+                               value="{{ street1 }}">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control input-lg" id="street-address2"
+                               value="{{ street2 }}">
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-7 col-md-7">
+                            <div class="form-group">
+                                <input type="text" class="form-control input-lg" id="city" value="{{ city }}">
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-2 col-md-2">
+                            <div class="form-group">
+                                <input type="text" class="form-control input-lg" id="state" value="{{ state }}">
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-3 col-md-3">
+                            <div class="form-group">
+                                <input type="text" class="form-control input-lg" id="zip-code"
+                                       value="{{ zipecode }}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-md-6">
+                            <button class="btn btn-primary btn-block btn-lg" id="save">
+                                Save
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <br><br><br><br>
+                <p><a href="https://docs.google.com/document/d/1sFq009P-qp8JjU29azy_9Eigyrt6vXsopn81svHsdU8/edit?usp=sharing" target="_blank">Terms of Service and Privacy Policy</a></p>
+            </div>
+            <div class="col-md-3"></div>
+
+        </div>
+    </div>
+    {% include 'bootstrap_modal.html' %}
+    {% include 'scripts.html' %}
+    {% include 'project_scripts.html' %}
+    <script src="/js/profile.js"></script>
+    <script type="text/javascript">
+        var server_data;
+        function set_user_data(data) {
+            server_data = data;
+        }
+        set_user_data({{ data|safe }});
+    </script>
+    </body>
+    </html>
+{% endautoescape %}

@@ -1,0 +1,26 @@
+cron:
+############## Analytics Cron Jobs ##############
+#- description: Generate Test Analytics Every Hour
+#  url: /background/analytics/gentest/hourly/
+#  schedule: every 1 hours from 00:10 to 23:10
+
+- description: Process Hourly Analytics
+  url: /background/analytics/run/hourly/
+  schedule: every 1 hours from 00:30 to 23:30
+
+- description: Process Daily Analytics
+  url: /background/analytics/run/daily/
+  schedule: every day 02:30
+
+- description: Process Weekly Analytics
+  url: /background/analytics/run/weekly/
+  schedule: every monday 03:30
+
+- description: Process Monthly Analytics
+  url: /background/analytics/run/monthly/
+  schedule: 1 of month 04:30
+
+############ System Health Cron Jobs ############
+#- description: Run Hourly System Health Checks
+#  url: /background/health/test/
+#  schedule: every 1 hours from 00:00 to 23:00

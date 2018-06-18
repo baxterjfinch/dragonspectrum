@@ -1,0 +1,349 @@
+<div class="row smart-form">
+    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+        <h1 class="page-title txt-color-blueDark">
+            <i class="fa fa-pencil-square-o fa-fw "></i>
+            Analytics
+        </h1>
+    </div>
+    <div class="col-sm-2">
+        <div class="inline-group">
+            <label class="radio">
+                <input type="radio" value="daily" name="ana_time_span" checked="checked">
+                <i></i>Daily</label>
+            <label class="radio">
+                <input type="radio" value="weekly" name="ana_time_span">
+                <i></i>Weekly</label>
+        </div>
+    </div>
+    <div class="col-sm-2">
+        <div class="form-group">
+            <div class="input-group">
+                <input type="text" id="ana_date_picker" placeholder=" Select a date" class="form-control" data-dateformat="dd/mm/yy">
+                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- widget grid -->
+<section id="widget-grid" class="">
+
+<!-- row -->
+<div class="row">
+
+    <!-- NEW WIDGET START -->
+    <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+        <!-- Widget ID (each widget will need unique ID)-->
+        <div class="jarviswidget" id="site_houly_total_analytics_widget" data-widget-editbutton="false">
+            <!-- widget options:
+                usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+                data-widget-colorbutton="false"
+                data-widget-editbutton="false"
+                data-widget-togglebutton="false"
+                data-widget-deletebutton="false"
+                data-widget-fullscreenbutton="false"
+                data-widget-custombutton="false"
+                data-widget-collapsed="true"
+                data-widget-sortable="false"
+
+            -->
+            <header>
+                <span class="widget-icon"> <i class="fa fa-bar-chart-o"></i> </span>
+                <h2>Site Total Analytics</h2>
+
+            </header>
+
+            <!-- widget div-->
+            <div>
+
+                <!-- widget edit box -->
+                <div class="jarviswidget-editbox">
+                    <!-- This area used as dropdown edit box -->
+
+                </div>
+                <!-- end widget edit box -->
+
+                <!-- widget content -->
+                <div class="widget-body no-padding">
+                    <div id="site_houly_total_analytics_chart_div"></div>
+                </div>
+                <!-- end widget content -->
+
+            </div>
+            <!-- end widget div -->
+
+        </div>
+        <!-- end widget -->
+
+    </article>
+    <!-- WIDGET END -->
+
+</div>
+
+<!-- end row -->
+
+<!-- row -->
+<div class="row">
+
+    <!-- NEW WIDGET START -->
+    <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+        <!-- Widget ID (each widget will need unique ID)-->
+        <div class="jarviswidget" id="site_analytics_widget" data-widget-editbutton="false">
+            <!-- widget options:
+                usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+                data-widget-colorbutton="false"
+                data-widget-editbutton="false"
+                data-widget-togglebutton="false"
+                data-widget-deletebutton="false"
+                data-widget-fullscreenbutton="false"
+                data-widget-custombutton="false"
+                data-widget-collapsed="true"
+                data-widget-sortable="false"
+
+            -->
+            <header>
+                <span class="widget-icon"> <i class="fa fa-bar-chart-o"></i> </span>
+                <h2>Site Analytics</h2>
+            </header>
+
+            <!-- widget div-->
+            <div>
+
+                <!-- widget edit box -->
+                <div class="jarviswidget-editbox">
+                    <!-- This area used as dropdown edit box -->
+
+                </div>
+                <!-- end widget edit box -->
+
+                <!-- widget content -->
+                <div class="widget-body no-padding">
+                    <div class="widget-body-toolbar">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <select multiple id="site_hourly_select" ></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="site_houly_analytics_chart_div"></div>
+                </div>
+                <!-- end widget content -->
+
+            </div>
+            <!-- end widget div -->
+
+        </div>
+        <!-- end widget -->
+
+    </article>
+    <!-- WIDGET END -->
+
+</div>
+<!-- end row -->
+
+<!-- row -->
+<div class="row">
+
+    <!-- NEW WIDGET START -->
+    <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+        <!-- Widget ID (each widget will need unique ID)-->
+        <div class="jarviswidget" id="top_concepts_widget" data-widget-editbutton="false">
+            <!-- widget options:
+                usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+                data-widget-colorbutton="false"
+                data-widget-editbutton="false"
+                data-widget-togglebutton="false"
+                data-widget-deletebutton="false"
+                data-widget-fullscreenbutton="false"
+                data-widget-custombutton="false"
+                data-widget-collapsed="true"
+                data-widget-sortable="false"
+
+            -->
+            <header>
+                <span class="widget-icon"> <i class="fa fa-bar-chart-o"></i> </span>
+                <h2>Concept Analytics</h2>
+            </header>
+
+            <!-- widget div-->
+            <div>
+
+                <!-- widget edit box -->
+                <div class="jarviswidget-editbox">
+                    <!-- This area used as dropdown edit box -->
+
+                </div>
+                <!-- end widget edit box -->
+
+                <!-- widget content -->
+                <div class="widget-body no-padding">
+                    <div class="col-xs-4">
+                        <label>Activity</label>
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Concept</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody id="top_concept_total"></tbody>
+                        </table>
+                    </div>
+                    <div class="col-xs-4">
+                        <label>Consumption</label>
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                                <th>Concept</th>
+                                <th>Total</th>
+                            </tr>
+                            </thead>
+                            <tbody id="top_concept_total_consumption"></tbody>
+                        </table>
+                    </div>
+                    <div class="col-xs-4">
+                        <label>Productivity</label>
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                                <th>Concept</th>
+                                <th>Total</th>
+                            </tr>
+                            </thead>
+                            <tbody id="top_concept_total_production"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- end widget content -->
+
+            </div>
+            <!-- end widget div -->
+
+        </div>
+        <!-- end widget -->
+
+    </article>
+    <!-- WIDGET END -->
+
+</div>
+
+<!-- end row -->
+
+<!-- row -->
+<div class="row">
+
+    <!-- NEW WIDGET START -->
+    <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+        <!-- Widget ID (each widget will need unique ID)-->
+        <div class="jarviswidget" id="top_user_widget" data-widget-editbutton="false">
+            <!-- widget options:
+                usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+                data-widget-colorbutton="false"
+                data-widget-editbutton="false"
+                data-widget-togglebutton="false"
+                data-widget-deletebutton="false"
+                data-widget-fullscreenbutton="false"
+                data-widget-custombutton="false"
+                data-widget-collapsed="true"
+                data-widget-sortable="false"
+
+            -->
+            <header>
+                <span class="widget-icon"> <i class="fa fa-bar-chart-o"></i> </span>
+                <h2>User Analytics</h2>
+            </header>
+
+            <!-- widget div-->
+            <div>
+
+                <!-- widget edit box -->
+                <div class="jarviswidget-editbox">
+                    <!-- This area used as dropdown edit box -->
+
+                </div>
+                <!-- end widget edit box -->
+
+                <!-- widget content -->
+                <div class="widget-body no-padding">
+                    <div class="col-xs-4">
+                        <label>Activity</label>
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Total</th>
+                            </tr>
+                            </thead>
+                            <tbody id="top_user_total"></tbody>
+                        </table>
+                    </div>
+                    <div class="col-xs-4">
+                        <label>Consumption</label>
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Total</th>
+                            </tr>
+                            </thead>
+                            <tbody id="top_user_total_consumption"></tbody>
+                        </table>
+                    </div>
+                    <div class="col-xs-4">
+                        <label>Productivity</label>
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Total</th>
+                            </tr>
+                            </thead>
+                            <tbody id="top_user_total_production"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- end widget content -->
+
+            </div>
+            <!-- end widget div -->
+
+        </div>
+        <!-- end widget -->
+
+    </article>
+    <!-- WIDGET END -->
+
+</div>
+
+<!-- end row -->
+
+</section>
+<!-- end widget grid -->
+
+<script type="text/javascript">
+
+// DO NOT REMOVE : GLOBAL FUNCTIONS!
+pageSetUp();
+
+// PAGE RELATED SCRIPTS
+
+// Load morris dependencies and run pagefunction
+loadScript("/lib/plugin/morris/raphael.min.js", function(){
+    loadScript("/lib/plugin/morris/morris.min.js?v=1", function() {
+        loadScript("/js/admin/thinktank/analytics.js?v=62", start);
+    });
+});
+
+function start() {
+    initialize();
+}
+
+</script>

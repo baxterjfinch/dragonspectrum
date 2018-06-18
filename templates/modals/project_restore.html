@@ -1,0 +1,34 @@
+<!-- Project Restore popup -->
+<div class="modal fade" id="project-restore-modal" tabindex="-1" role="dialog" aria-labelledby="project-restore-label"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <h3 class="modal-title" id="project-restore-label">Project Restore</h3>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="restore_project">
+                    <div class="control-group">
+                        <div id="import_file" class="fileinput fileinput-new" data-provides="fileinput">
+                            <span class="btn btn-default btn-file"><span class="fileinput-new">Select file</span><input type="file" name="..."></span>
+                            <span class="fileinput-filename"></span>
+                            <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">&times;</a>
+                        </div>
+                    </div>
+                </form>
+                <div id="restoring-message" class="hidden">
+                    Restoring your project, please wait <i class="fa fa-spinner fa-spin"></i>
+                </div>
+                <div id="restored-message" class="hidden">
+                    Your project has been restored. Do you want to open it?
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="project-restore-close-btn" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary hidden" id="project-restore-open-btn">Open</button>
+            </div>
+        </div>
+    </div>
+</div>

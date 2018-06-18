@@ -1,0 +1,39 @@
+
+service: account
+runtime: python27
+api_version: 1
+threadsafe: true
+
+instance_class: F1
+automatic_scaling:
+  max_idle_instances: 1
+
+inbound_services:
+- channel_presence
+
+handlers:
+- url: .*
+  script: handlers.account_app
+
+libraries:
+- name: webapp2
+  version: "2.5.2"
+- name: jinja2
+  version: "2.6"
+- name: ssl
+  version: "2.7.11"
+- name: lxml
+  version: "2.3"
+- name: numpy
+  version: "1.6.1"
+
+skip_files:
+- ^(.*/)?#.*#$
+- ^(.*/)?.*~$
+- ^(.*/)?.*\.py[co]$
+- ^(.*/)?.*/RCS/.*$
+- ^(.*/)?\..*$
+- ^dev_data$
+- ^extras$
+- ^tools$
+- ^static$

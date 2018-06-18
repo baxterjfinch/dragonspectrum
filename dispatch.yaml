@@ -1,0 +1,15 @@
+dispatch:
+- url: "*/account*"
+  service: account
+#
+#- url: "*/payment*"
+#  module: payment
+
+- url: "*/background*"
+  service: background
+
+- url: "*/importer*"
+  service: importer
+
+- url: "*/admin*"
+  service: admin

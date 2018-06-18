@@ -1,0 +1,67 @@
+<!-- Permissions Settings popup -->
+<div class="modal fade" id="permissions-settings-modal" tabindex="-1" role="dialog" aria-labelledby="permissions-settings-label"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h3 class="modal-title" id="permissions-settings-label"></h3>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <div>
+                        <h4>Groups
+                            <a data-container="body"
+                               data-toggle="popover"
+                               data-placement="right"
+                               tabindex="0"
+                               data-trigger="hover"
+                               title="Legend"
+                               data-html="true"
+                               data-content='<div><i class="fa fa-fw fa-check" style="color:green"></i> Shared with Group</div>
+                               <div><i class="fa fa-fw fa-check" style="color:red"></i> Required for Access</div>
+                               <div><i class="fa fa-fw fa-check" style="color:#808080"></i> Access Inherited</div>
+                               <div><i class="fa fa-fw fa-ban" style="color:green"></i> Deny Access</div>
+                               <div><i class="fa fa-fw fa-ban" style="color:#808080"></i> Deny Access Inherited</div>'
+                            >
+                               <i class="fa fa-info-circle" style="color: cornflowerblue"></i>
+                            </a>
+                        </h4>
+                        <table class="table table-striped table-hover table-condensed">
+                            <thead>
+                            <tr id="permissions-settings-group-thread-tr"></tr>
+                            </thead>
+                            <tbody id="permissions-settings-group-tbody"></tbody>
+                        </table>
+                        <form class="form-inline" role="form">
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="permissions-settings-group-search">
+                            </div>
+                            <button id="permissions-settings-add-group" class="btn btn-sm" type="button"><i class="fa fa-plus"></i></button>
+                        </form>
+                    </div>
+                    <h4 id="permissions-settings-permission-table-header"></h4>
+                    <table class="table table-striped table-hover table-condensed">
+                        <thead id="permissions-settings-perm-thead" class="hidden">
+                        <tr>
+                            <th>Permission</th>
+                            <th>Share</th>
+                            <th>Required</th>
+                        </tr>
+                        </thead>
+                        <tbody id="permissions-settings-perm-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{#<script>#}
+{#  $("button[data-toggle=popover]").popover();#}
+{#</script>#}

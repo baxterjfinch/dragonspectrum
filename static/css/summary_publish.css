@@ -1,0 +1,248 @@
+/************************************
+BOOTSTRAP OVERRIDE START TODO put this in LESS file
+*************************************/
+
+.row {
+    margin-right: -10px;
+    margin-left: -10px;
+}
+
+.col-xs-1,
+.col-sm-1,
+.col-md-1,
+.col-lg-1,
+.col-xs-2,
+.col-sm-2,
+.col-md-2,
+.col-lg-2,
+.col-xs-3,
+.col-sm-3,
+.col-md-3,
+.col-lg-3,
+.col-xs-4,
+.col-sm-4,
+.col-md-4,
+.col-lg-4,
+.col-xs-5,
+.col-sm-5,
+.col-md-5,
+.col-lg-5,
+.col-xs-6,
+.col-sm-6,
+.col-md-6,
+.col-lg-6,
+.col-xs-7,
+.col-sm-7,
+.col-md-7,
+.col-lg-7,
+.col-xs-8,
+.col-sm-8,
+.col-md-8,
+.col-lg-8,
+.col-xs-9,
+.col-sm-9,
+.col-md-9,
+.col-lg-9,
+.col-xs-10,
+.col-sm-10,
+.col-md-10,
+.col-lg-10,
+.col-xs-11,
+.col-sm-11,
+.col-md-11,
+.col-lg-11,
+.col-xs-12,
+.col-sm-12,
+.col-md-12,
+.col-lg-12 {
+    position: relative;
+    min-height: 1px;
+    padding-right: 6px;
+    padding-left: 6px;
+}
+
+.well {
+    padding: 3px;
+    margin-bottom: 3px;
+}
+
+kbd {
+    color: black;
+    background-color: transparent;
+    border-radius: 0;
+    box-shadow: inset 0 0 0 rgba(0, 0, 0, .0);
+}
+
+/************************************
+BOOTSTRAP OVERRIDE STOP
+*************************************/
+
+html {
+    position: relative;
+    height: 100%;
+}
+
+body {
+    position: relative;
+    height: 100%;
+}
+
+.container-liquid {
+    position: relative;
+    height: 100%;
+    margin: 0 15px 0 5px;
+}
+
+/***************************
+Context menu stuff starts here
+****************************/
+
+.context-menu-list {
+    width: 212px;
+    -webkit-box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
+    -ms-box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
+    -o-box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
+}
+
+.context-menu-list .context-menu-item {
+    background-color: #ffffff;
+}
+
+.context-menu-item:hover {
+    cursor: pointer;
+    background-color: #39F;
+    color: white;
+}
+
+.context-menu-item.icon-arrow-up:before {
+    position: absolute;
+    font-family: FontAwesome;
+    top: 1px;
+    left: 7px;
+    content: "\f062";
+}
+
+.context-menu-item.icon-arrow-down:before {
+    position: absolute;
+    font-family: FontAwesome;
+    top: 1px;
+    left: 7px;
+    content: "\f063";
+}
+
+.context-menu-item.icon-new:before {
+    position: absolute;
+    font-family: FontAwesome;
+    top: 1px;
+    left: 7px;
+    content: "\f067";
+}
+
+.context-menu-item.icon-del:before {
+    position: absolute;
+    font-family: FontAwesome;
+    top: 1px;
+    left: 7px;
+    content: "\f068";
+}
+
+.context-menu-item.icon-world:before {
+    position: absolute;
+    font-family: FontAwesome;
+    top: 1px;
+    left: 7px;
+    content: "\f0ac";
+}
+
+.context-menu-item.icon-shield:before {
+    position: absolute;
+    font-family: FontAwesome;
+    top: 1px;
+    left: 7px;
+    content: "\f132";
+}
+
+.context-menu-item.icon-expand-children:before {
+    position: absolute;
+    font-family: FontAwesome;
+    top: 1px;
+    left: 7px;
+    content: "\f103";
+}
+
+.context-menu-item.icon-collapse-children:before {
+    position: absolute;
+    font-family: FontAwesome;
+    top: 1px;
+    left: 7px;
+    content: "\f102";
+}
+
+.context-menu-item.icon-header:before {
+    position: absolute;
+    /*font-family: FontAwesome;*/
+    font-weight: bold;
+    top: 2px;
+    left: 7px;
+    content: "H";
+}
+
+.context-menu-item.icon-unordered-list:before {
+    position: absolute;
+    font-family: FontAwesome;
+    font-weight: bold;
+    top: 2px;
+    left: 7px;
+    content: "\f0ca";
+}
+
+.context-menu-item.icon-ordered-list:before {
+    position: absolute;
+    font-family: FontAwesome;
+    font-weight: bold;
+    top: 2px;
+    left: 7px;
+    content: "\f0cb";
+}
+
+.context-menu-item.icon-pencil:before {
+    position: absolute;
+    font-family: FontAwesome;
+    font-weight: bold;
+    top: 2px;
+    left: 7px;
+    content: "\f040";
+}
+
+.context-menu-item.icon-comment:before {
+    position: absolute;
+    font-family: FontAwesome;
+    font-weight: bold;
+    top: 2px;
+    left: 7px;
+    content: "\f075";
+}
+
+.context-menu-item.icon-external-link:before {
+    position: absolute;
+    font-family: FontAwesome;
+    font-weight: bold;
+    top: 2px;
+    left: 7px;
+    content: "\f08e";
+}
+
+.context-menu-item.icon-link:before {
+    position: absolute;
+    font-family: FontAwesome;
+    font-weight: bold;
+    top: 2px;
+    left: 7px;
+    content: "\f0c1";
+}
+
+/***************************
+Context menu stuff ends here
+****************************/

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Email not Verified</title>
+    {% include 'head_links.html' %}
+</head>
+
+<body>
+
+<div class="container">
+    <br>
+    <img src="/images/tt-logo.png" height="75">
+    <br><br>
+
+    <div class="alert alert-danger"><strong>Email Address Not Verified</strong></div>
+    <p>Hello!</p>
+    <p>You must verify your email address before you can login.</p>
+
+    <p>When you created a thinkTank account, we asked that you provide a valid email address so that we may send
+        important
+        communications to you about any changes to your account.</p>
+
+    <p>If you did not receive your email verification code at the email address you provided, please check your email,
+        including your "Spam" or "Junk" folder. This email should contain instructions to verify your email address.</p>
+
+    <p>If you cannot find the email, please click the button below to resend the verification email...</p>
+
+    <button id="resend" class="btn btn-success">Resend Email</button>
+    <br><br>
+
+    <p>You may also request further support by email: <a href="email:support@corpus.io">support@corpus.io</a></p>
+
+</div>
+</body>
+
+<script>
+    $('#resend').click(function (e) {
+        e.stopPropagation();
+        post_to_server("/account/unverified/", null, true);
+    });
+</script>
+
+</html>

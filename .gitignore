@@ -1,0 +1,7 @@
+^datastore
+search_index
+.idea/
+dev_data/
+*.py[cod]
+.directory
+venv/

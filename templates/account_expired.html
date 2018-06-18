@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Account Expired</title>
+    {% include 'head_links.html' %}
+</head>
+<body>
+
+<div class="container">
+    <br>
+    <img src="/images/tt-logo.png" height="75">
+    <br><br>
+
+    <div class="alert alert-danger"><strong>Account Expired</strong></div>
+    <p>Hello!</p>
+    <p>Your account has expired.</p>
+    <p>Please update your billing info by clicking on the button below...</p>
+
+    <a href="/account/billing/{{ username|safe }}" class="btn btn-success">Update Billing Info</a>
+    <br><br>
+
+    <p>You may also request support by email: <a href="email:support@corpus.io">support@corpus.io</a></p>
+
+</div>
+</body>
+</html>

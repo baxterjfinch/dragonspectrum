@@ -1,0 +1,196 @@
+<div class="row">
+    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+        <h1 class="page-title txt-color-blueDark">
+            <i class="fa fa-user "></i>
+            Users
+			<span>>
+				Groups
+			</span>
+        </h1>
+    </div>
+</div>
+
+<!-- widget grid -->
+<section id="widget-grid" class="">
+
+<!-- row -->
+<div class="row">
+
+    <!-- NEW WIDGET START -->
+    <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+        <!-- Widget ID (each widget will need unique ID)-->
+        <div class="jarviswidget jarviswidget-color-blueDark" id="group_table" data-widget-editbutton="false">
+            <header>
+                <span class="widget-icon"> <i class="fa fa-users"></i> </span>
+                <h2>Groups</h2>
+            </header>
+
+            <!-- widget div-->
+            <div>
+
+                <!-- widget edit box -->
+                <div class="jarviswidget-editbox">
+                    <!-- This area used as dropdown edit box -->
+
+                </div>
+                <!-- end widget edit box -->
+
+                <!-- widget content -->
+                <div class="widget-body no-padding">
+                    <div id="group_action_div" class="group_action_div">
+                        <div class="btn-group group_action_btn">
+                            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                Action
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li title="Add New Group"><a id="add_group_btn" href="javascript:void(0);">Add</a></li>
+                                <li title="Delete Account"><a id="delete_group_btn" href="javascript:void(0);">Delete</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <table id="org_group_table" class="display" width="100%">
+                        <thead>
+                            <tr>
+{#                                <th></th>#}
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Creation Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="group_tb_body"></tbody>
+                    </table>
+                </div>
+                <!-- end widget content -->
+
+            </div>
+            <!-- end widget div -->
+
+        </div>
+        <!-- end widget -->
+
+    </article>
+    <!-- WIDGET END -->
+
+</div>
+<!-- end row -->
+
+</section>
+<!-- end widget grid -->
+
+<!-- Modal -->
+<div class="modal fade" id="new_group_modal" tabindex="-1" role="dialog" aria-labelledby="new_group_modal_label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">New Group</h4>
+            </div>
+            <div class="modal-body">
+                <form action="" id="new_group_form" class="smart-form" novalidate="novalidate">
+                    <div class="row">
+                        <section>
+                            <label class="label">Name</label>
+                            <label class="input">
+                                <input type="text" id="new_group_name" name="name">
+                            </label>
+                        </section>
+                    </div>
+                    <div class="row">
+                        <section>
+                            <label class="label">Description</label>
+                            <label class="input">
+                                <input type="text" name="description">
+                            </label>
+                        </section>
+                    </div>
+                    <div class="row">
+                        <section>
+                            <label class="checkbox">
+                                <input type="checkbox" name="hidden_group"><i></i>Hidden Group
+                            </label>
+                        </section>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    Cancel
+                </button>
+                <button type="submit" class="btn btn-primary" form="new_group_form">
+                    Create
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script type="text/javascript">
+
+    // DO NOT REMOVE : GLOBAL FUNCTIONS!
+    pageSetUp();
+
+    // PAGE RELATED SCRIPTS
+
+    /* remove previous elems */
+
+    if($('.DTTT_dropdown.dropdown-menu').length){
+        $('.DTTT_dropdown.dropdown-menu').remove();
+    }
+
+    loadDataTableScripts();
+    function loadDataTableScripts() {
+
+        loadScript("/lib/plugin/datatables/jquery.dataTables.min.js", function(){
+            loadScript("/lib/plugin/datatables/dataTables.colVis.min.js", function(){
+                loadScript("/lib/plugin/datatables/dataTables.tableTools.min.js", function(){
+                    loadScript("/lib/plugin/datatables/dataTables.bootstrap.min.js", function () {
+                        loadScript("/lib/plugin/select2/select2.min.js", function () {
+                            loadScript("/lib/typehead/typeahead.js", initialize);
+                        });
+                    });
+                });
+            });
+        });
+    }
+
+    function initialize() {
+        /* Add the events etc before DataTables hides a column */
+        $("#datatable_fixed_column thead input").keyup(function() {
+            oTable.fnFilter(this.value, oTable.oApi._fnVisibleToColumnIndex(oTable.fnSettings(), $("thead input").index(this)));
+        });
+
+        $("#datatable_fixed_column thead input").each(function(i) {
+            this.initVal = this.value;
+        });
+        $("#datatable_fixed_column thead input").focus(function() {
+            if (this.className == "search_init") {
+                this.className = "";
+                this.value = "";
+            }
+        });
+        $("#datatable_fixed_column thead input").blur(function(i) {
+            if (this.value == "") {
+                this.className = "search_init";
+                this.value = this.initVal;
+            }
+        });
+
+        loadScript("/js/admin/users/groups.js", function () {
+            group_load_cb();
+        });
+    }
+    var new_group_modal = $('#new_group_modal');
+    new_group_modal.modal({show: false});
+    new_group_modal.on('shown.bs.modal', function() {
+        $('#new_group_name').focus();
+    });
+    $('#add_group_btn').click(function () {
+        new_group_modal.modal('show');
+    });
+
+
+</script>

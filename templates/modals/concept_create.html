@@ -1,0 +1,76 @@
+<!-- Create Image Concept popup -->
+<div class="modal fade" id="create-concept-image-modal" tabindex="-1" role="dialog" aria-labelledby="create-concept-image-label"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <h3 class="modal-title" id="create-concept-image-label">Create Image Concept</h3>
+            </div>
+            <div class="modal-body">
+                <div id="create-concept-image-submite-form">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <div>
+                                <input class="form-control" id="image_concept_url" placeholder="Image URL"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div id="file_input_div">
+                                <input name="image" data-url="/media/upload/" type="file" id="file_input" class="btn btn-primary" title="Choose File">
+                                <span id="image_filename"></span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div id="create-concept-image-upload-progress" class="hidden">
+                    <div class="progress">
+                        <div id="create-concept-image-progress-bar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+                            <span id="create-concept-image-progress-bar-text" class="sr-only">0% Complete</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button id="save-create-concept-image-btn" class="btn btn-primary">Save</button>
+                <button id="upload-create-concept-image-btn" class="btn btn-primary hidden">Upload</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Create Linked Concept popup -->
+<div class="modal fade" id="create-concept-linked-modal" tabindex="-1" role="dialog" aria-labelledby="create-concept-linked-label"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <h3 class="modal-title" id="create-concept-linked-label">Create Linked Concept</h3>
+            </div>
+            <div class="modal-body">
+                <form id="create-concept-linked-form" class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <div>
+                            <input class="form-control" id="linked-concept-input" placeholder="Enter the id of the concept to link."/>
+                        </div>
+                    </div>
+                    <div class="input-append">
+                    </div>
+                </form>
+                <div id="create-concept-link-progress" class="hidden">
+                    <div class="progress">
+                        <i class="fa fa-refresh fa-spin"></i> Linking Please Wait ...
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button id="save-create-concept-linked-btn" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
