@@ -19,7 +19,7 @@ from server.importer.restore import ProjectRestore
 from models.account.organization import Organization
 from server.httperrorexception import HttpErrorException
 from server.handlers import AuthorizationRequestHanlder, JINJA_ENVIRONMENT
-from models.artifacts import Project, Document, Concept, Phrasing, Permission, \
+from models.artifacts import Project, ProjectUserVotes, Document, Concept, Phrasing, Permission, \
     Attributes, ChannelToken, Transaction
 
 log = logging.getLogger('tt')
@@ -673,7 +673,15 @@ class ProjectHandler(AuthorizationRequestHanlder):
     def _up_vote(self):
         if not self.project.has_permission_write(self.user):
             raise HttpErrorException.forbidden()
-        self.project.project_score += 1
+
+        pvote = self.project.get_user_vote(self.user)
+        if pvote is None:
+            self.project.project_score += 1
+            uvote = ProjectUserVotes(project=self.project.key, user=self.user.key, direction='up')
+            uvote.put()
+        elif pvote is not None and pvote.direction == 'down':
+            self.project.project_score += 1
+            pvote.key.delete()
 
         action_data = {'project_score': self.project.project_score}
         trans = Transaction(action='pro_up_vote', user=self.user.key, artifact=self.project.key,
@@ -692,7 +700,15 @@ class ProjectHandler(AuthorizationRequestHanlder):
     def _down_vote(self):
         if not self.project.has_permission_write(self.user):
             raise HttpErrorException.forbidden()
-        self.project.project_score -= 1
+
+        pvote = self.project.get_user_vote(self.user)
+        if pvote is None:
+            self.project.project_score -= 1
+            uvote = ProjectUserVotes(project=self.project.key, user=self.user.key, direction='down')
+            uvote.put()
+        elif pvote is not None and pvote.direction == 'up':
+            self.project.project_score -= 1
+            pvote.key.delete()
 
         action_data = {'project_score': self.project.project_score}
         trans = Transaction(action='pro_down_vote', user=self.user.key, artifact=self.project.key,
