@@ -243,12 +243,22 @@ ProjectTable.buildSideTableRow = function (table, project) {
             score.empty();
             score.append(project.getProjectScore());
         }, true);
+
+        if (project.user_vote != "up") {
+          downvote_icon.removeClass("down")
+          upvote_icon.addClass("up")
+        };
     });
     downvote_icon.click(function (){
         ProjectEventListener.downvote(project, null, function () {
             score.empty();
             score.append(project.getProjectScore());
         }, true);
+
+        if (project.user_vote != "down") {
+          downvote_icon.addClass("down")
+          upvote_icon.removeClass("up")
+        };
     });
 
     return project_row;

@@ -7,12 +7,20 @@ ProjectEventListener.createShortcut = function () {
     ProjectCreateModal.show(function (title) {
         ProjectEventListener.create(title);
     });
+    if (project.user_vote != null) {
+      downvote_icon.addClass(project.user_vote.direction)
+      upvote_icon.addClass(project.user_vote.direction)
+    };
 };
 
 ProjectEventListener.createMouseClick = function () {
     ProjectCreateModal.show(function (title) {
         ProjectEventListener.create(title);
     });
+    if (project.user_vote != null) {
+      downvote_icon.addClass(project.user_vote.direction)
+      upvote_icon.addClass(project.user_vote.direction)
+    };
 };
 
 ProjectEventListener.create = function (title) {

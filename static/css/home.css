@@ -276,3 +276,19 @@ a {
 .mainview {
   width: 83%;
 }
+
+.fa-chevron-circle-down, .down {
+  color: red;
+}
+
+.fa-chevron-circle-down, .up {
+  color: grey;
+}
+
+.fa-chevron-circle-up, .up {
+  color: green;
+}
+
+.fa-chevron-circle-up, .down {
+  color: grey;
+}
