@@ -78,6 +78,80 @@ ProjectEventListener.rename = function (project, title, notifyServer) {
     }
 };
 
+/** UpVote **
+ * Event Listener for upvoting
+ */
+ProjectEventListener.upvoteMouseClick = function () {
+    var project = Project.getProject();
+    if (!project.hasPermissionWrite()) {
+        Notify.alert.warning('You do not have permission to Up Vote this project');
+        return;
+    }
+
+    ProjectEventListener.upvote(project, null, true);
+};
+
+ProjectEventListener.upvoteCollab = function (user, message) {
+    // TODO: This will need tested after UI is put in
+    var transaction = new Transaction();
+    message.transaction.user = user;
+    transaction.initializeTransaction(message.transaction);
+
+    ProjectEventListener.upvote(Project.getProject(), transaction.getActionData().project_score, false);
+};
+
+ProjectEventListener.upvote = function (project, project_score, call_back, notifyServer) {
+    if (notifyServer) {
+        comms.post({
+            url: ARTIFACT_URLS.project + project.getRequestId(),
+            data: {up_vote: true},
+            success: function (data) {
+                project.setProjectScore(data.project_score);
+                call_back();
+            }
+        })
+    } else {
+        project.setProjectScore(project_score);
+    }
+};
+
+/** DownVote **
+ * Event Listener for downvoting
+ */
+ProjectEventListener.downvoteMouseClick = function () {
+    var project = Project.getProject();
+    if (!project.hasPermissionWrite()) {
+        Notify.alert.warning('You do not have permission to Down Vote this project');
+        return;
+    }
+
+    ProjectEventListener.downvote(project, null, true);
+};
+
+ProjectEventListener.downvoteCollab = function (user, message) {
+    // TODO: This will need tested after UI is put in
+    var transaction = new Transaction();
+    message.transaction.user = user;
+    transaction.initializeTransaction(message.transaction);
+
+    ProjectEventListener.downvote(Project.getProject(), transaction.getActionData().project_score, false);
+};
+
+ProjectEventListener.downvote = function (project, project_score, call_back, notifyServer) {
+    if (notifyServer) {
+        comms.post({
+            url: ARTIFACT_URLS.project + project.getRequestId(),
+            data: {down_vote: true},
+            success: function (data) {
+                project.setProjectScore(data.project_score);
+                call_back();
+            }
+        })
+    } else {
+        project.setProjectScore(project_score);
+    }
+};
+
 /** IMPORT **
  * Event Listener for import events
  */

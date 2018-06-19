@@ -1,11 +1,13 @@
 function ProjectTable () {}
 
 ProjectTable.USER = 'user';
+ProjectTable.USER_SIDEBAR = $('#my-project-table-body-side');
 ProjectTable.SHARED = 'shared';
 ProjectTable.WORLD_SHARED = 'world_shared';
 ProjectTable.SEARCH = 'search';
 
 ProjectTable.my_table_body = $('#my-project-table-body');
+ProjectTable.my_table_body_side = $('#my-project-table-body-side');
 ProjectTable.shared_table_body = $('#shared-project-table-body');
 ProjectTable.world_table_body = $('#world-project-table-body');
 ProjectTable.search_table_body = $('#search-project-table-body');
@@ -22,6 +24,8 @@ ProjectTable.world_tab = $('#world-tab');
 ProjectTable.search_tab = $('#search-tab');
 
 ProjectTable.checkbox_column_classes = 'project-checkbox';
+ProjectTable.voter_column_classes = 'project-voter';
+ProjectTable.score_column_classes = 'project-score';
 ProjectTable.title_column_classes = 'project-title';
 ProjectTable.owner_column_classes = 'project-owner';
 ProjectTable.date_column_classes = 'project-date';
@@ -66,6 +70,7 @@ ProjectTable.initialize = function () {
 
 ProjectTable.loadTables = function (projects) {
     ProjectTable.clearUserTable();
+    ProjectTable.clearUserSideTable();
     ProjectTable.clearSharedTable();
     ProjectTable.clearWorldShareTable();
     ProjectTable.clearSearchTable();
@@ -77,14 +82,21 @@ ProjectTable.loadTables = function (projects) {
             ProjectTable.addToWorldSharedTable(projects[i]);
         } else {
             ProjectTable.addToUserTable(projects[i]);
+            ProjectTable.addToUserSideTable(projects[i]);
+
         }
 
         ProjectTable.addToSearchTable(projects[i]);
+
     }
 };
 
 ProjectTable.clearUserTable = function () {
     ProjectTable.my_table_body.empty();
+};
+
+ProjectTable.clearUserSideTable = function () {
+    ProjectTable.my_table_body_side.empty();
 };
 
 ProjectTable.clearSharedTable = function () {
@@ -165,11 +177,96 @@ ProjectTable.buildTableRow = function (table, project) {
     return project_row;
 };
 
+ProjectTable.buildSideTableRow = function (table, project) {
+    var project_row = new ProjectTableRow();
+    var tr = $('<tr></tr>');
+    project_row.setTableRow(tr);
+
+    var td = $('<td></td>');
+
+    var upvote_icon = $('<i></i>');
+    upvote_icon.addClass('fas fa-chevron-circle-up');
+    td.append(upvote_icon);
+
+    td.append($('<br>'));
+
+    var downvote_icon = $('<i></i>');
+    downvote_icon.addClass('fas fa-chevron-circle-down');
+    td.append(downvote_icon);
+
+    var vote = $('<a></a>');
+    vote.attr('type', 'checkbox');
+    td.addClass(ProjectTable.voter_column_classes);
+    tr.append(td);
+    project_row.setVoterColumn(vote);
+
+    td = $('<td></td>');
+    var score = $('<a></a>');
+    score.attr('href', project.getURL()); //This needs to be changed
+    score.attr('target', '_blank');       //This needs to be changed
+    score.append(project.getProjectScore());
+    td.addClass(ProjectTable.score_column_classes);
+    td.append(score);
+    tr.append(td);
+    project_row.setScoreColumn(score);
+
+    td = $('<td></td>');
+    var title = $('<a></a>');
+    title.attr('href', project.getURL());
+    title.attr('target', '_blank');
+    title.append(project.getTitle());
+    td.addClass(ProjectTable.title_column_classes);
+    td.append(title);
+    tr.append(td);
+    project_row.setTitleColumn(title);
+
+    td = $('<td></td>');
+    var owner = $('<span></span>');
+    owner.append(project.getOwners()[0]);
+    td.addClass(ProjectTable.owner_column_classes);
+    td.append(owner);
+    tr.append(td);
+    project_row.setOwnerColumn(owner);
+
+    td = $('<td></td>');
+    var date_created = $('<span></span>');
+    date_created.append(project.getCreatedDateString());
+    td.addClass(ProjectTable.date_column_classes);
+    td.append(date_created);
+    tr.append(td);
+    project_row.setDateCreatedColumn(date_created);
+
+    project.addTableRow(table, project_row);
+
+    upvote_icon.click(function (){
+        ProjectEventListener.upvote(project, null, function () {
+            score.empty();
+            score.append(project.getProjectScore());
+        }, true);
+    });
+    downvote_icon.click(function (){
+        ProjectEventListener.downvote(project, null, function () {
+            score.empty();
+            score.append(project.getProjectScore());
+        }, true);
+    });
+
+    return project_row;
+};
+
+ProjectTable.addToUserSideTable = function (project) {
+  var row = project.getTableRow(ProjectTable.USER_SIDEBAR);
+  if (!row)
+      row = ProjectTable.buildSideTableRow(ProjectTable.USER, project);
+    ProjectTable.my_table_body_side.append(row.getTableRow());
+}
+
 ProjectTable.addToUserTable = function (project) {
     var row = project.getTableRow(ProjectTable.USER);
     if (!row)
         row = ProjectTable.buildTableRow(ProjectTable.USER, project);
     ProjectTable.my_table_body.append(row.getTableRow());
+
 };
 
 ProjectTable.addToSharedTable = function (project) {
@@ -288,6 +385,8 @@ ProjectTable.deleteCheckedProjects = function () {
 function ProjectTableRow () {
     this.tr = null;
     this.checkbox_td = null;
+    this.vote_td = null;
+    this.score_td = null;
     this.title_td = null;
     this.owner_td = null;
     this.last_modified_td = null;
@@ -308,6 +407,21 @@ ProjectTableRow.prototype.setCheckboxColumn = function (checkbox) {
 
 ProjectTableRow.prototype.getCheckbox = function () {
     return this.checkbox_td;
+};
+
+ProjectTableRow.prototype.setVoterColumn = function (vote) {
+    this.vote_td = vote;
+};
+
+ProjectTableRow.prototype.getVoterColumn = function () {
+    return this.vote_td;
+};
+ProjectTableRow.prototype.setScoreColumn = function (score) {
+    this.score_td = score;
+};
+
+ProjectTableRow.prototype.getScoreColumn = function () {
+    return this.score_td;
 };
 
 ProjectTableRow.prototype.setTitleColumn = function (name) {
