@@ -242,12 +242,10 @@ ProjectTable.buildSideTableRow = function (table, project) {
         ProjectEventListener.upvote(project, null, function () {
             score.empty();
             score.append(project.getProjectScore());
+            downvote_icon.removeClass("down", "up")
+            upvote_icon.addClass("up")
         }, true);
 
-        if (project.user_vote != "up") {
-          downvote_icon.removeClass("down")
-          upvote_icon.addClass("up")
-        };
     });
     downvote_icon.click(function (){
         ProjectEventListener.downvote(project, null, function () {
@@ -255,9 +253,10 @@ ProjectTable.buildSideTableRow = function (table, project) {
             score.append(project.getProjectScore());
         }, true);
 
-        if (project.user_vote != "down") {
+        if (project.user_vote != null) {
+          upvote_icon.removeClass("up", "down")
           downvote_icon.addClass("down")
-          upvote_icon.removeClass("up")
+
         };
     });
 
