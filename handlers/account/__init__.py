@@ -25,7 +25,7 @@ account_url_mapping = [
     ('/account/group/?', GroupHandler),
     ('/account/group/admin/(.*)/?', GroupHandler),
     ('/account/group/search/?', GroupSearchHandler),
-    ('/account/client/logger/?', ClientLoggerHanlder),
+    ('/account/client/logger/?', ClientLoggerHandler),
     ('/account/tour-home-complete', HomeGuidedTourCompleteHandler),
     ('/account/tour-project-complete', ProjectGuidedTourCompleteHandler),
     ('/account/(.*)/?', UserHandler),
