@@ -277,18 +277,18 @@ a {
   width: 83%;
 }
 
-.fa-chevron-circle-down, .down {
-  color: red;
-}
-
-.fa-chevron-circle-down, .up {
+.fa-chevron-circle-down {
   color: grey;
 }
 
-.fa-chevron-circle-up, .up {
-  color: green;
+.fa-chevron-circle-up {
+  color: grey;
 }
 
-.fa-chevron-circle-up, .down {
-  color: grey;
+.down {
+  color: darkred;
+}
+
+.up {
+  color: #009fe0;
 }
