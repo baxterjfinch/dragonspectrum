@@ -286,11 +286,11 @@ ChildLoader.prototype = {
                 parent.setIsParent(false);
             }
 
-            var unprocced_parents = data['unprocced_parents'];
+            var unprocessed_parents = data['unprocessed_parents'];
             var children = data['children'];
-            if (unprocced_parents.length > 0)
-                for (i = 0; i < unprocced_parents.length; i++)
-                    this.loader._hq_queue(Concept.get(unprocced_parents[i]), true);
+            if (unprocessed_parents.length > 0)
+                for (i = 0; i < unprocessed_parents.length; i++)
+                    this.loader._hq_queue(Concept.get(unprocessed_parents[i]), true);
             this.loader._process_children(children, this.queue, this.requeue);
             this.loader._ajax_request.splice(this.loader._ajax_request.indexOf(this), 1);
             this.loader.lq_running = false;
