@@ -25,18 +25,23 @@ class SelectedPhrasingHandler(AuthorizationRequestHanlder):
     def get(self, selected_phrasing_id=None):
         selected_phrasing_dict = {}
         q = SelectedPhrasing.query()
+
         if self.request.get('project_id').strip() != '':
             q = q.filter(SelectedPhrasing.project == Project.get_by_id(
                 self.request.get('project_id').strip()).key)
+
         if self.request.get('document_id').strip() != '':
             q = q.filter(SelectedPhrasing.document == Document.get_by_id(
                 self.request.get('document_id').strip()).key)
+
         if self.request.get('phrasing_id').strip() != '':
             q = q.filter(SelectedPhrasing.phrasing == Phrasing.get_by_id(
                 self.request.get('phrasing_id').strip()).key)
+
         for phrase in q.iter():
             phrase_dict = phrase.to_dict()
             selected_phrasing_dict[phrase.key.id()] = phrase_dict
+
         self.write_json_response(selected_phrasing_dict)
 
     @cerberus_handlers.enable_json(True)
@@ -44,23 +49,32 @@ class SelectedPhrasingHandler(AuthorizationRequestHanlder):
     def post(self, phrasing_id=None):
         if not phrasing_id:
             raise HttpErrorException.bad_request('no phrasing_id given')
+
         phrasing = Phrasing.get_by_id(phrasing_id)
         if not phrasing:
             raise HttpErrorException.bad_request('invalid phrasing_id given')
         if not self.json_request.get('document'):
             raise HttpErrorException.bad_request('no document given')
+
         document = Document.get_by_id(self.json_request.get('document'))
         if not document:
             raise HttpErrorException.bad_request('invalid document given')
         if not document.has_permission(self.user, 'manage_phrasings'):
-            lr = tt_logging.construct_log(msg_short='User does not have manage_phrasing perm',
-                                          log_type=tt_logging.SECURITY, request=self.request, artifact=document,
-                                          request_user=self.user)
+            lr = tt_logging.construct_log(
+                msg_short='User does not have manage_phrasing perm',
+                log_type=tt_logging.SECURITY,
+                request=self.request,
+                artifact=document,
+                request_user=self.user
+            )
             log.info(lr['dict_msg']['msg'], extra=lr)
+
             raise HttpErrorException.forbidden()
+
         concept = phrasing.concept.get()
         project = concept.project.get()
         selected_phrasing = None
+
         if document.is_distilled_document() and project.key == document.project:
             concept.distilled_phrasing = phrasing.key
             concept.put()
@@ -75,18 +89,25 @@ class SelectedPhrasingHandler(AuthorizationRequestHanlder):
                 selected_phrasing.put()
                 concept.selected_phrasings.append(selected_phrasing.key)
                 concept.put()
+
         project = document.project.get()  # Don't want concept's project, this could be a linked concept
         project.pw_modified_ts = datetime.datetime.now()
         project.put()
+
         self.get_analytic_session()
         concept.record_analytic('con_phr_cha', self.analytic_session)
+
         if selected_phrasing:
             self.write_json_response(selected_phrasing.to_dict())
 
         action_data = {'document': document.key.id()}
-
-        trans = Transaction(action='phr_chg', user=self.user.key, artifact=phrasing.key,
-                            project=project.key, action_data=action_data)
+        trans = Transaction(
+            action='phr_chg',
+            user=self.user.key,
+            artifact=phrasing.key,
+            project=project.key,
+            action_data=action_data
+        )
         trans.put()
 
         self.get_channel_token()
@@ -109,11 +130,13 @@ class SummarySelectedPhrasingHandler(AuthorizationRequestHanlder):
     def post(self, phrasing_id=None):
         if not phrasing_id:
             raise HttpErrorException.bad_request('no phrasing_id given')
+
         phrasing = Phrasing.get_by_id(phrasing_id)
         if not phrasing:
             raise HttpErrorException.bad_request('invalid phrasing_id given')
         if not self.json_request.get('document'):
             raise HttpErrorException.bad_request('no document given')
+
         document = Document.get_by_id(self.json_request.get('document'))
         if not document:
             raise HttpErrorException.bad_request('invalid document given')
@@ -122,6 +145,7 @@ class SummarySelectedPhrasingHandler(AuthorizationRequestHanlder):
 
         if not document.summary_document:
             raise HttpErrorException.bad_request('document does not have a summary')
+
         sum_doc = document.summary_document.get()
         if not sum_doc:
             raise HttpErrorException.bad_request('document does not have a summary')
@@ -132,17 +156,24 @@ class SummarySelectedPhrasingHandler(AuthorizationRequestHanlder):
             selected_phrasing.phrasing = phrasing.key
             selected_phrasing.put()
         else:
-            selected_phrasing = SummarySelectedPhrasing(id=SummarySelectedPhrasing.create_uuid(),
-                                                        project=concept.project, document=sum_doc.key,
-                                                        phrasing=phrasing.key)
+            selected_phrasing = SummarySelectedPhrasing(
+                id=SummarySelectedPhrasing.create_uuid(),
+                project=concept.project,
+                document=sum_doc.key,
+                phrasing=phrasing.key
+            )
             selected_phrasing.put()
+
             concept.summary_selected_phrasings.append(selected_phrasing.key)
             concept.put()
+
         project = document.project.get()  # Don't want concept's project, this could be a linked concept
         project.pw_modified_ts = datetime.datetime.now()
         project.put()
+
         self.get_analytic_session()
         concept.record_analytic('con_phr_cha', self.analytic_session)
+
         if selected_phrasing:
             self.write_json_response(selected_phrasing.to_dict())
 
@@ -157,11 +188,13 @@ class PresentationSelectedPhrasingHandler(AuthorizationRequestHanlder):
     def post(self, phrasing_id=None):
         if not phrasing_id:
             raise HttpErrorException.bad_request('no phrasing_id given')
+
         phrasing = Phrasing.get_by_id(phrasing_id)
         if not phrasing:
             raise HttpErrorException.bad_request('invalid phrasing_id given')
         if not self.json_request.get('document'):
             raise HttpErrorException.bad_request('no document given')
+
         document = Document.get_by_id(self.json_request.get('document'))
         if not document:
             raise HttpErrorException.bad_request('invalid document given')
@@ -170,6 +203,7 @@ class PresentationSelectedPhrasingHandler(AuthorizationRequestHanlder):
 
         if not document.presentation_document:
             raise HttpErrorException.bad_request('document does not have a presentation')
+
         sum_doc = document.presentation_document.get()
         if not sum_doc:
             raise HttpErrorException.bad_request('document does not have a presentation')
@@ -180,17 +214,24 @@ class PresentationSelectedPhrasingHandler(AuthorizationRequestHanlder):
             selected_phrasing.phrasing = phrasing.key
             selected_phrasing.put()
         else:
-            selected_phrasing = PresentationSelectedPhrasing(id=PresentationSelectedPhrasing.create_uuid(),
-                                                             project=concept.project, document=sum_doc.key,
-                                                             phrasing=phrasing.key)
+            selected_phrasing = PresentationSelectedPhrasing(
+                id=PresentationSelectedPhrasing.create_uuid(),
+                project=concept.project,
+                document=sum_doc.key,
+                phrasing=phrasing.key
+            )
             selected_phrasing.put()
+
             concept.presentation_selected_phrasings.append(selected_phrasing.key)
             concept.put()
+
         project = document.project.get()  # Don't want concept's project, this could be a linked concept
         project.pw_modified_ts = datetime.datetime.now()
         project.put()
+
         self.get_analytic_session()
         concept.record_analytic('con_phr_cha', self.analytic_session)
+
         if selected_phrasing:
             self.write_json_response(selected_phrasing.to_dict())
 
