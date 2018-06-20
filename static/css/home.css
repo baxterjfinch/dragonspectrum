@@ -75,8 +75,8 @@
 }
 
 #project-panel {
-    margin-top: 50px;
-    margin-left: 16%;
+    margin-top: 65px;
+    margin-left: 21%;
 }
 
 .my_project_table_side_container {
@@ -108,11 +108,11 @@
 }
 
 #my-project-table-body-side {
-  font-size: 15px;
+    font-size: 12px;
 }
 
 #my-project-table-body-side .tr {
-  font-size: 15px;
+    font-size: 12px;
 }
 
 .project-table-side .project-score {
@@ -120,11 +120,11 @@
 }
 
 .project-table-side .project-owner {
-    max-width: 50px;
+    max-width: 40px;
 }
 
 .project-table-side .project-date {
-    max-width: 60px;
+    max-width: 70px;
 }
 
 #search-form {
@@ -238,21 +238,21 @@ a {
 .sidenav {
     margin-top: 50px;
     height: 100%; /* Full-height: remove this if you want "auto" height */
-    width: 15%; /* Set the width of the sidebar */
+    width: 20%; /* Set the width of the sidebar */
     position: fixed; /* Fixed Sidebar (stay in place on scroll) */
     z-index: 1; /* Stay on top */
     top: 0; /* Stay at the top */
     left: 0;
-    background-color: #111; /* Black */
-    overflow-x: hidden; /* Disable horizontal scroll */
-    padding-top: 20px;
+    background-color: #565656; /* Grey */
+
+    padding-top: 10px;
 }
 
 /* The navigation menu links */
 .sidenav a {
     text-decoration: none;
     font-size: 17px;
-    color: #818181;
+    color: ghostwhite;
     display: block;
 }
 
@@ -270,9 +270,25 @@ a {
 /* On smaller screens, where height is less than 450px, change the style of the sidebar (less padding and a smaller font size) */
 @media screen and (max-height: 450px) {
     .sidenav {padding-top: 15px;}
-    .sidenav a {font-size: 18px;}
+    .sidenav a {font-size: 12px;}
 }
 
 .mainview {
-  width: 83%;
+  width: 78%;
+}
+
+.fa-chevron-circle-down {
+  color: grey;
+}
+
+.fa-chevron-circle-up {
+  color: grey;
+}
+
+.down {
+  color: darkred;
+}
+
+.up {
+  color: #009fe0;
 }

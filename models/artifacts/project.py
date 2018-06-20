@@ -13,7 +13,21 @@ log = logging.getLogger('tt')
 
 __all__ = [
     'Project',
+    'ProjectUserVotes',
 ]
+
+
+class ProjectUserVotes(ndb.Model):
+    project = ndb.KeyProperty(required=True)
+    user = ndb.KeyProperty(required=True)
+    direction = ndb.StringProperty(required=True)
+
+    def to_dict(self):
+        return {
+            'project': self.project.id(),
+            'user': self.user.id(),
+            'direction': self.direction
+        }
 
 
 class Project(ProjectNode):
@@ -149,6 +163,17 @@ class Project(ProjectNode):
                 pass
         return project_array
 
+    def get_user_vote(self, user):
+        q = ProjectUserVotes.query()
+        q = q.filter(ProjectUserVotes.project == self.key)
+        q = q.filter(ProjectUserVotes.user == user.key)
+
+        vote = None
+        for vote in q.iter():
+            vote = vote
+            break
+        return vote
+
     def get_document_ids(self):
         doc_ids = [self.distilled_document.id()]
         for doc in self.documents:
@@ -256,6 +281,10 @@ class Project(ProjectNode):
         d['pw_modified'] = pw_modified_ts.strftime(DATETIME_FORMATE)
 
         d['project_score'] = self.project_score
+        user_vote = self.get_user_vote(user)
+        d['user_vote'] = None
+        if user_vote is not None:
+            d['user_vote'] = user_vote.to_dict()
 
         # Remove the world group from the user to test if a project is share to them
         # or just world shared

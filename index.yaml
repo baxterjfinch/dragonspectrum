@@ -178,6 +178,11 @@ indexes:
   - name: groups
   - name: owner
 
+- kind: ProjectUserVotes
+  properties:
+  - name: project
+  - name: user
+
 - kind: User
   properties:
   - name: organization
