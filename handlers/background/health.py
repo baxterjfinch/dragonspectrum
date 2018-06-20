@@ -1,5 +1,6 @@
 import time
 import json
+import random
 import webapp2
 import logging
 from datetime import datetime, timedelta
@@ -44,12 +45,14 @@ class SiteHealthRunHandler(webapp2.RequestHandler):
         keys = []
         for i in xrange(100):
             keys = WriteTestLatency.new(str(i))
+
         total = 0
         for e in keys:
             start = time.clock()
             e.put()
             end = time.clock()
             total += end - start
+
         self.health.write_latency = total / len(keys)
         return keys
 
@@ -86,13 +89,21 @@ class SiteHealthRunHandler(webapp2.RequestHandler):
 
         offset = self._get_load_log_offset()
         end_time = time.time()
+
         if not offset:
             start_time = time.time() - 60 * 60
-            rls = logservice.fetch(end_time=end_time, start_time=start_time,
-                                   minimum_log_level=logservice.LOG_LEVEL_DEBUG)
+            rls = logservice.fetch(
+                end_time=end_time,
+                start_time=start_time,
+                minimum_log_level=logservice.LOG_LEVEL_DEBUG
+            )
         else:
-            rls = logservice.fetch(end_time=end_time, offset=offset,
-                                   minimum_log_level=logservice.LOG_LEVEL_DEBUG)
+            rls = logservice.fetch(
+                end_time=end_time,
+                offset=offset,
+                minimum_log_level=logservice.LOG_LEVEL_DEBUG
+            )
+
         self.health.log_count = len(rls)
         for rl in rls:
             self.health.last_log_offset = rl.offset
@@ -106,15 +117,19 @@ class SiteHealthRunHandler(webapp2.RequestHandler):
                 self.health.total_loading_request += 1
                 if rl.latency > self.health.highest_loading_latency:
                     self.health.highest_loading_latency = rl.latency
+
             total_cost += rl.cost
             if rl.cost > self.health.highest_cost:
                 self.health.highest_cost = rl.cost
+
             total_pending_time += rl.pending_time
             if rl.pending_time > self.health.highest_pending_time:
                 self.health.highest_pending_time = rl.pending_time
+
             total_response_size += rl.response_size
             if rl.response_size > self.health.biggest_response_size:
                 self.health.biggest_response_size = rl.response_size
+
             if rl.status in self.health.status_count:
                 self.health.status_count[rl.status] += 1
             else:
@@ -135,7 +150,6 @@ class SiteHealthRunHandler(webapp2.RequestHandler):
 
 class CreateTestData(webapp2.RequestHandler):
     def get(self):
-        import random
         for i in xrange(720):
             h = Health.new()
             h.ts = datetime.now() - timedelta(hours=i)
