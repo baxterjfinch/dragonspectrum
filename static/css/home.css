@@ -248,11 +248,14 @@ a {
     padding-top: 10px;
 }
 
+.sidenav a:hover {
+  color: pink;
+}
 /* The navigation menu links */
 .sidenav a {
     text-decoration: none;
     font-size: 17px;
-    color: ghostwhite;
+    color: #23252a;
     display: block;
 }
 
@@ -275,6 +278,10 @@ a {
 
 .mainview {
   width: 78%;
+}
+
+.tbody tr:hover td, .table tbody tr:hover th {
+    background-color: #eeeeea;
 }
 
 .fa-chevron-circle-down {

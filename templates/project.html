@@ -8,6 +8,8 @@
 
     <link href="/css/summernote.css" rel="stylesheet">
     <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+
 </head>
 
 <body>
@@ -150,6 +152,13 @@
         <div id="tvs-wrapper" class="hidden-xs col-sm-4 col-md-3 col-lg-3">
             <div id="tvs" class="sidenav container my_project_table_side_container">
                 <div id="tvs-toolbar" style="margin-bottom: 2px">
+                    <div class="voting-buttons">
+                      <i class="fas fa-chevron-circle-up" id="voterrrrr_up"></i>                                
+                      <h4 id="pscorer"></h4>
+                      <i class="fas fa-chevron-circle-down" id="voter_down"></i>
+                    </div>
+
+                  </div>
                     <div id="tvs-buttons" class="btn-group">
                         <button type="button" class="btn btn-xs" id="tvs-tool-bar-new" data-toggle="tooltip" data-placement="top" data-container="body" title="New Concept &lt;Enter&gt;"><i class="fa fa-plus"></i></button>
                         <button type="button" class="btn btn-xs" id="tvs-tool-bar-del" data-toggle="tooltip" data-placement="top" data-container="body" title="Delete Concept &lt;Delete&gt;"><i class="fa fa-minus"></i></button>
@@ -171,7 +180,6 @@
 
         <!-- right pane -->
         <div id="right-pane" class="col-xs-12 col-sm-8 col-md-9 col-lg-9">
-
             <!-- Doc Tabs -->
             <div id="dvs-tabs-container" class="row">
                 <div class="col-lg-*">
@@ -242,6 +250,8 @@
             </div>
         </div>
     </div>
+    <!-- PROJECT SCORING -->
+
 
     <div id="pvs" class="row">
         <!-- PVs -->

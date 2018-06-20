@@ -44,6 +44,7 @@ Project.conceptLoader = null;
 Project.renderEngine = null;
 Project.render_enabled = true;
 
+
 /** @instance
  * Init function for project
  *
@@ -505,6 +506,7 @@ Project.finalizePageSetup = function (act_con) {
 
 Project.setupPage = function (children, act_con) {
     document.title = Project.project.getTitle();
+    document.getElementById("pscorer").innerHTML = Project.project.getProjectScore();
 
     if (Page.isProjectPage())
         TVS.initialize();
@@ -562,6 +564,36 @@ Project.setupPage = function (children, act_con) {
 
     $('#presentation-fullscreen-button').click(function () {
         Util.startSlideShow();
+    });
+
+    downvote_icon = $("#voter_down");
+    downvote_class = $("fas fa-chevron-circle-down")
+    upvote_icon = $("#voterrrrr_up");
+    upvote_class = $("fas fa-chevron-circle-up")
+    total_score = $("#pscorer");
+
+    downvote_icon.click(function (){
+      ProjectEventListener.downvote(Project.project, null, function () {
+          total_score.empty();
+          total_score.append(Project.project.getProjectScore());
+          Project.project.user_vote = "direction:down";
+          if (Project.project.user_vote.direction != "down") {
+            $( "div.voting-buttons i" ).removeClass("up");
+            $( "div.voting-buttons i" ).addClass("down");
+          }
+      }, true);
+    });
+
+    upvote_icon.click(function (){
+      ProjectEventListener.upvote(Project.project, null, function () {
+          total_score.empty();
+          total_score.append(Project.project.getProjectScore());
+          Project.project.user_vote = "direction:up";
+          if (Project.project.user_vote.direction != "up") {
+            $( "div.voting-buttons i" ).removeClass("down");
+            $( "div.voting-buttons i" ).addClass("up");
+          }
+      }, true);
     });
 };
 

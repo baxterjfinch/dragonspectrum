@@ -113,6 +113,7 @@ body {
     position: relative;
     height: 100%;
     margin: -15px 80px 0 -30%;
+
 }
 
 #content-pane {
@@ -503,8 +504,8 @@ i.synchronized {
 }
 
 .activate_concept {
-    background: yellow !important;
-    box-shadow: 0 0 2px 2px yellow;
+    background: #0084ff40 !important
+    box-shadow: 0 0 2px 2px #007eff;
 }
 
 .activate_concept_bullet {
@@ -760,7 +761,7 @@ Context menu stuff starts here
 .context-menu-item:hover {
     cursor: pointer;
     background-color: #39F;
-    color: white;
+    color: grey;
 }
 
 .context-menu-item.icon-arrow-up:before {
@@ -926,8 +927,8 @@ li span i.fa-circle {
 
 .note-editable {
     display: inline;
-    background-color: yellow !important;
-    outline: 1px dotted red !important;
+    background-color: #94e0ff !important;
+    outline: 1px dotted #0900ff !important;
     box-shadow: 0 0 0 1px yellow;
     padding: 1px 1px 1px 1px;
     margin: 0 1px 0 0;
@@ -1006,7 +1007,7 @@ li span i.fa-circle {
 }
 
 .node_context {
-    color: #004B64 !important;
+    color: #79baec !important;
     font-weight: normal !important;
     font-style: normal !important;
 }
@@ -1018,8 +1019,8 @@ ul.dynatree-container a:focus {
 
 span.dynatree-active a {
     color: black !important;
-    background-color: yellow !important;
-    box-shadow:  0 0 2px 2px yellow;
+    background-color: #00c5ff !important;
+    box-shadow:  0 0 2px 2px #0073ff7d;
 }
 
 /*******************
@@ -1845,3 +1846,23 @@ div:fullscreen {
 /******************
 Jmpress END
 /******************
+
+/********PROJECT PAGE ************/
+
+.project-scorer > h4{
+  margin-right: 20px;
+  height: 50%;
+  text-align: center;
+  border-bottom: 1px #636363 solid;
+
+}
+
+#pscorer {
+  display: inline;
+  padding-top: 30px;
+  padding-bottom: 30px
+}
+
+.voting-buttons {
+  display: inline;
+}
