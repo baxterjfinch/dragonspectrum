@@ -54,6 +54,7 @@ class Concept(ProjectNode):
     linked_to = ndb.StructuredProperty(ConceptLink, repeated=True)
 
     # Deprecated
+    # TODO: If this is deprecated, than it needs removed
     linkes = ndb.KeyProperty(kind='LinkedConcept', repeated=True)
 
     parent_obj = None
@@ -65,7 +66,6 @@ class Concept(ProjectNode):
         return self.parent.get()
 
     def get_link(self, link_id):
-        # noinspection PyTypeChecker
         for link in self.linked_to:
             if link.link_id == link_id:
                 return link
@@ -103,16 +103,19 @@ class Concept(ProjectNode):
 
         if self.key in old_parent.children:
             old_parent.children.remove(self.key)
+
         old_parent.put()
         if new_parent.node_type == 'Project':
             if link:
                 link.parent = new_parent.key
             else:
                 self.parent = None
+
             if index is None:
                 new_parent.children.append(self.key)
             else:
                 new_parent.children.insert(index, self.key)
+
             if not link:
                 self.parent_perms = [new_parent.permissions]
         else:
@@ -120,34 +123,44 @@ class Concept(ProjectNode):
                 link.parent = new_parent.key
             else:
                 self.parent = new_parent.key
+
             if index is None:
                 new_parent.children.append(self.key)
             else:
                 new_parent.children.insert(index, self.key)
+
             if not link:
                 self.parent_perms = new_parent.parent_perms
                 self.parent_perms.append(new_parent.permissions)
+
         if not link and len(self.children) > 0:
             children = ndb.get_multi(self.children)
             for child in children:
                 child.update_parent_permissions(self)
+
         new_parent.put()
         self.put()
 
     def get_parent_id_list(self, user):
         if self.parent is None:
             return []
+
         parent = self.parent.get()
         parent_list = []
+
         while True:
             parent_list.append(parent.key.id())
+
             if parent.parent is None:
                 break
+
             parent = parent.parent.get()
+
             if parent.node_type == 'Project':
                 break
             if not parent.has_permission_read(user):
                 break
+
         parent_list.reverse()
         return parent_list
 
@@ -155,19 +168,24 @@ class Concept(ProjectNode):
         indexes = user.get_indexes(create_new=False)
         self.rdelete(user, indexes)
 
-    # This is a recursive method that should only be called from within the models.py
-    # everyone else should call delete() instead.
-    # noinspection PyTypeChecker
     def rdelete(self, user, indexes):
+        """
+        This is a recursive method that should only be called from within the models.py
+        everyone else should call delete() instead.
+        noinspection PyTypeChecker
+        """
+
         if not self.has_permission_write(user):
             return False
 
         if len(self.phrasings) > 0:
             perms = []
             phrasings = ndb.get_multi(self.phrasings)
+
             for phrase in phrasings:
                 perms.append(phrase.permissions)
                 phrase.index_delete(indexes)
+
             ndb.delete_multi(self.phrasings)
             ndb.delete_multi(perms)
 
@@ -205,33 +223,38 @@ class Concept(ProjectNode):
         return True
 
     def delete_media(self):
-        # noinspection PyBroadException
         try:
-            # noinspection PyTypeChecker
             gcs.delete('/' + server.GCS_BUCKET_NAME + '/' + self.media_id)
-        except:
+        except:  # TODO: need to catch on the exception for Not Found and let other errors continue
             pass  # Don't want to fail if the media has already be deleted
 
     def get_parent_list(self, user, auth=True, keys_only=False, ids_only=False, append_self=False):
         parent_list = []
+
         if auth and not self.has_permission(user, 'read'):
             return None
+
         if append_self:
             parent = self
         else:
             parent = self.parent.get()
+
         while not parent.node_type == 'Project':
             if auth and not parent.has_permission(user, 'read'):
                 return None
+
             if keys_only:
                 parent_list.append(parent.key)
             elif ids_only:
                 parent_list.append(parent.key.id())
             else:
                 parent_list.append(parent)
+
             if parent.parent is None:
                 break
+
             parent = parent.parent.get()
+
         parent_list.reverse()
         return parent_list
 
@@ -268,12 +291,14 @@ class Concept(ProjectNode):
             if not isinstance(document, ndb.Key):
                 document = document.key
             sel_phrs = ndb.get_multi(self.selected_phrasings)
+
             for sel_phr in sel_phrs:
                 if sel_phr.document == document:
                     return True
         elif phrasing:
             if not isinstance(phrasing, ndb.Key):
                 phrasing = phrasing.key
+
             sel_phrs = ndb.get_multi(self.selected_phrasings)
             for sel_phr in sel_phrs:
                 if sel_phr.phrasing == phrasing:
@@ -284,6 +309,7 @@ class Concept(ProjectNode):
         if document:
             if not isinstance(document, ndb.Key):
                 document = document.key
+
             sel_phrs = ndb.get_multi(self.summary_selected_phrasings)
             for sel_phr in sel_phrs:
                 if sel_phr.document == document:
@@ -291,6 +317,7 @@ class Concept(ProjectNode):
         elif phrasing:
             if not isinstance(phrasing, ndb.Key):
                 phrasing = phrasing.key
+
             sel_phrs = ndb.get_multi(self.summary_selected_phrasings)
             for sel_phr in sel_phrs:
                 if sel_phr.phrasing == phrasing:
@@ -301,6 +328,7 @@ class Concept(ProjectNode):
         if document:
             if not isinstance(document, ndb.Key):
                 document = document.key
+
             sel_phrs = ndb.get_multi(self.presentation_selected_phrasings)
             for sel_phr in sel_phrs:
                 if sel_phr.document == document:
@@ -308,6 +336,7 @@ class Concept(ProjectNode):
         elif phrasing:
             if not isinstance(phrasing, ndb.Key):
                 phrasing = phrasing.key
+
             sel_phrs = ndb.get_multi(self.presentation_selected_phrasings)
             for sel_phr in sel_phrs:
                 if sel_phr.phrasing == phrasing:
@@ -318,6 +347,7 @@ class Concept(ProjectNode):
         if document:
             if not isinstance(document, ndb.Key):
                 document = document.key
+
             sel_phrs = ndb.get_multi(self.selected_phrasings)
             for sel_phr in sel_phrs:
                 if sel_phr.document == document:
@@ -325,8 +355,10 @@ class Concept(ProjectNode):
         elif phrasing:
             if not isinstance(phrasing, ndb.Key):
                 phrasing = phrasing.key
+
             sel_phr_list = []
             sel_phrs = ndb.get_multi(self.selected_phrasings)
+
             for sel_phr in sel_phrs:
                 if sel_phr.phrasing == phrasing:
                     sel_phr_list.append(sel_phr)
@@ -336,6 +368,7 @@ class Concept(ProjectNode):
         if document:
             if not isinstance(document, ndb.Key):
                 document = document.key
+
             sel_phrs = ndb.get_multi(self.summary_selected_phrasings)
             for sel_phr in sel_phrs:
                 if sel_phr.document == document:
@@ -343,8 +376,10 @@ class Concept(ProjectNode):
         elif phrasing:
             if not isinstance(phrasing, ndb.Key):
                 phrasing = phrasing.key
+
             sel_phr_list = []
             sel_phrs = ndb.get_multi(self.summary_selected_phrasings)
+
             for sel_phr in sel_phrs:
                 if sel_phr.phrasing == phrasing:
                     sel_phr_list.append(sel_phr)
@@ -354,6 +389,7 @@ class Concept(ProjectNode):
         if document:
             if not isinstance(document, ndb.Key):
                 document = document.key
+
             sel_phrs = ndb.get_multi(self.presentation_selected_phrasings)
             for sel_phr in sel_phrs:
                 if sel_phr.document == document:
@@ -361,8 +397,10 @@ class Concept(ProjectNode):
         elif phrasing:
             if not isinstance(phrasing, ndb.Key):
                 phrasing = phrasing.key
+
             sel_phr_list = []
             sel_phrs = ndb.get_multi(self.presentation_selected_phrasings)
+
             for sel_phr in sel_phrs:
                 if sel_phr.phrasing == phrasing:
                     sel_phr_list.append(sel_phr)
@@ -385,10 +423,12 @@ class Concept(ProjectNode):
     def get_distilled_crawlcontext(self, project=None, _crawlcontext_list=None):
         if not project:
             project = self.project.get()
+
         if not _crawlcontext_list:
             cc = ndb.get_multi(self.crawlcontext)
         else:
             cc = ndb.get_multi(_crawlcontext_list)
+
         for c in cc:
             if not c:
                 continue
@@ -407,6 +447,7 @@ class Concept(ProjectNode):
             cc = ndb.get_multi(self.crawlcontext)
         else:
             cc = ndb.get_multi(_crawlcontext_list)
+
         if document:
             for c in cc:
                 if not c:
@@ -423,14 +464,17 @@ class Concept(ProjectNode):
 
     def is_crawlable(self, document=None, project=None, _crawlcontext_list=None):
         cc = self.get_crawlcontext(document=document, project=project, _crawlcontext_list=_crawlcontext_list)
+
         if cc and not cc.crawl:
             return False
+
         parent = self.get_parent()
         while parent and not parent.is_root():
             cc = parent.get_crawlcontext(document=document, project=project, _crawlcontext_list=_crawlcontext_list)
             if cc and not cc.crawl:
                 return False
             parent = parent.get_parent()
+
         return True
 
     def is_summary_crawlable(self, document=None, project=None):
@@ -443,6 +487,7 @@ class Concept(ProjectNode):
         self.parent_perms = parent.parent_perms
         self.parent_perms.append(parent.permissions)
         self.put()
+
         if len(self.children) > 0:
             children = ndb.get_multi(self.children)
             for child in children:
@@ -471,6 +516,7 @@ class Concept(ProjectNode):
                     sp.key.delete()
                     modified = True
                     break
+
         if self.crawlcontext is not None:
             crawlcontext = ndb.get_multi(self.crawlcontext)
             for cc in crawlcontext:
@@ -479,6 +525,7 @@ class Concept(ProjectNode):
                     cc.key.delete()
                     modified = True
                     break
+
         if self.attributes is not None:
             attributes = ndb.get_multi(self.attributes)
             for a in attributes:
@@ -487,6 +534,7 @@ class Concept(ProjectNode):
                     a.key.delete()
                     modified = True
                     break
+
         if modified:  # puts are money, no need to call it if we don't need to :)
             self.put()
 
@@ -497,18 +545,21 @@ class Concept(ProjectNode):
                 if s.document.id() in document_ids:
                     self.selected_phrasings.remove(s.key)
                     s.key.delete()
+
         crawlc = ndb.get_multi(self.crawlcontext)
         if crawlc is not None:
             for c in crawlc:
                 if c.document.id() in document_ids:
                     self.crawlcontext.remove(c.key)
                     c.key.delete()
+
         attrs = ndb.get_multi(self.attributes)
         if attrs is not None:
             for a in attrs:
                 if a.document.id() in document_ids:
                     self.attributes.remove(a.key)
                     a.key.delete()
+
         children = ndb.get_multi(self.children)
         for child in children:
             child.remove_link_setting(document_ids)
@@ -527,11 +578,13 @@ class Concept(ProjectNode):
         index = user.get_indexes(create_new=False)
         search_results = ttindex.ttsearch(index, query_dict, limit=1000, use_cursor=False, user=user)
         concept_ids = []
+
         while len(concept_ids) < 20 and search_results is not None:
             for sr in search_results:
                 if sr['fields']['con'] not in concept_ids:
                     concept = Concept.get_by_id(sr['fields']['con'])
                     phrasing = ndb.Key('Phrasing', sr['id'])
+
                     if concept and phrasing:
                         if concept.has_permission(user, 'read') and phrasing.has_permission(user, 'read'):
                             concept_ids.append({'con_id': sr['fields']['con'], 'phr_text': sr['fields']['phr']})
@@ -546,6 +599,7 @@ class Concept(ProjectNode):
             phrasings = [self.distilled_phrasing.get()]
         else:
             phrasings = []
+
         phrasings += ndb.get_multi(self.phrasings)
         for phr in phrasings:
             phr.index(indexes, concept=self)
