@@ -139,6 +139,16 @@ ProjectTable.buildTableRow = function (table, project) {
     project_row.setCheckboxColumn(checkbox);
 
     td = $('<td></td>');
+    var score = $('<a></a>');
+    score.attr('href', project.getURL()); //This needs to be changed
+    score.attr('target', '_blank');       //This needs to be changed
+    score.append(project.getProjectScore());
+    td.addClass(ProjectTable.score_column_classes);
+    td.append(score);
+    tr.append(td);
+    project_row.setScoreColumn(score);
+    
+    td = $('<td></td>');
     var title = $('<a></a>');
     title.attr('href', project.getURL());
     title.attr('target', '_blank');

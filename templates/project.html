@@ -152,24 +152,18 @@
         <div id="tvs-wrapper" class="hidden-xs col-sm-4 col-md-3 col-lg-3">
             <div id="tvs" class="sidenav container my_project_table_side_container">
                 <div id="tvs-toolbar" style="margin-bottom: 2px; text-align: center;">
-                    <div class="voting-buttons">
-                      <i class="fas fa-chevron-circle-up" id="voterrrrr_up"></i>
-                      <h4 id="pscorer"></h4>
-                      <i class="fas fa-chevron-circle-down" id="voter_down"></i>
-                    </div>
-                    <br>
-                    <br>
-                    <div id="tvs-buttons" class="btn-group">
-                        <button type="button" class="btn btn-xs" id="tvs-tool-bar-new" data-toggle="tooltip" data-placement="top" data-container="body" title="New Concept &lt;Enter&gt;"><i class="fa fa-plus"></i></button>
-                        <button type="button" class="btn btn-xs" id="tvs-tool-bar-del" data-toggle="tooltip" data-placement="top" data-container="body" title="Delete Concept &lt;Delete&gt;"><i class="fa fa-minus"></i></button>
-                        <button type="button" class="btn btn-xs" id="tvs-tool-bar-indent" data-toggle="tooltip" data-placement="top" data-container="body" title="Indent Concept &lt;Tab&gt;"><i class="fa fa-arrow-right"></i></button>
-                        <button type="button" class="btn btn-xs" id="tvs-tool-bar-outdent" data-toggle="tooltip" data-placement="top" data-container="body" title="Outdent Concept &lt;Shift-Tab&gt;"><i class="fa fa-arrow-left"></i></button>
-                        <button type="button" class="btn btn-xs" id="tvs-tool-bar-move-up" data-toggle="tooltip" data-placement="top" data-container="body" title="Move Concept Up &lt;Ctrl+Up&gt;"><i class="fa fa-arrow-up"></i></button>
-                        <button type="button" class="btn btn-xs" id="tvs-tool-bar-move-down" data-toggle="tooltip" data-placement="top" data-container="body" title="Move Concept Down &lt;Ctrl+Down&gt;"><i class="fa fa-arrow-down"></i></button>
-                        <button type="button" class="btn btn-xs" id="tvs-tool-bar-expand" data-toggle="tooltip" data-placement="top" data-container="body" title="Expand Children"><i class="fa fa-angle-double-down"></i></button>
-                        <button type="button" class="btn btn-xs" id="tvs-tool-bar-collapse" data-toggle="tooltip" data-placement="top" data-container="body" title="Collapse Children"><i class="fa fa-angle-double-up"></i></button>
-                        <button type="button" class="btn btn-xs" id="tvs-tool-bar-security" data-toggle="tooltip" data-placement="top" data-container="body" title="Project Security"><i id="project-security-icon" class="fa fa-shield"></i></button>
-                    </div>
+
+                  <div id="tvs-buttons" class="btn-group">
+                      <button type="button" class="btn btn-xs" id="tvs-tool-bar-new" data-toggle="tooltip" data-placement="top" data-container="body" title="New Concept &lt;Enter&gt;"><i class="fa fa-plus"></i></button>
+                      <button type="button" class="btn btn-xs" id="tvs-tool-bar-del" data-toggle="tooltip" data-placement="top" data-container="body" title="Delete Concept &lt;Delete&gt;"><i class="fa fa-minus"></i></button>
+                      <button type="button" class="btn btn-xs" id="tvs-tool-bar-indent" data-toggle="tooltip" data-placement="top" data-container="body" title="Indent Concept &lt;Tab&gt;"><i class="fa fa-arrow-right"></i></button>
+                      <button type="button" class="btn btn-xs" id="tvs-tool-bar-outdent" data-toggle="tooltip" data-placement="top" data-container="body" title="Outdent Concept &lt;Shift-Tab&gt;"><i class="fa fa-arrow-left"></i></button>
+                      <button type="button" class="btn btn-xs" id="tvs-tool-bar-move-up" data-toggle="tooltip" data-placement="top" data-container="body" title="Move Concept Up &lt;Ctrl+Up&gt;"><i class="fa fa-arrow-up"></i></button>
+                      <button type="button" class="btn btn-xs" id="tvs-tool-bar-move-down" data-toggle="tooltip" data-placement="top" data-container="body" title="Move Concept Down &lt;Ctrl+Down&gt;"><i class="fa fa-arrow-down"></i></button>
+                      <button type="button" class="btn btn-xs" id="tvs-tool-bar-expand" data-toggle="tooltip" data-placement="top" data-container="body" title="Expand Children"><i class="fa fa-angle-double-down"></i></button>
+                      <button type="button" class="btn btn-xs" id="tvs-tool-bar-collapse" data-toggle="tooltip" data-placement="top" data-container="body" title="Collapse Children"><i class="fa fa-angle-double-up"></i></button>
+                      <button type="button" class="btn btn-xs" id="tvs-tool-bar-security" data-toggle="tooltip" data-placement="top" data-container="body" title="Project Security"><i id="project-security-icon" class="fa fa-shield"></i></button>
+                  </div>
                 </div>
                 <br>
                 <div id="scrollbar-tv">
@@ -250,8 +244,17 @@
                 </div>
             </div>
         </div>
+
+        <div class="voting-buttons-div">
+          <button type="button" class="btn btn-secondary btn-sm voting-buttons" data-toggle="button" aria-pressed="false" autocomplete="off" id="voterrrrr_up">
+            <i class="fas fa-chevron-circle-up"></i>
+          </button>
+            <h4 id="pscorer"></h4>
+          <button type="button" class="btn btn-secondary btn-sm voting-buttons" data-toggle="button" aria-pressed="false" autocomplete="off" id="voter_down">
+            <i class="fas fa-chevron-circle-down"></i>
+          </button>
+        </div>
     </div>
-    <!-- PROJECT SCORING -->
 
 
     <div id="pvs" class="row">

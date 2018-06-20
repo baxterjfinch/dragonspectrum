@@ -239,6 +239,7 @@ a {
     margin-top: 50px;
     height: 100%; /* Full-height: remove this if you want "auto" height */
     width: 20%; /* Set the width of the sidebar */
+    min-width: 250px;
     position: fixed; /* Fixed Sidebar (stay in place on scroll) */
     z-index: 1; /* Stay on top */
     top: 0; /* Stay at the top */
@@ -254,7 +255,7 @@ a {
 /* The navigation menu links */
 .sidenav a {
     text-decoration: none;
-    font-size: 17px;
+    font-size: 14px;
     color: #23252a;
     display: block;
 }
@@ -276,6 +277,35 @@ a {
     .sidenav a {font-size: 12px;}
 }
 
+
+/* The RIGHT sidebar menu */
+.sidenav-right {
+    margin-top: 50px;
+    height: 100%; /* Full-height: remove this if you want "auto" height */
+    width: 160px; /* Set the width of the sidebar */
+    position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+    z-index: 1; /* Stay on top */
+    top: 0; /* Stay at the top */
+    right: 0;
+    background-color: #111; /* Black */
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 20px;
+}
+
+/* The navigation menu links */
+.sidenav-right a {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+}
+
+/* When you mouse over the navigation links, change their color */
+.sidenav-right a:hover {
+    color: #f1f1f1;
+}
+
 .mainview {
   width: 78%;
 }
@@ -285,17 +315,31 @@ a {
 }
 
 .fa-chevron-circle-down {
-  color: grey;
+  color: white;
 }
 
 .fa-chevron-circle-up {
-  color: grey;
+  color: white;
 }
 
 .down {
-  color: darkred;
+  color: #802c2c;
 }
 
 .up {
-  color: #009fe0;
+  color: #5397b3;
+}
+
+// Mixin itself
+@mixin clearfix() {
+  &::after {
+    display: block;
+    content: "";
+    clear: both;
+  }
+}
+
+// Usage as a mixin
+.element {
+  @include clearfix;
 }

@@ -1858,11 +1858,22 @@ Jmpress END
 }
 
 #pscorer {
-  display: inline;
-  padding-top: 30px;
-  padding-bottom: 30px
+  display: block;
+  color: #bebebe;
+  font-weight: 800;
 }
 
 .voting-buttons {
-  display: inline;
+  display: block;
+}
+
+.voting-buttons-div {
+  margin-top: 45px;
+  position: absolute;
+  right: -60px;
+}
+
+.upper-right {
+  right: 10px;
+  margin-top: 60px;
 }

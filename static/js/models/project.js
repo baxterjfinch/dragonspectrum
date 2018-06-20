@@ -578,8 +578,8 @@ Project.setupPage = function (children, act_con) {
           total_score.append(Project.project.getProjectScore());
           Project.project.user_vote = "direction:down";
           if (Project.project.user_vote.direction != "down") {
-            $( "div.voting-buttons i" ).removeClass("up");
-            $( "div.voting-buttons i" ).addClass("down");
+            $( "div.voting-buttons-div i" ).removeClass("up");
+            $( "div.voting-buttons-div i" ).addClass("down");
           }
       }, true);
     });
@@ -590,8 +590,8 @@ Project.setupPage = function (children, act_con) {
           total_score.append(Project.project.getProjectScore());
           Project.project.user_vote = "direction:up";
           if (Project.project.user_vote.direction != "up") {
-            $( "div.voting-buttons i" ).removeClass("down");
-            $( "div.voting-buttons i" ).addClass("up");
+            $( "div.voting-buttons-div i" ).removeClass("down");
+            $( "div.voting-buttons-div i" ).addClass("up");
           }
       }, true);
     });
