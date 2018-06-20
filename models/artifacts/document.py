@@ -64,34 +64,37 @@ class Document(artifact.SecureArtifact):
         return self.key.id(), fields
 
     def get_published(self, group=None):
-        if group:
-            gp = []
-            pubs = ndb.get_multi(self.published)
-            for pub in pubs:
-                if pub is not None and pub.group == group.key:
-                    gp.append(pub)
-            return gp
-        return ndb.get_multi(self.published)
+        if group is None:
+            return ndb.get_multi(self.published)
+
+        gp = []
+        pubs = ndb.get_multi(self.published)
+        for pub in pubs:
+            if pub is not None and pub.group == group.key:
+                gp.append(pub)
+        return gp
 
     def get_summary_published(self, group=None):
-        if group:
-            gp = []
-            pubs = ndb.get_multi(self.summary_published)
-            for pub in pubs:
-                if pub is not None and pub.group == group.key:
-                    gp.append(pub)
-            return gp
-        return ndb.get_multi(self.summary_published)
+        if group is None:
+            return ndb.get_multi(self.summary_published)
+
+        gp = []
+        pubs = ndb.get_multi(self.summary_published)
+        for pub in pubs:
+            if pub is not None and pub.group == group.key:
+                gp.append(pub)
+        return gp
 
     def get_presentation_published(self, group=None):
-        if group:
-            gp = []
-            pubs = ndb.get_multi(self.presentation_published)
-            for pub in pubs:
-                if pub is not None and pub.group == group.key:
-                    gp.append(pub)
-            return gp
-        return ndb.get_multi(self.presentation_published)
+        if group is None:
+            return ndb.get_multi(self.presentation_published)
+
+        gp = []
+        pubs = ndb.get_multi(self.presentation_published)
+        for pub in pubs:
+            if pub is not None and pub.group == group.key:
+                gp.append(pub)
+        return gp
 
     def index(self, index_):
         id_, fields = self.get_index_doc()
