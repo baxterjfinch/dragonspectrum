@@ -69,6 +69,7 @@ class DocumentPublisherThread(background_thread.BackgroundThread):
             pub_doc.version_int = version_int
             pub_doc.html = publisher.html
             pub_doc.owner.append(self.user.key)
+
             if self.user.organization:
                 pub_doc.organization = self.user.organization
 
@@ -77,8 +78,14 @@ class DocumentPublisherThread(background_thread.BackgroundThread):
             self.document.published.append(pub_doc.key)
             self.document.put()
 
-            trans = Transaction(action='doc_published', user=self.user.key, artifact=self.document.key,
-                                project=self.project.key, action_data={'publish': pub_doc.to_dict(html=False)})
+            action_data = {'publish': pub_doc.to_dict(html=False)}
+            trans = Transaction(
+                action='doc_published',
+                user=self.user.key,
+                artifact=self.document.key,
+                project=self.project.key,
+                action_data=action_data
+            )
             trans.put()
 
             self.project.pw_modified_ts = datetime.now()
@@ -101,6 +108,7 @@ class DocumentPublishHandler(AuthorizationRequestHanlder):
     def get(self, project, document, group):
         if not project:
             raise HttpErrorException.bad_request('invalid project given')
+
         project = Project.get_by_id(project)
         if not project:
             raise HttpErrorException.bad_request('invalid project given')
@@ -109,6 +117,7 @@ class DocumentPublishHandler(AuthorizationRequestHanlder):
 
         if not document:
             raise HttpErrorException.bad_request('invalid document given')
+
         document = Document.get_by_id(document)
         if not document:
             raise HttpErrorException.bad_request('invalid document given')
@@ -117,6 +126,7 @@ class DocumentPublishHandler(AuthorizationRequestHanlder):
 
         if not group:
             raise HttpErrorException.bad_request('invalid group given')
+
         group = Group.get_by_id(group)
         if not group:
             raise HttpErrorException.bad_request('invalid group given')
@@ -124,6 +134,7 @@ class DocumentPublishHandler(AuthorizationRequestHanlder):
         temp_user = User()
         temp_user.groups = [group.key, Group.get_worldshare().key]
         org = self.user.organization if self.user.organization else None
+
         if org:
             temp_user.organization = org
 
@@ -135,6 +146,7 @@ class DocumentPublishHandler(AuthorizationRequestHanlder):
 
         pubs = document.get_published(group=group)
         version_int = PublishDocument.get_largest_version(pubs)
+
         if version_int is None:
             version_int = 1
         else:
@@ -212,6 +224,7 @@ class SummaryPublisherThread(background_thread.BackgroundThread):
 
             pubs = self.document.get_summary_published(group=self.group)
             version_int = PublishSummary.get_largest_version(pubs)
+
             if version_int is None:
                 version_int = 1
             else:
@@ -234,8 +247,14 @@ class SummaryPublisherThread(background_thread.BackgroundThread):
             self.document.summary_published.append(pub_doc.key)
             self.document.put()
 
-            trans = Transaction(action='sum_published', user=self.user.key, artifact=self.document.key,
-                                project=self.project.key, action_data={'publish': pub_doc.to_dict(html=False)})
+            action_data = {'publish': pub_doc.to_dict(html=False)}
+            trans = Transaction(
+                action='sum_published',
+                user=self.user.key,
+                artifact=self.document.key,
+                project=self.project.key,
+                action_data=action_data
+            )
             trans.put()
 
             self.project.pw_modified_ts = datetime.now()
@@ -258,6 +277,7 @@ class SummaryPublishHandler(AuthorizationRequestHanlder):
     def get(self, project, document, group):
         if not project:
             raise HttpErrorException.bad_request('invalid project given')
+
         project = Project.get_by_id(project)
         if not project:
             raise HttpErrorException.bad_request('invalid project given')
@@ -266,6 +286,7 @@ class SummaryPublishHandler(AuthorizationRequestHanlder):
 
         if not document:
             raise HttpErrorException.bad_request('invalid document given')
+
         document = Document.get_by_id(document)
         if not document:
             raise HttpErrorException.bad_request('invalid document given')
@@ -274,6 +295,7 @@ class SummaryPublishHandler(AuthorizationRequestHanlder):
 
         if not group:
             raise HttpErrorException.bad_request('invalid group given')
+
         group = Group.get_by_id(group)
         if not group:
             raise HttpErrorException.bad_request('invalid group given')
@@ -284,6 +306,7 @@ class SummaryPublishHandler(AuthorizationRequestHanlder):
         temp_user = User()
         temp_user.groups = [group.key, Group.get_worldshare().key]
         org = self.user.organization if self.user.organization else None
+
         if org:
             temp_user.organization = org
 
@@ -292,6 +315,7 @@ class SummaryPublishHandler(AuthorizationRequestHanlder):
 
         pubs = document.get_summary_published(group=group)
         version_int = PublishDocument.get_largest_version(pubs)
+
         if version_int is None:
             version_int = 1
         else:
@@ -401,6 +425,7 @@ class PresentationPublisherThread(background_thread.BackgroundThread):
             pub_doc.max_bullet = self.max_bullet
             pub_doc.html = publisher.html
             pub_doc.owner.append(self.user.key)
+
             if self.user.organization:
                 pub_doc.organization = self.user.organization
 
@@ -409,8 +434,14 @@ class PresentationPublisherThread(background_thread.BackgroundThread):
             self.document.presentation_published.append(pub_doc.key)
             self.document.put()
 
-            trans = Transaction(action='pres_published', user=self.user.key, artifact=self.document.key,
-                                project=self.project.key, action_data={'publish': pub_doc.to_dict(html=False)})
+            action_data = {'publish': pub_doc.to_dict(html=False)}
+            trans = Transaction(
+                action='pres_published',
+                user=self.user.key,
+                artifact=self.document.key,
+                project=self.project.key,
+                action_data=action_data
+            )
             trans.put()
 
             self.project.pw_modified_ts = datetime.now()
@@ -431,6 +462,7 @@ class PresentationPublishHandler(AuthorizationRequestHanlder):
     def get(self, project, document, group):
         if not project:
             raise HttpErrorException.bad_request('invalid project given')
+
         project = Project.get_by_id(project)
         if not project:
             raise HttpErrorException.bad_request('invalid project given')
@@ -439,6 +471,7 @@ class PresentationPublishHandler(AuthorizationRequestHanlder):
 
         if not document:
             raise HttpErrorException.bad_request('invalid document given')
+
         document = Document.get_by_id(document)
         if not document:
             raise HttpErrorException.bad_request('invalid document given')
@@ -447,6 +480,7 @@ class PresentationPublishHandler(AuthorizationRequestHanlder):
 
         if not group:
             raise HttpErrorException.bad_request('invalid group given')
+
         group = Group.get_by_id(group)
         if not group:
             raise HttpErrorException.bad_request('invalid group given')
@@ -457,6 +491,7 @@ class PresentationPublishHandler(AuthorizationRequestHanlder):
         temp_user = User()
         temp_user.groups = [group.key, Group.get_worldshare().key]
         org = self.user.organization if self.user.organization else None
+
         if org:
             temp_user.organization = org
 
@@ -465,6 +500,7 @@ class PresentationPublishHandler(AuthorizationRequestHanlder):
 
         pubs = document.get_presentation_published(group=group)
         version_int = PublishDocument.get_largest_version(pubs)
+
         if version_int is None:
             version_int = 1
         else:
