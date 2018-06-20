@@ -187,7 +187,6 @@ ProjectTable.buildSideTableRow = function (table, project) {
     var upvote_icon = $('<i></i>');
     upvote_icon.addClass('fas fa-chevron-circle-up');
     td.append(upvote_icon);
-
     td.append($('<br>'));
 
     var downvote_icon = $('<i></i>');
@@ -247,6 +246,7 @@ ProjectTable.buildSideTableRow = function (table, project) {
         }, true);
 
     });
+
     downvote_icon.click(function (){
         ProjectEventListener.downvote(project, null, function () {
             score.empty();
