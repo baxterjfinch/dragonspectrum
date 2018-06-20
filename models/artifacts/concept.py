@@ -39,7 +39,6 @@ class ConceptLink(ndb.Model):
 
 
 class Concept(ProjectNode):
-    parent = ndb.KeyProperty()  # TODO: Need to start storing project as parent instead of None for top level Concepts
     distilled_phrasing = ndb.KeyProperty(kind='Phrasing')
     phrasings = ndb.KeyProperty(kind='Phrasing', repeated=True)
     selected_phrasings = ndb.KeyProperty(kind='SelectedPhrasing', repeated=True)

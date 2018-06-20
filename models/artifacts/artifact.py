@@ -12,8 +12,10 @@ from server.httperrorexception import HttpErrorException
 from models.account.organization import Group
 from models.analytic import Analytics
 
+
 log = logging.getLogger('tt')
 DATETIME_FORMATE = '%m/%d/%Y %H:%M:%S'
+
 
 __all__ = [
     'MemcacheException',
@@ -145,29 +147,37 @@ class SecureArtifact(Artifact):
     def refresh_permission_inheritance(self, inherited_perms=None):
         perm_obj = self.permissions.get()
         operations_list = self.get_operations_list()
+
         permissions = {}
         for op in operations_list:
             permissions[op] = {"shared": {}, "required": {}}
+
         parent_perm = ndb.get_multi(self.parent_perms)
         parent_perm.append(perm_obj)
 
         for pp in parent_perm:
             for op in operations_list:
                 pop = op
+
                 if op not in pp.permissions:
                     pop = self.get_alternative_perm(op)
                 if pop is None:
                     continue
+
                 for group in pp.permissions[pop]['shared'].keys():
                     permissions[op]['shared'][group] = pp.permissions[pop]['shared'][group]
+
                 for group in pp.permissions[pop]['required'].keys():
                     permissions[op]['required'][group] = pp.permissions[pop]['required'][group]
+
         perm_obj.calculated_permissions = permissions
 
     def get_permission_object(self):
         perm = self.permissions.get()
+
         if perm.calculated_permissions is None:
             self.refresh_permission_inheritance()
+
         return perm
 
     # Add new or replace existing permission
@@ -176,6 +186,7 @@ class SecureArtifact(Artifact):
             raise ValueError(str(rule) + ' is not a real rule')
         if not self.is_operation(operation):
             raise ValueError(str(operation) + ' is not an operation')
+
         if isinstance(group, Group):
             group_id = group.key.id()
         elif isinstance(group, ndb.Key):
@@ -190,8 +201,8 @@ class SecureArtifact(Artifact):
             raise ValueError('Need Group, Group key, or Group id')
 
         perm = self.get_permission_object()
-        # if not perm.old_permissions:
         perm.old_permissions = copy.deepcopy(perm.calculated_permissions)
+
         if rule == 'inherit' or rule == 'none':  # inherit and none is the same as no rule at all
             self.remove_group_perm(group, operation, required)
         else:
@@ -282,6 +293,7 @@ class SecureArtifact(Artifact):
 
         perm = self.get_permission_object()
         group_perm = None
+
         if permission is None:
             for p in perm.permissions.keys():
                 if required:
@@ -308,23 +320,30 @@ class SecureArtifact(Artifact):
     def has_permission(self, user, operation, permissions=None):
         if user.is_world_user() and operation != 'read':
             return False
+
         if self.is_owner(user):
             return True
+
         if self.organization is not None:
             if self.organization.get().is_admin(user):
                 return True
+
         if user.is_super_admin:
             return True
+
         user_groups = user.groups
         user_groups_id_list = server.get_ids_from_key_list(user_groups)
+
         perm_obj = self.get_permission_object()
         if not permissions:
             permissions = perm_obj.calProjectNodeculated_permissions
+
         # Check required permissions first
         required_operation_perm = permissions[operation]['required']
         if len(required_operation_perm.keys()) > 0:
             if not server.is_sub_list(required_operation_perm.keys(), user_groups_id_list):
                 return False
+
         # Check share permissions next
         shared_operation_perm = permissions[operation]['shared']
         if len(shared_operation_perm.keys()) > 0:
@@ -370,6 +389,7 @@ class SecureArtifact(Artifact):
             raise HttpErrorException.bad_request('invalid group id')
         if not request.get('operation'):
             raise HttpErrorException.bad_request('no operation given')
+
         required = False
         if request.get('type'):
             if request.get('type') != 'shared' and request.get('type') != 'required':
@@ -379,9 +399,11 @@ class SecureArtifact(Artifact):
                     required = True
         else:
             raise HttpErrorException.bad_request('no type given')
+
         group = Group.get_by_id(request.get('group_id'))
         if not group:
             raise HttpErrorException.bad_request('invalid group_id')
+
         return group, required
 
     # TODO: this needs to be in the base handler and not in Artifact
@@ -390,6 +412,7 @@ class SecureArtifact(Artifact):
             raise HttpErrorException.forbidden()
         if not request.get('operation'):
             raise HttpErrorException.bad_request('no operation given')
+
         required = False
         if request.get('type'):
             if request.get('type') != 'shared' and request.get('type') != 'required':
@@ -399,9 +422,11 @@ class SecureArtifact(Artifact):
                     required = True
         else:
             raise HttpErrorException.bad_request('no type givin')
+
         group = Group.get_by_id(request.get('group_id'))
         if not group:
             raise HttpErrorException.bad_request('invalid group_id')
+
         return group, required
 
     # TODO: this needs to be in the base handler and not in Artifact
@@ -410,20 +435,24 @@ class SecureArtifact(Artifact):
             raise HttpErrorException.forbidden()
         if not Artifact.valid_id(request.get('remove_group')) and not request.get('remove_group') == 'world':
             raise HttpErrorException.bad_request('invalid group id')
+
         group = Group.get_by_id(request.get('remove_group'))
         if not group:
             raise HttpErrorException.bad_request('invalid group id')
+
         return group
 
     def record_analytic(self, action, analyitc_session, reference=None, project=None, meta_data=None):
         if project and type(project) is not ndb.Key:
             project = project.key
+
         analytic = Analytics.new(
             artifact=self.key,
             artifact_owners=self.owner,
             project=project if project else self.project,
             action=action,
         )
+
         if analyitc_session:
             analytic.analytic_session = analyitc_session.key
         if self.organization:
@@ -432,6 +461,7 @@ class SecureArtifact(Artifact):
             analytic.reference = reference
         if meta_data:
             analytic.meta_data = meta_data
+
         analytic.put()
 
     def to_dict(self, user):
@@ -443,13 +473,13 @@ class SecureArtifact(Artifact):
             self.corrupted = True
             self.put()
             raise CorruptedArtifactException('Concept has no permission object')
+
         d['permissions'] = Permission.remove_hidden_groups(user, perm.permissions)
 
         if d['organization']:
             d['organization'] = d['organization'].id()
 
         d['owner'] = []
-        # noinspection PyTypeChecker
         for owner in self.owner:
             d['owner'].append(owner.id())
 
@@ -473,25 +503,32 @@ class Permission(Artifact):
         not_finished = True
         fake_ids_mapping = {}
         fake_ids = []
+
         while not_finished:
             for op in permission:
                 for group_id in permission[op]['shared']:
                     group = ndb.Key('Group', group_id)
+
                     if org.is_hidden_group(group) and not user.in_group(group):
                         if group_id in fake_ids_mapping:
                             fake_id = fake_ids_mapping[group_id]
                         else:
                             fake_id = memcache.get(str(group_id) + '_fake_id')
+
                             if fake_id is None:
                                 fake_id = server.create_uuid()
                                 memcache.add(key=str(group_id) + '_fake_id', value=fake_id)
+
                             fake_ids_mapping[group_id] = fake_id
                             fake_ids.append(fake_id)
+
                         permission[op]['shared'][fake_id] = permission[op]['shared'][group_id]
                         del permission[op]['shared'][group_id]
                         break
+
                 for group_id in permission[op]['required']:
                     group = ndb.Key('Group', group_id)
+
                     if org.is_hidden_group(group) and not user.in_group(group):
                         if group_id in fake_ids_mapping:
                             fake_id = fake_ids_mapping[group_id]
@@ -499,12 +536,16 @@ class Permission(Artifact):
                             fake_id = server.create_uuid()
                             fake_ids_mapping[group_id] = fake_id
                             fake_ids.append(fake_id)
+
                         permission[op]['required'][fake_id] = permission[op]['required'][group_id]
                         del permission[op]['required'][group_id]
                         break
+
             not_finished = False
+
         if len(fake_ids) > 0:
             permission['hidden'] = fake_ids
+
         return permission
 
     @staticmethod
@@ -530,11 +571,11 @@ class Permission(Artifact):
 
 
 class ProjectNode(SecureArtifact):
+    parent = ndb.KeyProperty()  # TODO: Need to start storing project as parent instead of None for top level Concepts
     children = ndb.KeyProperty(repeated=True)
     attributes = ndb.KeyProperty(kind='Attributes', repeated=True)
 
     render_object = None
-
 
     def add_attribute(self, attribute, document_key):
         atts = ndb.get_multi(self.attributes)
@@ -549,10 +590,12 @@ class ProjectNode(SecureArtifact):
         for attr in attrs:
             if attr.document == doc_key:
                 return attr
+
         if self.node_type == 'Project':
             pro = self
         else:
             pro = self.project.get()
+
         if pro.distilled_document != doc_key:
             return self.get_attr(pro.distilled_document)
         else:
@@ -563,12 +606,15 @@ class ProjectNode(SecureArtifact):
         for attr in attrs:
             if attr.document == doc.key:
                 return attr
+
         if self.project != doc.project:
             return None
+
         if self.node_type == 'Project':
             pro = self
         else:
             pro = self.project.get()
+
         if pro.distilled_document != doc.key:
             return self.get_attr(pro.distilled_document)
         else:
@@ -585,19 +631,19 @@ class ProjectNode(SecureArtifact):
 
     def num_of_children(self, user=None):
         if user is None:
-            # noinspection PyTypeChecker
             return len(self.children)
         else:
             count = 0
             children = ndb.get_multi(self.children)
+
             for child in children:
                 if child and child.has_permission(user, 'read'):
                     count += 1
+
             return count
 
     def get_concept_index(self, concept):
         index = 0
-        # noinspection PyTypeChecker
         for child in self.children:
             if child.id() == concept.key.id():
                 break
@@ -607,36 +653,43 @@ class ProjectNode(SecureArtifact):
     def get_concept_index_adjusted(self, user, concept):
         index = 0
         children = ndb.get_multi(self.children)
+
         for child in children:
             if child is not None:
                 if child.key == concept.key:
                     break
+
                 if child.has_permission_read(user):
                     index += 1
+
         return index
 
     def get_next_sibling_for_col_user(self, con, user):
         index = self.children.index(con.key)
-        # noinspection PyTypeChecker
         if index == len(self.children) - 1:
             return None
+
         index += 1
         while not self.children[index].get().has_permission(user, 'read'):
             index += 1
-            # noinspection PyTypeChecker
+
             if index == len(self.children):
                 return None
+
         return self.children[index].get()
 
     def get_prev_sibling_for_col_user(self, con, user):
         index = self.children.index(con.key)
         if index == 0:
             return None
+
         index -= 1
         while not self.children[index].get().has_permission(user, 'read'):
             index -= 1
+
             if index <= 0:
                 return None
+
         return self.children[index].get()
 
     def adjust_col_index(self, user, index, parent=None):
@@ -645,39 +698,48 @@ class ProjectNode(SecureArtifact):
                 parent = self.project.get()
             else:
                 parent = self.parent.get()
+
         adjusted_index = index
+
         children = ndb.get_multi(parent.children)
         for child in children:
             if child == self:
                 break
+
             if not child.has_permission(user, 'read'):
                 adjusted_index -= 1
+
         return adjusted_index
 
     def adjust_index(self, index, request_user):
         if index is None:
-            # noinspection PyTypeChecker
             index = len(self.children) + 1
-        children = ndb.get_multi(self.children)
+
         new_index = 0
         cur_index = 0
+
+        children = ndb.get_multi(self.children)
         for child in children:
             if cur_index == index:
                 break
+
             if child is not None:
                 if not child.has_permission(request_user, 'read'):
                     new_index += 1
                 else:
                     new_index += 1
                     cur_index += 1
+
             else:
                 new_index += 1
                 cur_index += 1
+
         return new_index
 
     def get_parent(self):
         if self.node_type == 'Project':
             return None
+
         if self.parent is not None:
             return self.parent.get()
         else:
@@ -685,12 +747,15 @@ class ProjectNode(SecureArtifact):
 
     def get_children(self, user=None):
         children = ndb.get_multi(self.children)
+
         if not user:
             return children
+
         c = []
         for child in children:
             if child and child.has_permission_read(user):
                 c.append(child)
+
         return c
 
     def is_parent(self, user=None):
@@ -705,11 +770,14 @@ class ProjectNode(SecureArtifact):
 
     def to_dict(self, user, keep_dist=None):
         d = super(ProjectNode, self).to_dict(user)
+
         del d['children']
+
         children = ndb.get_multi(self.children)
         for child in children:
             if child is None:
                 continue
+
             if child.has_permission_read(user):
                 d['is_parent'] = True
                 break
@@ -717,17 +785,21 @@ class ProjectNode(SecureArtifact):
             d['is_parent'] = False
 
         d['attributes'] = []
+
         attributes = ndb.get_multi(self.attributes)
         index = 0
+
         for attribute in attributes:
             if attribute is None:
                 continue
             else:
                 doc = attribute.document.get()
+
                 if not doc:
                     continue
                 elif doc.has_permission(user, 'read') or doc.key.id() == keep_dist:
                     d['attributes'].append(attribute.to_dict())
+
             index += 1
 
         return d
