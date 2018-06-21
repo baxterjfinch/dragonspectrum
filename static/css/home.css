@@ -76,13 +76,15 @@
 
 #project-panel {
     margin-top: 50px;
-    position: absolute;
-    margin-left: 323px;
+    width: 55%;
+    position: relative;
+    margin-left: 22.5%;
 }
 
 .my_project_table_side_container {
   padding-left: 5px;
   padding-right: 0px;
+  left: 0;
 }
 
 .project-table .project-checkbox {
@@ -245,7 +247,6 @@ a {
     position: fixed; /* Fixed Sidebar (stay in place on scroll) */
     z-index: 1; /* Stay on top */
     top: 0; /* Stay at the top */
-    left: 0;
     background-color: #ededed; /* Grey */
     padding-top: 45px;
 }
@@ -363,4 +364,8 @@ a {
 .title-tvs-buttons {
   right: 0 !important;
   position: absolute;
+}
+
+.right-nav {
+  right: 0;
 }
