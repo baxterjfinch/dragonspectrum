@@ -314,9 +314,6 @@ DVSRender.prototype = {
         }
 
         if (concept.isParent()) {
-            console.log("queued: " + concept.isQueuedLoading());
-            console.log("loading: " + concept.isBeingFetched());
-
             if (!dvsRender.more_icon) {
                 dvsRender.queued_icon = $('<i></i>');
                 dvsRender.queued_icon.addClass(Concept.loading_queued_icon_classes);

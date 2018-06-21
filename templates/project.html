@@ -71,7 +71,7 @@
                         <li><a id="nav_bar_delete_concept" href="#"><i class="fa fa-times-circle"></i> Delete Concept <kbd class="shortcut">DELETE</kbd></a></li>
                         <li class="divider"></li>
                         <li><a id="nav_bar_concept_security" href="#"><i class="fa fa-shield"></i> Concept Security</a></li>
-                        <li><a id="copy_link" href="#"><i class="fa fa-link"></i> Copy Concept Link</a></li>
+                        <li><a id="copy_link" class="copy-btn" href="#"><i class="fa fa-link"></i> Copy Concept Link</a></li>
                     </ul>
                 </li>
                 <li id="phrasing-menu-item">
@@ -192,7 +192,7 @@
                                 <div id="summary-slider-progress"></div>
                             </div>
                             <div id="summary-btn">
-                                <button id="summary-copy-btn" class="btn btn-default btn-xs summary-btn">Copy</button>
+                                <!--<button id="summary-copy-btn" class="btn btn-default btn-xs summary-btn">Copy</button>-->
 {#                                <button class="btn btn-default btn-xs summary-btn">Share</button>#}
                             </div>
                         </div>
@@ -506,6 +506,7 @@
             DocumentChat.initialize();
         }
 
+        new ClipboardJS('.copy-btn');
     }
 
     $(window).resize(function () {
