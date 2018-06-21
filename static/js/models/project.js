@@ -616,3 +616,7 @@ Project.getUserProjects = function (user, cb) {
         }
     })
 };
+
+//Side Button Popovers
+
+$("[data-toggle=popover]").popover();

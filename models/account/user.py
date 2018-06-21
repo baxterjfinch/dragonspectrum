@@ -96,6 +96,10 @@ class User(AuthUser):
     org_admin = None
     super_admin = None
 
+    # User Currency Information
+    ddss = ndb.IntegerProperty()
+    spectra_count = ndb.IntegerProperty()
+
     @staticmethod
     def new(request_user, verify_email=True, request=None, worldshare_group=None, organization=None):
         if not request_user.get('username'):
@@ -546,7 +550,9 @@ class User(AuthUser):
             'account_status',
             'account_expire_data',
             'tour_home_complete',
-            'tour_project_complete'
+            'tour_project_complete',
+            'ddss',
+            'spectra_count',
         ]
         d = super(AuthUser, self).to_dict(include=include)
 
