@@ -139,7 +139,7 @@ body {
 }
 
 #tvs {
-    /*position: relative;*/
+    margin-top: 100px;
     height: 100%;
     border-radius: 0;
     background: #ededed
@@ -154,7 +154,7 @@ body {
 
 #content-pane {
     margin-top: 15px;
-    margin-left: 21%;
+    margin-left: 24%;
 }
 
 .dvs-tab {

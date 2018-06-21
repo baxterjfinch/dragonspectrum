@@ -240,7 +240,7 @@ a {
 
 /* The sidebar menu */
 .sidenav {
-    margin-top: 50px;
+    margin-top: 5px;
     height: 100%; /* Full-height: remove this if you want "auto" height */
     width: 20%; /* Set the width of the sidebar */
     min-width: 250px;
@@ -248,7 +248,7 @@ a {
     z-index: 1; /* Stay on top */
     top: 0; /* Stay at the top */
     background-color: #ededed; /* Grey */
-    padding-top: 45px;
+
 }
 
 .sidenav a:hover {

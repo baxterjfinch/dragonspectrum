@@ -159,3 +159,4 @@ function show_guided_tour_offering() {
 function mark_guided_tour_complete() {
     post_to_server(ACCOUNT_URLS.tour_home_complete, null, true);
 }
+

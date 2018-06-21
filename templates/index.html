@@ -83,20 +83,35 @@
     </nav>
 </div>
 
-<div class="sidenav container my_project_table_side_container">
-  <table id="my_project_table_side" class="table table table-hover table-condensed project-table-side">
-      <thead>
-          <tr>
-              <th class="project-voter"></th>
-              <th class="project-score">Score</th>
-              <th class="project-title" id="sidetitle">Title</th>
-              <th class="project-owner">Owner</th>
-              <th class="project-date">Date Created</th>
-          </tr>
-      </thead>
-      <tbody id="my-project-table-body-side">
-      </tbody>
-  </table>
+<div class="sidenav container my_project_table_side_container" style="padding-top: 45px;">
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+      <li class="nav-item active">
+        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Projects</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Concepts</a>
+      </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+      <div class="tab-pane fade show active in" id="home" role="tabpanel" aria-labelledby="home-tab">
+          <table id="my_project_table_side" class="table table table-hover table-condensed project-table-side">
+              <thead>
+                  <tr>
+                      <th class="project-voter"></th>
+                      <th class="project-score">Score</th>
+                      <th class="project-title" id="sidetitle">Title</th>
+                      <th class="project-owner">Owner</th>
+                      <th class="project-date">Date Created</th>
+                  </tr>
+              </thead>
+              <tbody id="my-project-table-body-side">
+              </tbody>
+          </table>
+
+      </div>
+      <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">tast</div>
+    </div>
+
 </div>
 
 
@@ -195,6 +210,18 @@
           </div>
       </div>
       <div class="sidenav right-nav">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Profile</a>
+          </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+          <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">test</div>
+          <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">tast</div>
+        </div>
       </div>
   </div>
 

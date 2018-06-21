@@ -8,6 +8,8 @@ ProjectTable.SEARCH = 'search';
 
 ProjectTable.my_table_body = $('#my-project-table-body');
 ProjectTable.my_table_body_side = $('#my-project-table-body-side');
+ProjectTable.top_projects_table_side = $('#top_projects_table_side');
+ProjectTable.top_projects_table_body_side = $('#top_projects_table_body_side');
 ProjectTable.shared_table_body = $('#shared-project-table-body');
 ProjectTable.world_table_body = $('#world-project-table-body');
 ProjectTable.search_table_body = $('#search-project-table-body');
@@ -271,7 +273,11 @@ ProjectTable.buildSideTableRow = function (table, project) {
     });
 
     return project_row;
+
 };
+
+
+
 
 ProjectTable.addToUserSideTable = function (project) {
   var row = project.getTableRow(ProjectTable.USER_SIDEBAR);
@@ -482,3 +488,4 @@ ProjectTableRow.prototype.hide = function () {
 ProjectTableRow.prototype.show = function () {
     this.tr.removeClass('hidden');
 };
+
