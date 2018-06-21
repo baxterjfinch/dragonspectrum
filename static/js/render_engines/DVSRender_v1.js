@@ -313,32 +313,17 @@ DVSRender.prototype = {
             dvsRender.span.append(dvsRender.phr_span);
         }
 
-//        if (concept.isParent() && !dvsRender.more_icon) {
-//            dvsRender.more_icon = $('<i></i>');
-//            dvsRender.more_icon.addClass(Concept.more_icon_classes);
-//            dvsRender.more_icon[0].concept = concept;
-//            dvsRender.more_icon.click(function () {
-//                ConceptEventListener.expandMouseClick(concept);
-//            });
-//            if (concept.isExpanded())
-//                dvsRender.more_icon.hide();
-//            dvsRender.span.append(dvsRender.more_icon);
-//        } else if (!concept.isParent() && dvsRender.more_icon) {
-//            dvsRender.more_icon.detach();
-//            dvsRender.more_icon = null;
-//        }
-
         if (concept.isParent()) {
             console.log("queued: " + concept.isQueuedLoading());
             console.log("loading: " + concept.isBeingFetched());
 
             if (!dvsRender.more_icon) {
                 dvsRender.queued_icon = $('<i></i>');
-                dvsRender.queued_icon.addClass(concept.loading_queued_icon_classes);
+                dvsRender.queued_icon.addClass(Concept.loading_queued_icon_classes);
                 dvsRender.span.append(dvsRender.queued_icon);
 
                 dvsRender.loading_icon = $('<i></i>');
-                dvsRender.loading_icon.addClass(concept.loading_icon_classes);
+                dvsRender.loading_icon.addClass(Concept.loading_icon_classes);
                 dvsRender.span.append(dvsRender.loading_icon);
 
                 dvsRender.more_icon = $('<i></i>');
@@ -352,16 +337,16 @@ DVSRender.prototype = {
 
             if (concept.isQueuedLoading()) {
                 dvsRender.queued_icon.show();
-                dvsRender.loading_icon.hide();
+                dvsRender.more_icon.hide();
                 dvsRender.loading_icon.hide();
             } else if (concept.isBeingFetched()) {
                 dvsRender.queued_icon.hide();
-                dvsRender.more_icon.show();
-                dvsRender.loading_icon.hide();
-            } else {
-                dvsRender.queued_icon.hide();
                 dvsRender.more_icon.hide();
                 dvsRender.loading_icon.show();
+            } else {
+                dvsRender.queued_icon.hide();
+                dvsRender.more_icon.show();
+                dvsRender.loading_icon.hide();
             }
         }
 
@@ -483,6 +468,8 @@ DVSRender.prototype = {
         dvsRender.cleanup(attr);
         if (dvsRender.more_icon) {
             dvsRender.phr_text_span.after(dvsRender.more_icon.detach());
+            dvsRender.phr_text_span.after(dvsRender.queued_icon.detach());
+            dvsRender.phr_text_span.after(dvsRender.loading_icon.detach());
             if (concept.isExpanded())
                 dvsRender.more_icon.hide();
         }
