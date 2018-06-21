@@ -142,7 +142,7 @@ body {
     /*position: relative;*/
     height: 100%;
     border-radius: 0;
-    background: #565656;
+    background: #ededed
 }
 
 .dvs {
@@ -1869,7 +1869,6 @@ Jmpress END
 
 .voting-buttons-div {
   margin-top: 45px;
-  position: absolute;
   right: -60px;
 }
 
@@ -1880,4 +1879,8 @@ Jmpress END
 
 .popover-buttons {
   margin-top: 10px;
+}
+
+.right-dropdown-menu {
+  width: 100px;
 }
