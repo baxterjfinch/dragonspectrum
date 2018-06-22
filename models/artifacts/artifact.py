@@ -683,6 +683,13 @@ class ProjectNode(SecureArtifact):
         else:
             return self.project.get()
 
+    def _check_children_dups(self):
+        if len(self.children) != len(set(self.children)):
+            cs = set()
+            self.children = [x for x in self.children if not (x in cs or cs.add(x))]
+            return True
+        return False
+
     def get_children(self, user=None):
         children = ndb.get_multi(self.children)
         if not user:

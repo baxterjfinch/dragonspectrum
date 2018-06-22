@@ -84,6 +84,38 @@ class Concept(ProjectNode):
             par = par.get().parent
         return depth
 
+    def get_children(self, user=None):
+        q = Concept.query()
+        q = q.filter(Concept.parent == self.key)
+
+        children_by_id = {}
+        for child in q.iter():
+            children_by_id[child.id] = child
+
+        changed = self._check_children_dups()
+        children = []
+        for child_key in self.children:
+            c = children_by_id.get(child_key.id())
+            if c is not None:
+                children.append(c)
+                del children_by_id[child_key.id()]
+            else:
+                self.children.remove(child_key)
+                changed = True
+
+        children = children + children_by_id.values()
+
+        if changed:
+            self.put()
+
+        if not user:
+            return children
+        c = []
+        for child in children:
+            if child and child.has_permission_read(user):
+                c.append(child)
+        return c
+
     # noinspection PyUnusedLocal
     def set_parent(self, new_parent, next_sibling, user, link=None):
         if next_sibling:
