@@ -319,7 +319,7 @@ class SecureArtifact(Artifact):
         user_groups_id_list = server.get_ids_from_key_list(user_groups)
         perm_obj = self.get_permission_object()
         if not permissions:
-            permissions = perm_obj.calProjectNodeculated_permissions
+            permissions = perm_obj.calculated_permissions
         # Check required permissions first
         required_operation_perm = permissions[operation]['required']
         if len(required_operation_perm.keys()) > 0:
