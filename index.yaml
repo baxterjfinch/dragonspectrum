@@ -26,10 +26,6 @@ indexes:
   - name: owner
   - name: created_ts
 
-- kind: Concept
-  properties:
-  - name: parent
-
 - kind: ConceptAnalyticsDailyStat
   properties:
   - name: entity
