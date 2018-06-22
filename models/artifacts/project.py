@@ -4,8 +4,9 @@ import logging
 from google.appengine.ext import ndb, deferred
 
 from server import ttindex
-from artifact import CorruptedArtifactException, ProjectNode, DATETIME_FORMATE
 from markers import Marker
+from concept import Concept
+from artifact import CorruptedArtifactException, ProjectNode, DATETIME_FORMATE
 from document import PresentationDocument, SummaryDocument
 from publish import PublishDocument, PublishPresentation, PublishSummary
 
@@ -85,7 +86,7 @@ class Project(ProjectNode):
                 doc.index_delete(indexes)
             ndb.delete_multi(perms)
             ndb.delete_multi(self.documents)
-        concept = ndb.get_multi(self.children)
+        concept = self.get_children()
         indexes = user.get_indexes()
         for con in concept:
             if not con:
@@ -111,6 +112,43 @@ class Project(ProjectNode):
             if document_key in self.documents:
                 self.documents.remove(document_key)
                 self.put()
+
+    def get_children(self, user=None):
+        q = Concept.query()
+        q = q.filter(
+            ndb.AND(
+                Concept.project == self.key,
+                ndb.OR(Concept.parent == None, Concept.parent == self.key)
+            )
+        )
+
+        children_by_id = {}
+        for child in q.iter():
+            children_by_id[child.id] = child
+
+        changed = self._check_children_dups()
+        children = []
+        for child_key in self.children:
+            c = children_by_id.get(child_key.id())
+            if c is not None:
+                children.append(c)
+                del children_by_id[child_key.id()]
+            else:
+                self.children.remove(child_key)
+                changed = True
+
+        children = children + children_by_id.values()
+
+        if changed:
+            self.put()
+
+        if not user:
+            return children
+        c = []
+        for child in children:
+            if child and child.has_permission_read(user):
+                c.append(child)
+        return c
 
     @staticmethod
     def get_user_projects(user):
