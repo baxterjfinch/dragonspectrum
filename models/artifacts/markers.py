@@ -29,8 +29,10 @@ class Marker(artifact.Artifact):
     def get_all_comments_index_doc(self):
         concept = self.concept.get()
         project = concept.project
+
         docs = []
         ids = []
+
         for comment in self.comments:
             fields = [
                 ttindex.ATOMFIELD, 'typ', 'anno_reply',
@@ -40,13 +42,16 @@ class Marker(artifact.Artifact):
                 ttindex.ATOMFIELD, 'con', concept.key.id(),
                 ttindex.DATEFIELD, 'date', comment.created_ts,
             ]
+
             docs.append(fields)
             ids.append(self.key.id())
+
         return ids, docs
 
     def get_comment_index_doc(self, comment):
         concept = self.concept.get()
         project = concept.project
+
         fields = [
             ttindex.ATOMFIELD, 'typ', 'anno_reply',
             ttindex.ATOMFIELD, 'anno', self.key.id(),
@@ -56,6 +61,7 @@ class Marker(artifact.Artifact):
             ttindex.ATOMFIELD, 'con', concept.key.id(),
             ttindex.DATEFIELD, 'date', comment.created_ts,
         ]
+
         return create_uuid(), fields
 
     def index_all_comments(self, index_):
@@ -70,16 +76,22 @@ class Marker(artifact.Artifact):
         d = super(Marker, self).to_dict()
         if self.organization:
             d['organization'] = self.organization.id()
+
         d['document'] = self.document.id()
         d['concept'] = self.concept.id()
         d['path'] = []
+
         concept = self.concept.get()
         if concept:
             perms = ndb.get_multi(concept.parent_perms)
             for perm in perms:
                 d['path'].insert(0, perm.artifact.id())
+
         d['comments'] = []
         for comment in self.comments:
-            d['comments'].append({'username': comment.user.get().username,
-                                  'comment': comment.comment})
+            d['comments'].append({
+                'username': comment.user.get().username,
+                'comment': comment.comment
+            })
+
         return d

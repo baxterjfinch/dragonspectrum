@@ -93,6 +93,7 @@ class Transaction(SecureArtifact):
 
         super(Transaction, self).__init__(*args, **kwargs)
         self.key = Transaction.create_key()
+
         if self.artifact:
             art = self.artifact.get()
 
@@ -100,19 +101,33 @@ class Transaction(SecureArtifact):
                 self.project = kwargs['project']
             elif art.project:
                 self.project = art.project
+
             if hasattr(art, 'operations_list'):
                 self.owner = art.owner
                 self.operations_list = art.operations_list
                 perm = art.get_permission_object()
-                self.permissions = Permission(key=Permission.create_key(), permissions=perm.calculated_permissions,
-                                              project=self.project, artifact=self.key).put()
+
+                self.permissions = Permission(
+                    key=Permission.create_key(),
+                    permissions=perm.calculated_permissions,
+                    project=self.project,
+                    artifact=self.key
+                )
+                self.permissions.put()
+
             elif document:
                 self.organization = document.organization
                 self.owner = document.owner
                 self.operations_list = document.operations_list
                 perm = document.get_permission_object()
-                self.permissions = Permission(key=Permission.create_key(), permissions=perm.calculated_permissions,
-                                              project=self.project, artifact=self.key).put()
+
+                self.permissions = Permission(
+                    key=Permission.create_key(),
+                    permissions=perm.calculated_permissions,
+                    project=self.project,
+                    artifact=self.key
+                )
+                self.permissions.put()
 
     def undo(self):
         artifact = self.artifact.get()
@@ -128,7 +143,9 @@ class Transaction(SecureArtifact):
             d['artifact'] = self.artifact.id()
         if self.organization:
             d['organization'] = self.organization.id()
+
         d['owner'] = []
         for o in self.owner:
             d['owner'].append(o.id())
+
         return d

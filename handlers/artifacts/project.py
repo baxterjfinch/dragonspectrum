@@ -81,8 +81,10 @@ class ProjectHomeHandler(AuthorizationRequestHanlder):
             host_url=self.request.host_url,
             referer=self.request.referer,
         )
+
         if not self.user.is_world_user():
             analytic_session.user = self.user.key
+
         analytic_session.put()
         memcache.add(analytic_session.key.id(), analytic_session, namespace='analytics')
         self.analytic_session = analytic_session
@@ -104,15 +106,22 @@ class ProjectHandler(AuthorizationRequestHanlder):
         if project_id:
             if not Project.valid_id(project_id):
                 raise HttpErrorException.bad_request('invalid project id')
+
             self.project = Project.get_by_id(project_id)
             if not self.project:
                 raise HttpErrorException.bad_request('invalid project id')
+
             if not self.project.has_permission_read(self.user):
-                lr = tt_logging.construct_log(msg_short='User does not have permission to access this project',
-                                              log_type=tt_logging.SECURITY, request=self.request,
-                                              artifact=self.project, request_user=self.user)
+                lr = tt_logging.construct_log(
+                    msg_short='User does not have permission to access this project',
+                    log_type=tt_logging.SECURITY,
+                    request=self.request,
+                    artifact=self.project,
+                    request_user=self.user
+                )
                 log.info(lr['dict_msg']['msg'], extra=lr)
                 self.redirect('/', abort=True)
+
             self._serve_page()
         elif self.request.get('type') == 'json':
             self._serve_json()
@@ -120,7 +129,7 @@ class ProjectHandler(AuthorizationRequestHanlder):
     def _serve_page(self):
         self._create_analytic_session()
         self.project.record_analytic('pro_opn', self.analytic_session)
-        world_share = self.user.is_world_user()
+
         doc = None
         if self.request.get('doc') != '':
             doc = Document.get_by_id(self.request.get('doc'))
@@ -128,38 +137,49 @@ class ProjectHandler(AuthorizationRequestHanlder):
                 raise HttpErrorException.bad_request('invalid doc id given')
             if doc.project != self.project.key:
                 raise HttpErrorException.bad_request('invalid doc id given')
+
         if self.request.get('active_concept') != '':
             act_con_path = self.request.get('active_concept')
         elif self.request.get('act_con') != '':
             act_con_path = self.request.get('act_con')
         else:
             act_con_path = None
+
         if self.request.get('debug').lower() == 'true':
             self.client_debug = True
+
         if self.request.get('check_auth').lower() == 'false':
             self.client_check_auth = False
+
         self._get_concept_loader_configs()
-        if world_share:
+
+        if self.user.is_world_user():
             self._serve_worldshare_page(doc, act_con_path)
         else:
             self._serve_project_page(doc, act_con_path)
 
     def _serve_worldshare_page(self, doc, act_con_path):
         template_index = JINJA_ENVIRONMENT.get_template('worldshare_project.html')
+
         if not doc:
             doc = self.project.distilled_document.get()
+
         if doc.project != self.project.key:
             raise HttpErrorException.bad_request('invalid doc id given')
+
         if not doc.has_permission_read(self.user):
             self.redirect('/', abort=True)
+
         tree = False
         if self.request.get('tree') != '':
             if self.request.get('tree') == 'true':
                 tree = True
+
         nav = True
         if self.request.get('nav') != '' and not tree and act_con_path is None:
             if self.request.get('nav') == 'false':
                 nav = False
+
         depth = -1
         if self.request.get('depth') not in ['all', 'max', '']:
             depth = self._to_int(self.request.get('depth'))
@@ -192,15 +212,18 @@ class ProjectHandler(AuthorizationRequestHanlder):
             'tree': tree,
             'nav': nav,
         }
+
         self.response.write(template_index.render(template_data))
 
     def _serve_project_page(self, doc, act_con_path,):
         open_chal = True
         if self.request.get('open_chal').lower() == 'false':
             open_chal = False
+
         context_menu = True
         if self.request.get('context_menu').lower() == 'false':
             context_menu = False
+
         template_index = JINJA_ENVIRONMENT.get_template('project.html')
 
         display_name = self.user.display_name
@@ -231,10 +254,16 @@ class ProjectHandler(AuthorizationRequestHanlder):
             }),
             'display_name': short_name,
         }
-        lr = tt_logging.construct_log(msg_short='Opened Project',
-                                      log_type=tt_logging.USER, request=self.request,
-                                      artifact=self.project, request_user=self.user)
+
+        lr = tt_logging.construct_log(
+            msg_short='Opened Project',
+            log_type=tt_logging.USER,
+            request=self.request,
+            artifact=self.project,
+            request_user=self.user
+        )
         log.info(lr['dict_msg']['msg'], extra=lr)
+
         self.response.write(template_index.render(template_data))
 
     def _get_concept_loader_configs(self):
@@ -286,12 +315,17 @@ class ProjectHandler(AuthorizationRequestHanlder):
 
     def _serve_org_project_json(self):
         organization = Organization.get_by_id(self.request.get('organization_id'))
+
         if not self.user.is_admin:
             lr = tt_logging.construct_log(
                 msg_short='Non-Admin User Attemped to Access all Org Projects',
-                log_type=tt_logging.SECURITY, request=self.request, artifact=organization,
-                request_user=self.user)
+                log_type=tt_logging.SECURITY,
+                request=self.request,
+                artifact=organization,
+                request_user=self.user
+            )
             log.warning(lr['dict_msg']['msg'], extra=lr)
+
             raise HttpErrorException.forbidden()
         else:
             project_arry = Project.get_org_projects(organization, self.user)
@@ -301,41 +335,59 @@ class ProjectHandler(AuthorizationRequestHanlder):
         depth = 0
         if self.request.get('depth').strip() != '':
             depth = self._to_int(self.request.get('depth'))
+
         if self.request.get('project_id').strip() != '':
             project = Project.get_by_id(self.request.get('project_id').strip())
+
             if not project.has_permission_read(self.user):
-                lr = tt_logging.construct_log(msg_short='User does not have permission to access this project',
-                                              log_type=tt_logging.SECURITY, request=self.request,
-                                              artifact=project, request_user=self.user)
+                lr = tt_logging.construct_log(
+                    msg_short='User does not have permission to access this project',
+                    log_type=tt_logging.SECURITY,
+                    request=self.request,
+                    artifact=project,
+                    request_user=self.user
+                )
                 log.info(lr['dict_msg']['msg'], extra=lr)
+
                 raise HttpErrorException.forbidden()
+
             project_dict = project.to_dict(depth, self.user, get_treeview=self.request.get('get_treeview'))
         else:
             q = Project.query(Project.owner == self.user.key)
+
             projects = []
             for results in q.iter():
                 if results.has_permission_read(self.user):
                     projects.append(results)
+
             groups = ndb.get_multi(self.user.groups)
             for group in groups:
                 pros = ndb.get_multi(group.artifacts)
                 index = 0
+
                 for pro in pros:
                     if pro is None:
                         group.artifacts.remove(group.artifacts[index])
-                        lr = tt_logging.construct_log(msg_short='Found Broken Project Key',
-                                                      msg='Found broken project key (%s) in group artifact list'
-                                                          '\n Key has been removed' % group.artifacts[index],
-                                                      log_type=tt_logging.SECURITY, request=self.request,
-                                                      request_user=self.user)
+                        lr = tt_logging.construct_log(
+                            msg_short='Found Broken Project Key',
+                            msg='Found broken project key (%s) in group artifact list'
+                                '\n Key has been removed' % group.artifacts[index],
+                            log_type=tt_logging.SECURITY,
+                            request=self.request,
+                            request_user=self.user
+                        )
                         log.info(lr['dict_msg']['msg'], extra=lr)
+
                     if pro.has_permission_read(self.user):
                         if pro not in projects:
                             projects.append(pro)
+
                     index += 1
+
             project_dict = []
             for project in projects:
                 project_dict.append(project.to_dict(self.user))
+
         self.write_json_response(project_dict)
 
     def _create_analytic_session(self):
@@ -348,8 +400,10 @@ class ProjectHandler(AuthorizationRequestHanlder):
             project=self.project.key,
             referer=self.request.referer,
         )
+
         if not self.user.is_world_user():
             analytic_session.user = self.user.key
+
         analytic_session.put()
         memcache.add(analytic_session.key.id(), analytic_session, namespace='analytics')
         self.analytic_session = analytic_session
@@ -360,13 +414,19 @@ class ProjectHandler(AuthorizationRequestHanlder):
     def put(self, project_id=None):
         if self.json_request.get('title') is None:
             raise HttpErrorException.bad_request('invalid project title')
+
         if self.json_request.get('distilled_document') is None:
             raise HttpErrorException.bad_request('invalid document')
+
         distilled_document = self.json_request.get('distilled_document')
         if not distilled_document.get('title'):
             raise HttpErrorException.bad_request('invalid document title')
-        doc_perm = Permission(permissions=Permission.init_perm_struct(Document.operations_list),
-                              key=Permission.create_key())
+
+        doc_perm = Permission(
+            permissions=Permission.init_perm_struct(Document.operations_list),
+            key=Permission.create_key()
+        )
+
         doc = Document(
             key=Document.create_key(),
             title=distilled_document.get('title'),
@@ -381,8 +441,11 @@ class ProjectHandler(AuthorizationRequestHanlder):
         )
 
         doc_perm.artifact = doc.key
-        pro_perm = Permission(permissions=Permission.init_perm_struct(Project.operations_list),
-                              key=Permission.create_key())
+        pro_perm = Permission(
+            permissions=Permission.init_perm_struct(Project.operations_list),
+            key=Permission.create_key()
+        )
+
         pro = Project(
             key=Project.create_key(),
             title=self.json_request.get('title'),
@@ -394,12 +457,16 @@ class ProjectHandler(AuthorizationRequestHanlder):
         pro_perm.artifact = pro.key
         pro_perm.project = pro.key
         doc_perm.project = pro.key
-        doc.parent_perms.append(pro_perm.key)
         doc.project = pro.key
+
+        doc.parent_perms.append(pro_perm.key)
+
         if self.user.in_org():
             doc.organization = self.user.organization
             pro.organization = self.user.organization
+
         ndb.put_multi([doc_perm, doc, pro_perm, pro])
+
         index = self.user.get_put_index()
         doc.index(index)
         pro.index(index)
@@ -413,6 +480,7 @@ class ProjectHandler(AuthorizationRequestHanlder):
 
         if not project_id and not Project.valid_id(project_id):
             raise HttpErrorException.bad_request('no project id')
+
         self.project = Project.get_by_id(project_id)
         if not self.project:
             raise HttpErrorException.bad_request('invalid project id')
@@ -442,12 +510,14 @@ class ProjectHandler(AuthorizationRequestHanlder):
 
     def _add_perm(self):
         group, required = self.project.validate_add_perm_request(self.json_request, self.user)
+
         self.project.add_group_perm(
             group,
             self.json_request.get('operation'),
             self.json_request.get('permission'),
             required
         )
+
         if self.json_request.get('operation') == 'read':
             self.project.record_analytic('pro_perm', self.analytic_session)
 
@@ -459,9 +529,15 @@ class ProjectHandler(AuthorizationRequestHanlder):
             'hidden': False,
         }
 
-        trans = Transaction(action='pro_perm_add', user=self.user.key, artifact=self.project.key,
-                            project=self.project.key, action_data=action_data)
+        trans = Transaction(
+            action='pro_perm_add',
+            user=self.user.key,
+            artifact=self.project.key,
+            project=self.project.key,
+            action_data=action_data
+        )
         trans.put()
+
         org = self.project.organization.get()
 
         # Get project channel tokens
@@ -495,6 +571,7 @@ class ProjectHandler(AuthorizationRequestHanlder):
 
     def _rm_perm(self):
         group, required = self.project.validate_rm_perm_request(self.json_request, self.user)
+
         self.project.remove_group_perm(
             group,
             self.json_request.get('operation'),
@@ -508,9 +585,15 @@ class ProjectHandler(AuthorizationRequestHanlder):
             'hidden': False,
         }
 
-        trans = Transaction(action='pro_perm_rmv', user=self.user.key, artifact=self.project.key,
-                            project=self.project.key, action_data=action_data)
+        trans = Transaction(
+            action='pro_perm_rmv',
+            user=self.user.key,
+            artifact=self.project.key,
+            project=self.project.key,
+            action_data=action_data
+        )
         trans.put()
+
         org = self.project.organization.get()
 
         # Get project channel tokens
@@ -544,9 +627,11 @@ class ProjectHandler(AuthorizationRequestHanlder):
 
     def _remove_group(self):
         group = self.project.validate_rm_group_request(self.json_request, self.user)
+
         for op in self.project.operations_list:
             self.project.remove_group_perm(group, op)
             self.project.remove_group_perm(group, op, required=True)
+
         self.project.record_analytic('pro_perm', self.analytic_session)
 
         action_data = {
@@ -554,9 +639,15 @@ class ProjectHandler(AuthorizationRequestHanlder):
             'hidden': False,
         }
 
-        trans = Transaction(action='pro_grp_rmv', user=self.user.key, artifact=self.project.key,
-                            project=self.project.key, action_data=action_data)
+        trans = Transaction(
+            action='pro_grp_rmv',
+            user=self.user.key,
+            artifact=self.project.key,
+            project=self.project.key,
+            action_data=action_data
+        )
         trans.put()
+
         org = self.project.organization.get()
 
         # Get project channel tokens
@@ -594,18 +685,20 @@ class ProjectHandler(AuthorizationRequestHanlder):
             raise ValueError('no attribute given')
         if not isinstance(r_attr, basestring):
             raise ValueError('attributes must be a string')
+
         if not self.json_request.get('document'):
             raise ValueError('no document id given')
         if not Document.valid_id(self.json_request.get('document')):
             raise HttpErrorException.bad_request('invalid document id')
+
         doc = Document.get_by_id(self.json_request.get('document'))
         if not doc.has_permission_write(self.user):
             raise HttpErrorException.forbidden()
         if not doc:
             raise ValueError('invalid document id given')
+
         attr = self.project.get_attr(doc.key)
         if attr:
-
             if r_attr == 'h' and 'noh' in attr.attributes:
                 attr.attributes.remove('noh')
             if r_attr == 'noh' and 'h' in attr.attributes:
@@ -636,8 +729,14 @@ class ProjectHandler(AuthorizationRequestHanlder):
             'attribute': r_attr,
             'document': doc.key.id()
         }
-        trans = Transaction(action='pro_attr_add', user=self.user.key, artifact=self.project.key,
-                            project=self.project.key, action_data=action_data)
+
+        trans = Transaction(
+            action='pro_attr_add',
+            user=self.user.key,
+            artifact=self.project.key,
+            project=self.project.key,
+            action_data=action_data
+        )
         trans.put()
 
         channel_tokens = ChannelToken.get_by_project_key(self.project.key, self.user_channel_token)
@@ -652,13 +751,20 @@ class ProjectHandler(AuthorizationRequestHanlder):
         title = self.json_request.get('title')
         if title.rstrip() == '':
             raise HttpErrorException.bad_request('empty title given')
+
         if not self.project.has_permission_write(self.user):
             raise HttpErrorException.forbidden()
+
         self.project.title = title
 
         action_data = {'title': title}
-        trans = Transaction(action='pro_title', user=self.user.key, artifact=self.project.key,
-                            project=self.project.key, action_data=action_data)
+        trans = Transaction(
+            action='pro_title',
+            user=self.user.key,
+            artifact=self.project.key,
+            project=self.project.key,
+            action_data=action_data
+        )
         trans.put()
 
         self.get_channel_token()
@@ -675,17 +781,28 @@ class ProjectHandler(AuthorizationRequestHanlder):
             raise HttpErrorException.forbidden()
 
         pvote = self.project.get_user_vote(self.user)
+
+        # If there is no previous vote, they can vote up or down
         if pvote is None:
             self.project.project_score += 1
             uvote = ProjectUserVotes(project=self.project.key, user=self.user.key, direction='up')
             uvote.put()
+
+        # If there was a previous vote and its down. We remove their vote, otherwise they are trying
+        # to vote up again and we disallow that.
         elif pvote is not None and pvote.direction == 'down':
             self.project.project_score += 1
+
             pvote.key.delete()
 
         action_data = {'project_score': self.project.project_score}
-        trans = Transaction(action='pro_up_vote', user=self.user.key, artifact=self.project.key,
-                            project=self.project.key, action_data=action_data)
+        trans = Transaction(
+            action='pro_up_vote',
+            user=self.user.key,
+            artifact=self.project.key,
+            project=self.project.key,
+            action_data=action_data
+        )
         trans.put()
 
         self.get_channel_token()
@@ -701,18 +818,27 @@ class ProjectHandler(AuthorizationRequestHanlder):
         if not self.project.has_permission_write(self.user):
             raise HttpErrorException.forbidden()
 
+        # If there is no previous vote, they can vote up or down
         pvote = self.project.get_user_vote(self.user)
         if pvote is None:
             self.project.project_score -= 1
             uvote = ProjectUserVotes(project=self.project.key, user=self.user.key, direction='down')
             uvote.put()
+
+        # If there was a previous vote and its down. We remove their vote, otherwise they are trying
+        # to vote up again and we disallow that.
         elif pvote is not None and pvote.direction == 'up':
             self.project.project_score -= 1
             pvote.key.delete()
 
         action_data = {'project_score': self.project.project_score}
-        trans = Transaction(action='pro_down_vote', user=self.user.key, artifact=self.project.key,
-                            project=self.project.key, action_data=action_data)
+        trans = Transaction(
+            action='pro_down_vote',
+            user=self.user.key,
+            artifact=self.project.key,
+            project=self.project.key,
+            action_data=action_data
+        )
         trans.put()
 
         self.get_channel_token()
@@ -731,17 +857,23 @@ class ProjectHandler(AuthorizationRequestHanlder):
     def delete(self, project_id=None):
         if self.request.get('token_id') is None:
             raise HttpErrorException.bad_request('no token id')
+
         self.user.current_token_id = self.request.get('token_id')
         if not project_id and not Project.valid_id(project_id):
             raise HttpErrorException.bad_request('no project id')
+
         project = Project.get_by_id(project_id)
         if not project:
             raise HttpErrorException.bad_request('invaild project id')
         if not project.has_permission_delete(self.user):
             raise HttpErrorException.forbidden()
 
-        trans = Transaction(action='pro_del', user=self.user.key, artifact=project.key,
-                            project=project.key)
+        trans = Transaction(
+            action='pro_del',
+            user=self.user.key,
+            artifact=project.key,
+            project=project.key
+        )
         trans.put()
 
         self.get_channel_token()
@@ -859,6 +991,7 @@ class ChannelDisconnectedHandler(AuthorizationRequestHanlder):
         client_id = self.request.get('from')
         log.debug('User Disconnected: %s', client_id)
         channel_token = ChannelToken.get_by_id(client_id)
+
         if channel_token:
             log.debug('Found Channel Token')
             channel_token.key.delete()
@@ -911,6 +1044,7 @@ class ChannelUsersHandler(AuthorizationRequestHanlder):
     def get(self):
         if not self.request.get('project', None):
             raise HttpErrorException.bad_request('invalid project id')
+
         project = Project.get_by_id(self.request.get('project'))
         if not project:
             raise HttpErrorException.bad_request('invalid project id')
@@ -918,6 +1052,7 @@ class ChannelUsersHandler(AuthorizationRequestHanlder):
         self.get_user_channel_data()
         channel_tokens = ChannelToken.get_by_project_key(project.key, self.user_channel_token)
         channel_tokens_list = []
+
         for channel_token in channel_tokens:
             user = channel_token.user.get()
             if channel_token:
@@ -930,6 +1065,7 @@ class ChannelUsersHandler(AuthorizationRequestHanlder):
                     'concept': channel_token.concept.id() if channel_token.concept else '',
                     'document': channel_token.document.id() if channel_token.document else '',
                 })
+
         self.write_json_response(channel_tokens_list)
         self.ping_test(project)
 
@@ -942,21 +1078,26 @@ class ChannelUsersHandler(AuthorizationRequestHanlder):
 def check_ping_replies(project_key):
     try:
         time.sleep(10)
+
         channel_tokens = ChannelToken.get_by_project_key(project_key)
         for channel_token in channel_tokens:
                 channel.send_message(channel_token.client_id, json.dumps({'channel_op': 'ping'}))
 
         time.sleep(10)
+
         good_channel_tokens = []
         good_channel_tokens_ids = []
+
         for chan_token in channel_tokens:
             reply = memcache.get(chan_token.client_id)
             memcache.delete(chan_token.client_id)
+
             if not reply:
                 chan_token.key.delete()
             else:
                 good_channel_tokens.append(chan_token)
                 good_channel_tokens_ids.append(chan_token.client_id)
+
         for chan_token in good_channel_tokens:
             channel.send_message(chan_token.client_id, json.dumps({'channel_op': 'valid_users',
                                                                    'users': good_channel_tokens_ids}))
@@ -980,6 +1121,7 @@ class SearchLibraryHandler(AuthorizationRequestHanlder):
         query_dict = self.json_request.get('query')
         if not query_dict:
             raise HttpErrorException.bad_request('no query given')
+
         if query_dict['return'] == 'project_ids':
             self.write_json_response({'projects': Project.search_projects(query_dict, self.user)})
         elif query_dict['return'] == 'concept_ids':
@@ -994,34 +1136,43 @@ class SearchProjectHandler(AuthorizationRequestHanlder):
             raise HttpErrorException.bad_request('no query given')
         if not query_dict['pro']:
             raise HttpErrorException.bad_request('no project id given')
+
         project = Project.get_by_id(query_dict['pro'])
         if not project:
             raise HttpErrorException.bad_request('invalid project id given')
         if not project.has_permission(self.user, 'read'):
             raise HttpErrorException.forbidden()
+
         index = project.get_indexes(create_new=False)
         self.get_analytic_session()
+
         query_string = 'pro=%s typ=(phr OR anno_reply) (reply=(%s) OR phr=(%s))' % (
             project.key.id(),
             query_dict.get('string', ''),
             query_dict.get('string', '')
         )
+
         if index is not None and len(index) > 0:
             search_results = ttindex.ttsearch(index, query_string, limit=1000, use_cursor=False, user=self.user)
+
             concepts = []
             concept_ids = []
+
             while len(concepts) < 20 and search_results is not None:
                 for sr in search_results:
                     if sr['fields']['con'] not in concept_ids:
                         concept_ids.append(sr['fields']['con'])
+
                         if sr['fields']['typ'] == 'phr':
                             concept = Concept.get_by_id(sr['fields']['con'])
                             phrasing = Phrasing.get_by_id(sr['id'])
+
                             if concept.has_permission_read(self.user) and phrasing.has_permission_read(self.user):
                                 concepts.append({'con_id': sr['fields']['con'], 'phr_text': sr['fields']['phr']})
                         elif sr['fields']['typ'] == 'anno_reply':
                             concept = Concept.get_by_id(sr['fields']['con'])
                             document = Document.get_by_id(sr['fields']['doc'])
+
                             if concept.has_permission_read(self.user) and \
                                     document.has_permission_read(self.user) and \
                                     document.has_permission_annotation_read(self.user):
@@ -1029,9 +1180,13 @@ class SearchProjectHandler(AuthorizationRequestHanlder):
 
                     if len(concepts) >= 20:
                         break
+
                 else:
                     search_results = ttindex.ttsearch(index, query_dict, limit=1000, user=self.user)
+
             self.write_json_response({'concepts': concepts})
+
         else:
             self.write_json_response({'concepts': ''})
+
         project.record_analytic('pro_search', self.analytic_session, meta_data={'sch_query': str(query_dict)})

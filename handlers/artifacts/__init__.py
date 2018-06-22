@@ -70,7 +70,7 @@ artifact_url_mapping = [
     ('/search/project/?', SearchProjectHandler),
     ('/search/library/?', SearchLibraryHandler),
     ('/channel/token/', ChannelTokenHandler),
-    ('/monitor/server/(.*)/?', MonitoringHanlder),
+    # ('/monitor/server/(.*)/?', MonitoringHanlder),
     ('/chat/?', ChatHandler),
     ('/channel/token/?', ChannelTokenHandler),
     ('/channel/users/?', ChannelUsersHandler),

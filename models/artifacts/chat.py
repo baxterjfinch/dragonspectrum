@@ -14,6 +14,7 @@ class ChatMessage(Artifact):
     def to_dict(self):
         d = super(ChatMessage, self).to_dict()
         d['user'] = self.user.id()
+
         if self.document:
             d['document'] = self.document.id()
             d['type'] = 'doc_chat'

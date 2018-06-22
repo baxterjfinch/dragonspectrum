@@ -15,8 +15,7 @@ class ChannelToken(Artifact):
     concept = ndb.KeyProperty()
     link_id = ndb.StringProperty()
     document = ndb.KeyProperty()
-    connected = ndb.BooleanProperty(default=False)  # Tell if the client ever connected
-                                                    # not if they are connected
+    connected = ndb.BooleanProperty(default=False)  # Tell if the client ever connected not if they are connected
 
     @property
     def client_id(self):
@@ -43,17 +42,20 @@ class ChannelToken(Artifact):
 
         valid_tokens = []
         invalid_tokens = []
+
         for channel_token in channel_tokens:
             # Remove expired tokens
             if request_user_token and request_user_token.client_id == channel_token.client_id:
                 continue
             elif channel_token.created_ts < cut_off_time1:
                 invalid_tokens.append(channel_token.key)
+
             # Remove token that were never used older than 3 minutes
             elif not channel_token.connected and channel_token.created_ts < cut_off_time2:
                 invalid_tokens.append(channel_token.key)
             else:
                 valid_tokens.append(channel_token)
+
         ndb.delete_multi(invalid_tokens)
         return valid_tokens
 
@@ -78,5 +80,6 @@ class ChannelToken(Artifact):
     def broadcast_message(channel_tokens, message):
         if not isinstance(message, basestring):
             message = json.dumps(message)
+
         for channel_token in channel_tokens:
             channel.send_message(channel_token.client_id, message)

@@ -11,6 +11,7 @@ __all__ = [
     'Phrasing',
 ]
 
+
 ENGLISH_ARTICLES = [
     'a',
     'an',
@@ -19,6 +20,7 @@ ENGLISH_ARTICLES = [
     'any',
     'either',
 ]
+
 
 DISTILL_THRESHOLD = 12
 ARTICLE_THRESHOLD = 9
@@ -38,20 +40,25 @@ class Phrasing(SecureArtifact):
     def delete(self, concept, user):
         if self.key in concept.phrasings:
             concept.phrasings.remove(self.key)
+
         for sp in ndb.get_multi(concept.selected_phrasings):
             if sp.phrasing == self.key:
                 concept.selected_phrasings.remove(sp.key)
                 sp.key.delete()
+
         concept.put()
         projects = [concept.project.get()]
+
         sel_phr = ndb.get_multi(concept.selected_phrasings)
         for sp in sel_phr:
             if sp.phrasing == self.key:
                 project = sp.document.project.get()
                 if project not in projects:
                     projects.append(project)
+
         self.permissions.delete()
         self.key.delete()
+
         indexes = user.get_indexes(create_new=False)
         self.index_delete(indexes)
 
@@ -63,14 +70,18 @@ class Phrasing(SecureArtifact):
         perm_obj = self.permissions.get()
         concept = self.concept.get()
         operations_list = self.get_operations_list()
+
         permissions = {}
         for op in operations_list:
             permissions[op] = {"shared": {}, "required": {}}
+
         parent_perm = ndb.get_multi(concept.parent_perms)
         parent_perm.append(concept.permissions.get())
+
         ori_doc = self.originating_document.get()
         if not ori_doc:
             ori_doc = self.project.get().distilled_document.get()
+
         parent_perm.append(ori_doc.permissions.get())
         parent_perm.append(perm_obj)
 
@@ -80,8 +91,10 @@ class Phrasing(SecureArtifact):
                     op = self.get_alternative_perm(op)
                 if op is None:
                     continue
+
                 for group in pp.permissions[op]['shared'].keys():
                     permissions[op]['shared'][group] = pp.permissions[op]['shared'][group]
+
                 for group in pp.permissions[op]['required'].keys():
                     permissions[op]['required'][group] = pp.permissions[op]['required'][group]
 
@@ -95,10 +108,13 @@ class Phrasing(SecureArtifact):
             concept = self.concept.get()
         if not project:
             project = concept.project
+
         sel_phr = concept.get_selected_phrasing(phrasing=self)
         docs = ''
+
         for sp in sel_phr:
             docs += sp.document.id() + ' '
+
         fields = [
             ttindex.ATOMFIELD, 'typ', 'phr',
             ttindex.TEXTFIELD, 'phr', self.text,
@@ -106,6 +122,7 @@ class Phrasing(SecureArtifact):
             ttindex.ATOMFIELD, 'con', concept.key.id(),
             ttindex.DATEFIELD, 'date', self.created_ts,
         ]
+
         return self.key.id(), fields
 
     def index(self, index_, project=None, concept=None):
@@ -115,9 +132,11 @@ class Phrasing(SecureArtifact):
     def get_word_count(self):
         words = self.text.split(' ')
         count = 0
+
         for word in words:
             if word.rstrip() != '':
                 count += 1
+
         return count
 
     @staticmethod
@@ -157,6 +176,7 @@ def distill_with_threshold(text, capitalization=CAPITALIZE_FIRST):
     """
     words = nltk.word_tokenize(text)
     count = len(words)
+
     if count > DISTILL_THRESHOLD:
         no_articles = remove_articles(words)
         if len(no_articles) > ARTICLE_THRESHOLD:
@@ -193,7 +213,6 @@ def capitalize(text, capitalization):
         output = text.lower()
     else:
         output = text
-
     return output
 
 
