@@ -713,15 +713,9 @@ class ProjectNode(SecureArtifact):
     def to_dict(self, user, keep_dist=None):
         d = super(ProjectNode, self).to_dict(user)
         del d['children']
-        children = ndb.get_multi(self.children)
-        for child in children:
-            if child is None:
-                continue
-            if child.has_permission_read(user):
-                d['is_parent'] = True
-                break
-        else:
-            d['is_parent'] = False
+
+        children = self.get_children(user)
+        d['is_parent'] = len(children) > 0
 
         d['attributes'] = []
         attributes = ndb.get_multi(self.attributes)
