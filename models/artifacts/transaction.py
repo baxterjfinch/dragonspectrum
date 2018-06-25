@@ -107,27 +107,23 @@ class Transaction(SecureArtifact):
                 self.operations_list = art.operations_list
                 perm = art.get_permission_object()
 
-                self.permissions = Permission(
-                    key=Permission.create_key(),
-                    permissions=perm.calculated_permissions,
-                    project=self.project,
-                    artifact=self.key
-                )
-                self.permissions.put()
-
             elif document:
                 self.organization = document.organization
                 self.owner = document.owner
                 self.operations_list = document.operations_list
                 perm = document.get_permission_object()
 
-                self.permissions = Permission(
-                    key=Permission.create_key(),
-                    permissions=perm.calculated_permissions,
-                    project=self.project,
-                    artifact=self.key
-                )
-                self.permissions.put()
+            else:
+                return
+
+            perms = Permission(
+                key=Permission.create_key(),
+                permissions=perm.calculated_permissions,
+                project=self.project,
+                artifact=self.key
+            )
+            perms.put()
+            self.permissions = perms.key
 
     def undo(self):
         artifact = self.artifact.get()

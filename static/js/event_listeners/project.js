@@ -107,6 +107,7 @@ ProjectEventListener.upvote = function (project, project_score, call_back, notif
             data: {up_vote: true},
             success: function (data) {
                 project.setProjectScore(data.project_score);
+                project.user_vote = data.user_vote;
                 call_back();
             }
         })
@@ -144,6 +145,7 @@ ProjectEventListener.downvote = function (project, project_score, call_back, not
             data: {down_vote: true},
             success: function (data) {
                 project.setProjectScore(data.project_score);
+                project.user_vote = data.user_vote;
                 call_back();
             }
         })

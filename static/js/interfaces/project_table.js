@@ -257,39 +257,35 @@ ProjectTable.buildSideTableRow = function (table, project) {
 
     project.addTableRow(table, project_row);
 
-    if (Project.getProjects()[0].user_vote.direction === "up") {
-        upvote_icon.addClass('up');
-    } else {
-        downvote_icon.addClass('down');
+    function update_colors () {
+        if (project.user_vote !== null && project.user_vote.direction === "up") {
+            upvote_icon.addClass('up');
+            downvote_icon.removeClass('down');
+        } else if (project.user_vote !== null && project.user_vote.direction === "down") {
+            upvote_icon.removeClass('up');
+            downvote_icon.addClass('down');
+        } else {
+            upvote_icon.removeClass('up');
+            downvote_icon.removeClass('down');
+        }
     }
-    if (Project.getProjects()[1].user_vote.direction === "up") {
-        upvote_icon.addClass('up');
-    } else {
-        downvote_icon.addClass('down');
-    }
+    update_colors();
 
 
     upvote_icon.click(function (){
         ProjectEventListener.upvote(project, null, function () {
             score.empty();
             score.append(project.getProjectScore());
-            downvote_icon.removeClass("down", "up")
-            upvote_icon.addClass("up")
+            update_colors();
         }, true);
-
     });
 
     downvote_icon.click(function (){
         ProjectEventListener.downvote(project, null, function () {
             score.empty();
             score.append(project.getProjectScore());
+            update_colors();
         }, true);
-
-        if (project.user_vote != null) {
-          upvote_icon.removeClass("up", "down")
-          downvote_icon.addClass("down")
-
-        };
     });
 
     return project_row;
