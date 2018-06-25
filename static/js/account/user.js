@@ -25,6 +25,8 @@ function User() {
     this.require_password_change = null;
     this.tour_home_complete = null;
     this.tour_project_complete = null;
+    this.spectra_count = 500;
+    this.ddss = 500000;
 }
 
 User.users = {};
@@ -48,6 +50,8 @@ User.prototype.initCurrentUser = function (user) {
     this.first_name = user.first_name;
     this.last_name = user.last_name;
     this.full_name = user.full_name;
+    this.spectra_count = user.spectra_count;
+    this.ddss = user.ddss;
 
     // Set this here to group initiation
     User.users[this.getId()] = this;
@@ -119,6 +123,15 @@ User.prototype.setUsername = function (username) {
 User.prototype.getUserName = function () {
     return this.username;
 };
+
+User.prototype.setSpectraCount = function (spectra_count) {
+    this.spectra_count = spectra_count;
+};
+
+User.prototype.getSpectraCount = function () {
+    return this.spectra_count;
+};
+
 
 User.prototype.setAccountExpireTs = function (ts) {
     this.account_expire_date = ts;

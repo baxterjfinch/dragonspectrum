@@ -97,8 +97,8 @@ class User(AuthUser):
     super_admin = None
 
     # User Currency Information
-    ddss = ndb.IntegerProperty()
-    spectra_count = ndb.IntegerProperty()
+    ddss = ndb.IntegerProperty(default=0)
+    spectra_count = ndb.IntegerProperty(default=0)
 
     @staticmethod
     def new(request_user, verify_email=True, request=None, worldshare_group=None, organization=None):
@@ -569,6 +569,8 @@ class User(AuthUser):
         if d['email_changed']:
             d['email_changed'] = time.mktime(d['email_changed'].timetuple())
         d['id'] = self.key.id()
+        d['spectra_count'] = self.spectra_count
+        d['ddss'] = self.ddss
 
         if not self.is_world_user():
             d['full_name'] = self.full_name
