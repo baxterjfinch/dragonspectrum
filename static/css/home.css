@@ -281,31 +281,43 @@ a {
 
 
 /* The RIGHT sidebar menu */
+
 .sidenav-right {
-    margin-top: 50px;
+    margin-top: 5px;
+    right:0;
     height: 100%; /* Full-height: remove this if you want "auto" height */
-    width: 160px; /* Set the width of the sidebar */
+    width: 20%; /* Set the width of the sidebar */
+    min-width: 250px;
     position: fixed; /* Fixed Sidebar (stay in place on scroll) */
     z-index: 1; /* Stay on top */
     top: 0; /* Stay at the top */
-    right: 0;
-    background-color: #111; /* Black */
-    overflow-x: hidden; /* Disable horizontal scroll */
-    padding-top: 20px;
+    background-color: #ededed; /* Grey */
+
 }
 
+.sidenav-right a:hover {
+  color: pink;
+}
 /* The navigation menu links */
 .sidenav-right a {
-    padding: 6px 8px 6px 16px;
     text-decoration: none;
-    font-size: 25px;
-    color: #818181;
+    font-size: 12px;
+    color: #23252a;
     display: block;
 }
 
 /* When you mouse over the navigation links, change their color */
 .sidenav-right a:hover {
-    color: #f1f1f1;
+    color: slategrey;
+}
+
+.right-panels {
+    width: 100%;
+    padding-top: 25px;
+    padding-bottom: 25px;
+}
+.right-inputs {
+    position: absolute;
 }
 
 .mainview {

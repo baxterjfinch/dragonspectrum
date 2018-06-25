@@ -159,7 +159,7 @@
             </ul>
             <div class="tab-content" id="myTabContent">
               <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
-                  <table id="my_project_table_side" class="table table table-hover table-condensed project-table-side">
+                  <table id="my_project_table_side_ranked" class="table table table-hover table-condensed project-table-side">
                       <thead>
                           <tr>
                               <th class="project-voter"></th>
@@ -169,12 +169,12 @@
                               <th class="project-date">Date Created</th>
                           </tr>
                       </thead>
-                      <tbody id="my-project-table-body-side">
+                      <tbody id="my-project-table-body-ranked">
                       </tbody>
                   </table>
 
               </div>
-              <div class="tab-pane fade show active in" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+              <div class="tab-pane fade active in" id="profile" role="tabpanel" aria-labelledby="profile-tab">
 
                   <div id="tvs-wrapper" class="hidden-xs col-sm-4 col-md-3 col-lg-3">
 
@@ -201,10 +201,6 @@
 
                   </div>
                 </div>
-
-
-
-
               </div>
             </div>
         </div>
@@ -287,6 +283,113 @@
             </div>
         </div>
 
+        <div id="content-pane" class="row">
+        <div class="sidenav-right container my_project_table_side_container_right" style="margin-top: 50px;">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+              <li class="nav-item">
+                <a class="nav-link" id="chat-tab" data-toggle="tab" href="#chat" role="tab" aria-controls="chat" aria-selected="true">Chat</a>
+              </li>
+              <li class="nav-item active">
+                <a class="nav-link active" id="comment-tab" data-toggle="tab" href="#comment" role="tab" aria-controls="comment" aria-selected="false">Comments</a>
+              </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+              <div class="tab-pane fade" id="chat" role="tabpanel" aria-labelledby="chat-tab">
+               <div class="tab-pane" id="pvs_collaboration_tab">
+                    <div class="row">
+                        <div id="pvs-collaboration-users" class="col-xs-4 pvs-properties right-panels">
+                            <div id="pvs-collaboration-panel" class="panel panel-info pvs-panel">
+                                <div class="panel-heading pvs-panel-heading">
+                                    <h5 class="panel-title">Users</h5>
+                                </div>
+                                <div class="panel-body pvs-panel-body pvs-scroll">
+                                    <table class="table table-condensed">
+                                        <tbody id="col_user_tb_body">
+                                            <tr>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Document properties -->
+                        <div id="pvs-document-properties" class="col-xs-8 pvs-properties right-panels">
+                            <div id="pvs-document-properties-panel" class="panel panel-info pvs-panel">
+                                <div class="panel-heading pvs-panel-heading">
+                                    <h5 class="panel-title">Chat</h5>
+                                </div>
+                                <div id="chat_panel" class="panel-body pvs-panel-body">
+                                    <!-- see here: http://www.bootply.com/RMQctuZqHJ -->
+                                    <div id="doc_chat" class="chat doc_chat">
+                                        <div id="doc_chat_view" class="chat doc_chat_view">
+                                            <table id="chat-table" class="table table-striped table-condensed ">
+                                                <tbody id="chat_messages" class="chat_messages"></tbody>
+                                            </table>
+                                        </div>
+                                        <div id="doc_chat_input" class="chat chat_input right-inputs">
+                                            <div class="input-group">
+                                                <input id="grp_chat_input" type="text" class="form-control">
+                                                <span class="input-group-btn">
+                                                    <button id="grp_chat_input_send" class="btn btn-primary" type="button"><i class="fa fa-send"></i></button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              </div>
+              <div class="tab-pane fade active in" id="comment" role="tabpanel" aria-labelledby="comment-tab">
+                  <div class="tab-pane" id="pvs_comments_tab" data-toggle="pill">
+                    <div class="row">
+                        <!-- Annotation list -->
+                        <div class="col-xs-6 pvs-properties pvs-annotations right-panels">
+                            <div id="pvs-annos-list-panel" class="panel panel-info pvs-panel">
+                                <div class="panel-heading clearfix pvs-panel-heading">
+                                    <h5 class="panel-title pull-left">Comments</h5>
+                                    <button href="#" id="crt_new_anno_btn" class="anno-act-btn btn btn-primary btn-xs pull-right"><i class="fa fa-plus"></i></button>
+                                </div>
+                                <div id="anno_panel" class="panel-body pvs-panel-body pvs-scroll">
+                                    <table id="pvs_annos_table" class="table table-condensed">
+                                        <tbody id="pvs_annos_table_body">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <br><br>
+                        <!-- Comment thread -->
+                        <div class="col-xs-6 pvs-properties pvs-thread right-panels">
+                            <div id="pvs-thread-list-panel" class="panel panel-info pvs-panel">
+                                <div class="panel-heading pvs-panel-heading">
+                                    <h5 class="panel-title">Thread</h5>
+                                </div>
+                                <div class="panel-body pvs-panel-body">
+                                    <div id="comment-view">
+                                        <table id="pvs_comments_table" class="table table-striped table-condensed">
+                                            <tbody id="pvs_comments_table_body">
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div id="comment_input_div" class="chat_input right-inputs">
+                                        <div class="input-group">
+                                            <input id="comment_input" type="text" class="form-control" >
+                                            <span class="input-group-btn">
+                                                <button id="comment_input_send" class="btn btn-primary" type="button"><i class="fa fa-reply"></i></button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+        </div>
+
       <div class="voting-buttons-div">
           <button type="button" class="btn btn-secondary btn-sm voting-buttons" data-toggle="button" aria-pressed="false" autocomplete="off" id="voterrrrr_up">
             <i class="fas fa-chevron-circle-up"></i>
@@ -296,7 +399,221 @@
             <i class="fas fa-chevron-circle-down"></i>
           </button>
 
-          <br>
+
+
+              <div id="pvs" class="row">
+                <!-- PVs -->
+                <div id="properties_view" class="tabbable tabs-below">
+                    <div>
+                        <div id="pvs-tabs-content" class="tab-content">
+
+                            <!-- PHRASING TAB -->
+                            <div class="tab-pane active" id="pvs_phrasing_tab">
+
+                                <div class="row">
+                                    <!-- Phrasings list -->
+                                    <div class="col-xs-7 pvs-properties">
+                                        <div id="pvs-phrasing-list-panel" class="panel panel-info pvs-panel">
+                                            <div class="panel-heading pvs-panel-heading">
+                                                <h5 class="panel-title">Phrasings</h5>
+                                            </div>
+                                            <div class="panel-body pvs-panel-body pvs-scroll">
+                                                <table id="pvs_phrasing_table" class="table table-striped table-condensed">
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Phrasing metadata -->
+                                    <div id="pvs-phrasing-properties" class="col-xs-5 pvs-properties">
+                                        <div id="pvs-phrasing-properties-panel" class="panel panel-info pvs-panel">
+                                            <div class="panel-heading pvs-panel-heading">
+                                                <h5 class="panel-title">Properties</h5>
+                                            </div>
+                                            <div class="panel-body pvs-panel-body pvs-scroll">
+                                                <table class="table table-striped table-condensed">
+                                                    <tbody id="phr_prop_body">
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+
+                            <!-- CONCEPT TAB -->
+                            <div class="tab-pane" id="pvs_concept_tab">
+                                <div class="row">
+                                    <!-- Concept properties -->
+                                    <div id="pvs-concept-properties" class="col-xs-12 pvs-properties">
+                                        <div id="pvs-concept-properties-panel" class="panel panel-info pvs-panel">
+                                            <div class="panel-heading pvs-panel-heading">
+                                                <h5 class="panel-title">Properties</h5>
+                                            </div>
+                                            <div class="panel-body pvs-panel-body pvs-scroll">
+                                                <table class="table table-striped table-condensed">
+                                                    <tbody id="con_prop_body">
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <!-- DOCUMENT TAB -->
+                            <div class="tab-pane" id="pvs_document_tab">
+                                <div class="row">
+                                    <!-- Document properties -->
+                                    <div id="pvs-document-properties" class="col-xs-12 pvs-properties">
+                                        <div id="pvs-document-properties-panel" class="panel panel-info pvs-panel">
+                                            <div class="panel-heading pvs-panel-heading">
+                                                <h5 class="panel-title">Properties</h5>
+                                            </div>
+                                            <div class="panel-body pvs-panel-body pvs-scroll">
+                                                <table class="table table-striped table-condensed">
+                                                    <tbody id="doc_prop_body">
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+
+                            <!-- COLLABORATION TAB -->
+                            <div class="tab-pane" id="pvs_collaboration_tab">
+                                <div class="row">
+                                    <div id="pvs-collaboration-users" class="col-xs-4 pvs-properties">
+                                        <div id="pvs-collaboration-panel" class="panel panel-info pvs-panel">
+                                            <div class="panel-heading pvs-panel-heading">
+                                                <h5 class="panel-title">Users</h5>
+                                            </div>
+                                            <div class="panel-body pvs-panel-body pvs-scroll">
+                                                <table class="table table-condensed">
+                                                    <tbody id="col_user_tb_body">
+                                                        <tr>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Document properties -->
+                                    <div id="pvs-document-properties" class="col-xs-8 pvs-properties">
+                                        <div id="pvs-document-properties-panel" class="panel panel-info pvs-panel">
+                                            <div class="panel-heading pvs-panel-heading">
+                                                <h5 class="panel-title">Chat</h5>
+                                            </div>
+                                            <div id="chat_panel" class="panel-body pvs-panel-body">
+                                                <!-- see here: http://www.bootply.com/RMQctuZqHJ -->
+                                                <div id="doc_chat" class="chat doc_chat">
+                                                    <div id="doc_chat_view" class="chat doc_chat_view">
+                                                        <table id="chat-table" class="table table-striped table-condensed ">
+                                                            <tbody id="chat_messages" class="chat_messages"></tbody>
+                                                        </table>
+                                                    </div>
+                                                    <div id="doc_chat_input" class="chat chat_input">
+                                                        <div class="input-group">
+                                                            <input id="grp_chat_input" type="text" class="form-control">
+                                                            <span class="input-group-btn">
+                                                                <button id="grp_chat_input_send" class="btn btn-primary" type="button"><i class="fa fa-send"></i></button>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+
+                            <!-- COMMENTS TAB -->
+                            <div class="tab-pane" id="pvs_comments_tab" data-toggle="pill">
+                                <div class="row">
+                                    <!-- Annotation list -->
+                                    <div class="col-xs-6 pvs-properties pvs-annotations">
+                                        <div id="pvs-annos-list-panel" class="panel panel-info pvs-panel">
+                                            <div class="panel-heading clearfix pvs-panel-heading">
+                                                <h5 class="panel-title pull-left">Comments</h5>
+                                                <button href="#" id="crt_new_anno_btn" class="anno-act-btn btn btn-primary btn-xs pull-right"><i class="fa fa-plus"></i></button>
+                                            </div>
+                                            <div id="anno_panel" class="panel-body pvs-panel-body pvs-scroll">
+                                                <table id="pvs_annos_table" class="table table-condensed">
+                                                    <tbody id="pvs_annos_table_body">
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Comment thread -->
+                                    <div class="col-xs-6 pvs-properties pvs-thread">
+                                        <div id="pvs-thread-list-panel" class="panel panel-info pvs-panel">
+                                            <div class="panel-heading pvs-panel-heading">
+                                                <h5 class="panel-title">Thread</h5>
+                                            </div>
+                                            <div class="panel-body pvs-panel-body">
+                                                <div id="comment-view">
+                                                    <table id="pvs_comments_table" class="table table-striped table-condensed">
+                                                        <tbody id="pvs_comments_table_body">
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div id="comment_input_div" class="chat_input">
+                                                    <div class="input-group">
+                                                        <input id="comment_input" type="text" class="form-control" >
+                                                        <span class="input-group-btn">
+                                                            <button id="comment_input_send" class="btn btn-primary" type="button"><i class="fa fa-reply"></i></button>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+
+                            <!-- SEARCH TAB -->
+                            <div class="tab-pane" id="pvs_search_tab" data-toggle="pill">
+                                <div class="row">
+                                    <span class="col-lg-12">
+                                        <div id="pvs-search-results" class="search_phrasing_table">
+                                            <div id="searching-message" class="alert alert-info searching-message text-center">Searching Please Wait <i class="fa fa-spinner fa-spin"></i></div>
+                                            <div id="no-results-message" class="alert alert-warning no-results-message text-center">No Results</div>
+                                            <table id="project_table" class="table table-striped table-hover table-condensed">
+                                                <tbody id="search_phrasing_table_body"></tbody>
+                                            </table>
+                                        </div>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <ul class="nav nav-tabs pvs-tabs">
+                    <li><a id="document_pvs_tab" data-target="#pvs_document_tab" data-toggle="tab" class="pvs-tab" data-toggle="tooltip" title="Document Properties"><i class="fa fa-fw fa-folder-open-o"></i> </a></li>
+                    <li><a id="concept_pvs_tab" data-target="#pvs_concept_tab" data-toggle="tab" class="pvs-tab" data-toggle="tooltip" title="Concept Properties"><i class="fa fa-fw fa-file-o"></i> </a></li>
+                    <li class="active"><a id="phrasing_pvs_tab" data-target="#pvs_phrasing_tab" data-toggle="tab" class="pvs-tab" data-toggle="tooltip" title="Phrasing Properties"><i class="fa fa-fw fa-file-text-o"></i> </a></li>
+                    <li><a id="collaboration_pvs_tab" data-target="#pvs_collaboration_tab" data-toggle="tab" class="pvs-tab" data-toggle="tooltip" title="Collaboration Panel"><i class="fa fa-fw fa-users"></i><span id="coll_count_badge" class="badge animated">0</span></a></li>
+                    <li id="comments_pvs_tab"><a id="comments_pvs_tab" data-target="#pvs_comments_tab" data-toggle="tab" class="pvs-tab"><i class="fa fa-fw fa-comments" data-toggle="tooltip" title="Comments"></i></a></li>
+                    <li id="search_pvs_tab" class="hidden"><a id="search_pvs_tab" data-target="#pvs_search_tab" data-toggle="tab" class="pvs-tab"><i class="fa fa-fw fa-search" data-toggle="tooltip" title="Search Results"></i></a></li>
+
+                    <div id="pvs-status">
+                        <span id="edit-mode" class="label label-primary">Edit Mode</span>
+                        <span id="sync-status"><i class="fa fa-cloud synchronized"></i></span>
+                        <button id="pvs-toggle" class="btn btn-xs btn-default" data-toggle="tooltip" title="Show/Hide Properties View"><i class="fa fa-expand"></i></button>
+                    </div>
+                </ul>
+
+                </div>
+            </div>
 
 
 
@@ -304,215 +621,7 @@
     </div>
 
 
-    <div id="pvs" class="row">
-        <!-- PVs -->
-        <div id="properties_view" class="tabbable tabs-below">
-            <div>
-                <div id="pvs-tabs-content" class="tab-content">
 
-                    <!-- PHRASING TAB -->
-                    <div class="tab-pane active" id="pvs_phrasing_tab">
-
-                        <div class="row">
-                            <!-- Phrasings list -->
-                            <div class="col-xs-7 pvs-properties">
-                                <div id="pvs-phrasing-list-panel" class="panel panel-info pvs-panel">
-                                    <div class="panel-heading pvs-panel-heading">
-                                        <h5 class="panel-title">Phrasings</h5>
-                                    </div>
-                                    <div class="panel-body pvs-panel-body pvs-scroll">
-                                        <table id="pvs_phrasing_table" class="table table-striped table-condensed">
-                                            <tbody>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Phrasing metadata -->
-                            <div id="pvs-phrasing-properties" class="col-xs-5 pvs-properties">
-                                <div id="pvs-phrasing-properties-panel" class="panel panel-info pvs-panel">
-                                    <div class="panel-heading pvs-panel-heading">
-                                        <h5 class="panel-title">Properties</h5>
-                                    </div>
-                                    <div class="panel-body pvs-panel-body pvs-scroll">
-                                        <table class="table table-striped table-condensed">
-                                            <tbody id="phr_prop_body">
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- CONCEPT TAB -->
-                    <div class="tab-pane" id="pvs_concept_tab">
-                        <div class="row">
-                            <!-- Concept properties -->
-                            <div id="pvs-concept-properties" class="col-xs-12 pvs-properties">
-                                <div id="pvs-concept-properties-panel" class="panel panel-info pvs-panel">
-                                    <div class="panel-heading pvs-panel-heading">
-                                        <h5 class="panel-title">Properties</h5>
-                                    </div>
-                                    <div class="panel-body pvs-panel-body pvs-scroll">
-                                        <table class="table table-striped table-condensed">
-                                            <tbody id="con_prop_body">
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- DOCUMENT TAB -->
-                    <div class="tab-pane" id="pvs_document_tab">
-                        <div class="row">
-                            <!-- Document properties -->
-                            <div id="pvs-document-properties" class="col-xs-12 pvs-properties">
-                                <div id="pvs-document-properties-panel" class="panel panel-info pvs-panel">
-                                    <div class="panel-heading pvs-panel-heading">
-                                        <h5 class="panel-title">Properties</h5>
-                                    </div>
-                                    <div class="panel-body pvs-panel-body pvs-scroll">
-                                        <table class="table table-striped table-condensed">
-                                            <tbody id="doc_prop_body">
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- COLLABORATION TAB -->
-                    <div class="tab-pane" id="pvs_collaboration_tab">
-                        <div class="row">
-                            <div id="pvs-collaboration-users" class="col-xs-4 pvs-properties">
-                                <div id="pvs-collaboration-panel" class="panel panel-info pvs-panel">
-                                    <div class="panel-heading pvs-panel-heading">
-                                        <h5 class="panel-title">Users</h5>
-                                    </div>
-                                    <div class="panel-body pvs-panel-body pvs-scroll">
-                                        <table class="table table-condensed">
-                                            <tbody id="col_user_tb_body">
-                                                <tr>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Document properties -->
-                            <div id="pvs-document-properties" class="col-xs-8 pvs-properties">
-                                <div id="pvs-document-properties-panel" class="panel panel-info pvs-panel">
-                                    <div class="panel-heading pvs-panel-heading">
-                                        <h5 class="panel-title">Chat</h5>
-                                    </div>
-                                    <div id="chat_panel" class="panel-body pvs-panel-body">
-                                        <!-- see here: http://www.bootply.com/RMQctuZqHJ -->
-                                        <div id="doc_chat" class="chat doc_chat">
-                                            <div id="doc_chat_view" class="chat doc_chat_view">
-                                                <table id="chat-table" class="table table-striped table-condensed ">
-                                                    <tbody id="chat_messages" class="chat_messages"></tbody>
-                                                </table>
-                                            </div>
-                                            <div id="doc_chat_input" class="chat chat_input">
-                                                <div class="input-group">
-                                                    <input id="grp_chat_input" type="text" class="form-control">
-                                                    <span class="input-group-btn">
-                                                        <button id="grp_chat_input_send" class="btn btn-primary" type="button"><i class="fa fa-send"></i></button>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- COMMENTS TAB -->
-                    <div class="tab-pane" id="pvs_comments_tab" data-toggle="pill">
-                        <div class="row">
-                            <!-- Annotation list -->
-                            <div class="col-xs-6 pvs-properties pvs-annotations">
-                                <div id="pvs-annos-list-panel" class="panel panel-info pvs-panel">
-                                    <div class="panel-heading clearfix pvs-panel-heading">
-                                        <h5 class="panel-title pull-left">Comments</h5>
-                                        <button href="#" id="crt_new_anno_btn" class="anno-act-btn btn btn-primary btn-xs pull-right"><i class="fa fa-plus"></i></button>
-                                    </div>
-                                    <div id="anno_panel" class="panel-body pvs-panel-body pvs-scroll">
-                                        <table id="pvs_annos_table" class="table table-condensed">
-                                            <tbody id="pvs_annos_table_body">
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Comment thread -->
-                            <div class="col-xs-6 pvs-properties pvs-thread">
-                                <div id="pvs-thread-list-panel" class="panel panel-info pvs-panel">
-                                    <div class="panel-heading pvs-panel-heading">
-                                        <h5 class="panel-title">Thread</h5>
-                                    </div>
-                                    <div class="panel-body pvs-panel-body">
-                                        <div id="comment-view">
-                                            <table id="pvs_comments_table" class="table table-striped table-condensed">
-                                                <tbody id="pvs_comments_table_body">
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <div id="comment_input_div" class="chat_input">
-                                            <div class="input-group">
-                                                <input id="comment_input" type="text" class="form-control" >
-                                                <span class="input-group-btn">
-                                                    <button id="comment_input_send" class="btn btn-primary" type="button"><i class="fa fa-reply"></i></button>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- SEARCH TAB -->
-                    <div class="tab-pane" id="pvs_search_tab" data-toggle="pill">
-                        <div class="row">
-                            <span class="col-lg-12">
-                                <div id="pvs-search-results" class="search_phrasing_table">
-                                    <div id="searching-message" class="alert alert-info searching-message text-center">Searching Please Wait <i class="fa fa-spinner fa-spin"></i></div>
-                                    <div id="no-results-message" class="alert alert-warning no-results-message text-center">No Results</div>
-                                    <table id="project_table" class="table table-striped table-hover table-condensed">
-                                        <tbody id="search_phrasing_table_body"></tbody>
-                                    </table>
-                                </div>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <ul class="nav nav-tabs pvs-tabs">
-            <li><a id="document_pvs_tab" data-target="#pvs_document_tab" data-toggle="tab" class="pvs-tab" data-toggle="tooltip" title="Document Properties"><i class="fa fa-fw fa-folder-open-o"></i> </a></li>
-            <li><a id="concept_pvs_tab" data-target="#pvs_concept_tab" data-toggle="tab" class="pvs-tab" data-toggle="tooltip" title="Concept Properties"><i class="fa fa-fw fa-file-o"></i> </a></li>
-            <li class="active"><a id="phrasing_pvs_tab" data-target="#pvs_phrasing_tab" data-toggle="tab" class="pvs-tab" data-toggle="tooltip" title="Phrasing Properties"><i class="fa fa-fw fa-file-text-o"></i> </a></li>
-            <li><a id="collaboration_pvs_tab" data-target="#pvs_collaboration_tab" data-toggle="tab" class="pvs-tab" data-toggle="tooltip" title="Collaboration Panel"><i class="fa fa-fw fa-users"></i><span id="coll_count_badge" class="badge animated">0</span></a></li>
-            <li id="comments_pvs_tab"><a id="comments_pvs_tab" data-target="#pvs_comments_tab" data-toggle="tab" class="pvs-tab"><i class="fa fa-fw fa-comments" data-toggle="tooltip" title="Comments"></i></a></li>
-            <li id="search_pvs_tab" class="hidden"><a id="search_pvs_tab" data-target="#pvs_search_tab" data-toggle="tab" class="pvs-tab"><i class="fa fa-fw fa-search" data-toggle="tooltip" title="Search Results"></i></a></li>
-
-            <div id="pvs-status">
-                <span id="edit-mode" class="label label-primary">Edit Mode</span>
-                <span id="sync-status"><i class="fa fa-cloud synchronized"></i></span>
-                <button id="pvs-toggle" class="btn btn-xs btn-default" data-toggle="tooltip" title="Show/Hide Properties View"><i class="fa fa-expand"></i></button>
-            </div>
-        </ul>
-
-        </div>
-    </div>
 </div>
 
 <!-- Modals -->
