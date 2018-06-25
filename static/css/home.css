@@ -245,6 +245,7 @@ a {
     width: 20%; /* Set the width of the sidebar */
     min-width: 250px;
     position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+    overflow: auto;
     z-index: 1; /* Stay on top */
     top: 0; /* Stay at the top */
     background-color: #ededed; /* Grey */
