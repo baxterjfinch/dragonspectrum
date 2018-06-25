@@ -336,7 +336,7 @@ class SecureArtifact(Artifact):
 
         perm_obj = self.get_permission_object()
         if not permissions:
-            permissions = perm_obj.calProjectNodeculated_permissions
+            permissions = perm_obj.calculated_permissions
 
         # Check required permissions first
         required_operation_perm = permissions[operation]['required']

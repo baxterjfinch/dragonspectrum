@@ -2,12 +2,15 @@ function ProjectTable () {}
 
 ProjectTable.USER = 'user';
 ProjectTable.USER_SIDEBAR = $('#my-project-table-body-side');
+//ProjectTable.USER_RANKED_SIDEBAR = $('#my-project-table-body-ranked');
 ProjectTable.SHARED = 'shared';
 ProjectTable.WORLD_SHARED = 'world_shared';
 ProjectTable.SEARCH = 'search';
+ProjectTable.RANK = 'rank';
 
 ProjectTable.my_table_body = $('#my-project-table-body');
 ProjectTable.my_table_body_side = $('#my-project-table-body-side');
+//ProjectTable.my_table_body_ranked = $('#my_project_table_side_ranked');
 ProjectTable.top_projects_table_side = $('#top_projects_table_side');
 ProjectTable.top_projects_table_body_side = $('#top_projects_table_body_side');
 ProjectTable.shared_table_body = $('#shared-project-table-body');
@@ -101,6 +104,10 @@ ProjectTable.clearUserSideTable = function () {
     ProjectTable.my_table_body_side.empty();
 };
 
+//ProjectTable.clearUserSideTable = function () {
+    //ProjectTable.my_table_body_ranked.empty();
+//};
+
 ProjectTable.clearSharedTable = function () {
     ProjectTable.shared_table_body.empty();
 };
@@ -190,6 +197,7 @@ ProjectTable.buildTableRow = function (table, project) {
 };
 
 ProjectTable.buildSideTableRow = function (table, project) {
+
     var project_row = new ProjectTableRow();
     var tr = $('<tr></tr>');
     project_row.setTableRow(tr);
@@ -202,9 +210,9 @@ ProjectTable.buildSideTableRow = function (table, project) {
     td.append($('<br>'));
 
     var downvote_icon = $('<i></i>');
-    downvote_icon.addClass('fas fa-chevron-circle-down');
-    td.append(downvote_icon);
 
+    td.append(downvote_icon);
+    downvote_icon.addClass('fas fa-chevron-circle-down');
     var vote = $('<a></a>');
     vote.attr('type', 'checkbox');
     td.addClass(ProjectTable.voter_column_classes);
@@ -249,6 +257,18 @@ ProjectTable.buildSideTableRow = function (table, project) {
 
     project.addTableRow(table, project_row);
 
+    if (Project.getProjects()[0].user_vote.direction === "up") {
+        upvote_icon.addClass('up');
+    } else {
+        downvote_icon.addClass('down');
+    }
+    if (Project.getProjects()[1].user_vote.direction === "up") {
+        upvote_icon.addClass('up');
+    } else {
+        downvote_icon.addClass('down');
+    }
+
+
     upvote_icon.click(function (){
         ProjectEventListener.upvote(project, null, function () {
             score.empty();
@@ -275,9 +295,6 @@ ProjectTable.buildSideTableRow = function (table, project) {
     return project_row;
 
 };
-
-
-
 
 ProjectTable.addToUserSideTable = function (project) {
   var row = project.getTableRow(ProjectTable.USER_SIDEBAR);
@@ -406,6 +423,7 @@ ProjectTable.deleteCheckedProjects = function () {
         }
     });
 };
+
 
 function ProjectTableRow () {
     this.tr = null;
