@@ -30,6 +30,8 @@ class ProjectUserVotes(ndb.Model):
         }
 
 
+
+
 class Project(ProjectNode):
     project = None  # Want to overide the Artifact's requirement for this
     pw_modified_ts = ndb.DateTimeProperty(auto_now_add=True)
