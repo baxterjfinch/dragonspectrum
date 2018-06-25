@@ -160,3 +160,7 @@ function mark_guided_tour_complete() {
     post_to_server(ACCOUNT_URLS.tour_home_complete, null, true);
 }
 
+function show_spectra_count () {
+    console.log(User.users.getUserName().spectra_count)
+}
+show_spectra_count()
