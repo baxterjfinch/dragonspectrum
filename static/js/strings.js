@@ -2,7 +2,6 @@
 var BASE_STATIC_URL = '';
 var STATIC_URLS = {
     root: '/',
-    zeroclipboard: '/zeroclipboard/ZeroClipboard.swf',
     presentation_background: '/images/presentation_background.jpg',
     webworker_server: BASE_STATIC_URL + '/js/webworker_server.js'
 };
