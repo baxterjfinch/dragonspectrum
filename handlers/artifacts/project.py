@@ -195,9 +195,9 @@ class ProjectHandler(AuthorizationRequestHanlder):
         self.response.write(template_index.render(template_data))
 
     def _serve_project_page(self, doc, act_con_path,):
-        open_chal = True
-        if self.request.get('open_chal').lower() == 'false':
-            open_chal = False
+        # TODO: Channels are no longer supported on App Engine
+        open_chal = False
+
         context_menu = True
         if self.request.get('context_menu').lower() == 'false':
             context_menu = False
