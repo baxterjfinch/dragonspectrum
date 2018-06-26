@@ -163,5 +163,7 @@ function mark_guided_tour_complete() {
 }
 
 function show_spectra_count () {
+
     console.log(User.getCurrent().spectra_count)
+
 }
