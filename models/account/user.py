@@ -91,8 +91,8 @@ class User(AuthUser):
     coupon = ndb.KeyProperty()
 
     # User Currency Information
-    ddss = ndb.IntegerProperty()
-    spectra_count = ndb.IntegerProperty()
+    ddss = ndb.IntegerProperty(default=config.default_ddss)
+    spectra_count = ndb.IntegerProperty(default=config.default_spectra_count)
 
     # Temp variables
     log = None
@@ -526,6 +526,20 @@ class User(AuthUser):
 
     def account_disabled(self):
         return self.account_status == payment.DISABLED
+
+    def get_ddss(self):
+        if self.ddss is None:
+            self.ddss = config.default_ddss
+        return self.ddss
+
+    def get_spectra_count(self):
+        if self.spectra_count is None:
+            self.spectra_count = config.default_spectra_count
+        return self.spectra_count
+
+    def sub_spectra_cost(self, cost):
+        self.spectra_count = self.get_spectra_count() - cost
+        return self.spectra_count
 
     def to_dict(self, user=None, request=None):
         include = [

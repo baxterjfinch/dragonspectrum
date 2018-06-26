@@ -9,6 +9,7 @@ from models.background.account_notification import start_account_notification
 
 from health import *
 from analytics import *
+from spectra import *
 
 log = logging.getLogger(__file__)
 
@@ -38,4 +39,6 @@ background_url_mapping = [
     RedirectRoute('/background/analytics/fix/', handler=FixAnalyticData, strict_slash=True, name='fix'),
     # RedirectRoute('/background/health/test/', handler=CreateTestData, strict_slash=True, name='test'),
     RedirectRoute('/background/', handler=MainHandler, strict_slash=True, name='background'),
+
+    RedirectRoute('/background/spectra/run/daily/', handler=SpectraDailyHandler, strict_slash=True, name='run_daily_spectra'),
 ]

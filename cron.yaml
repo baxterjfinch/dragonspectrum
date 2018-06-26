@@ -1,4 +1,15 @@
 cron:
+
+
+############## Spectra Cron Jobs ##############
+#- description: Spectra
+#  url: /background/spectra/daily/
+#  schedule: every day at 01:00
+- description: Process Hourly Analytics
+  url: /background/spectra/run/daily/
+  schedule: every day 01:00
+
+
 ############## Analytics Cron Jobs ##############
 #- description: Generate Test Analytics Every Hour
 #  url: /background/analytics/gentest/hourly/

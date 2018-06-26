@@ -10,6 +10,7 @@ from google.appengine.api import channel, memcache
 from cerberus import handlers as cerberus_handlers
 
 import server
+from server import spectra
 from server import ttindex
 from server import tt_logging
 from models.account.user import User
@@ -506,6 +507,8 @@ class ProjectHandler(AuthorizationRequestHanlder):
         self.project.pw_modified_ts = datetime.datetime.now()
         self.project.put()
 
+        self.user.put()
+
         self.write_json_response(self.project.to_dict(self.user))
 
     def _add_perm(self):
@@ -780,6 +783,8 @@ class ProjectHandler(AuthorizationRequestHanlder):
         if not self.project.has_permission_write(self.user):
             raise HttpErrorException.forbidden()
 
+        vote_changed = True
+
         pvote = self.project.get_user_vote(self.user)
 
         # If there is no previous vote, they can vote up or down
@@ -792,8 +797,16 @@ class ProjectHandler(AuthorizationRequestHanlder):
         # to vote up again and we disallow that.
         elif pvote is not None and pvote.direction == 'down':
             self.project.project_score += 1
-
             pvote.key.delete()
+
+        else:
+            vote_changed = False
+
+        if vote_changed:
+            cost = spectra.calculate_cost('pro_up_vote', user=self.user, artifact=self.project)
+            if not spectra.has_sufficient_points(cost, self.user):
+                raise HttpErrorException.forbidden()
+            self.user.sub_spectra_cost(cost)
 
         action_data = {'project_score': self.project.project_score}
         trans = Transaction(
@@ -818,6 +831,8 @@ class ProjectHandler(AuthorizationRequestHanlder):
         if not self.project.has_permission_write(self.user):
             raise HttpErrorException.forbidden()
 
+        vote_changed = True
+
         # If there is no previous vote, they can vote up or down
         pvote = self.project.get_user_vote(self.user)
         if pvote is None:
@@ -830,6 +845,15 @@ class ProjectHandler(AuthorizationRequestHanlder):
         elif pvote is not None and pvote.direction == 'up':
             self.project.project_score -= 1
             pvote.key.delete()
+
+        else:
+            vote_changed = False
+
+        if vote_changed:
+            cost = spectra.calculate_cost('pro_down_vote', user=self.user, artifact=self.project)
+            if not spectra.has_sufficient_points(cost, self.user):
+                raise HttpErrorException.forbidden()
+            self.user.sub_spectra_cost(cost)
 
         action_data = {'project_score': self.project.project_score}
         trans = Transaction(
