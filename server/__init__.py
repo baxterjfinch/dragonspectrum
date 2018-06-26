@@ -161,6 +161,10 @@ class GlobalConfig(ndb.Model):
     failed_login_attemps_limit = ndb.IntegerProperty(default=config.failed_login_attemps_limit)
     failed_login_attemps_timeout = ndb.IntegerProperty(default=config.failed_login_attemps_timeout)
 
+    # User Currency Information
+    default_ddss = ndb.IntegerProperty(default=config.default_ddss)
+    default_spectra_count = ndb.IntegerProperty(default=config.default_spectra_count)
+
     @staticmethod
     def new():
         gc = GlobalConfig(id=config.global_config_id)
