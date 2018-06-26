@@ -161,6 +161,6 @@ function mark_guided_tour_complete() {
 }
 
 function show_spectra_count () {
-    console.log(User.users.getUserName().spectra_count)
+    console.log("Your current balance is: " + User.current_user.spectra_count)
 }
 show_spectra_count()
