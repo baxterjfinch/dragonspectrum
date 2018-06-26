@@ -1883,3 +1883,68 @@ Jmpress END
 .right-dropdown-menu {
   width: 100px;
 }
+
+.profile-jumbotron {
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    min-height: 300px;
+    padding: 10px;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+
+}
+
+.profile-jumbotron-right {
+    background-color: #00ace6;
+    color: white;
+}
+
+.profile-jumbotron-center {
+    background-color: #2ecc40;
+    color: white;
+}
+
+.profile-jumbotron-left {
+    background-color: #688F9E;
+    color: white;
+
+}
+
+#spectra-class {
+    padding-left: 0;
+}
+
+.profile-alert {
+    text-align: center;
+    display: block;
+    width: 80%;
+    left: 10%;
+    margin-top: 10px;
+}
+
+.panel-titles {
+    color: white;
+}
+
+.profile-page-container {
+    height: 100%;
+    width: 100%;
+    overflow-y: scroll;
+}
+
+.user-information-form {
+    margin-bottom: 100px;
+    min-height: 500px;
+    padding-bottom: 100px !important;
+    padding-left: 200px !important;
+    padding-right: 200px !important;
+    background-color: #4c4c4c;
+}
+
+.bottom-right-form {
+    margin-bottom: 100px;
+    min-height: 500px;
+    padding: 40px;
+    background-color: indianred;
+}

@@ -114,6 +114,8 @@ ProjectEventListener.upvote = function (project, project_score, call_back, notif
     } else {
         project.setProjectScore(project_score);
     }
+    var userspectra = User.getCurrent().spectra_count;
+    $("#spectra-class").html(userspectra);
 };
 
 /** DownVote **
@@ -152,6 +154,8 @@ ProjectEventListener.downvote = function (project, project_score, call_back, not
     } else {
         project.setProjectScore(project_score);
     }
+    var userspectra = get_user().spectra_count;
+    $("#spectra-class").html(userspectra);
 };
 
 /** IMPORT **

@@ -3841,6 +3841,7 @@ textarea.input-group-sm > .input-group-btn > .btn {
   padding-top: 10px;
   padding-bottom: 10px;
   line-height: 20px;
+  float: left;
 }
 @media (max-width: 1234px) {
   .navbar-nav .open .dropdown-menu {

@@ -22,6 +22,7 @@ NavigationBar.project_security = $("#nav_bar_project_security");
 NavigationBar.project_abstract = $("#nar_bar_exort_abstract");
 NavigationBar.project_persentation = $("#nar_bar_exort_presentation");
 NavigationBar.project_print = $("#nar_bar_exort_print");
+NavigationBar.spectra_class = $("#spectra-class");
 
 NavigationBar.initializeProjectMenu = function () {
     NavigationBar.project_create.click(function () {
@@ -85,6 +86,9 @@ NavigationBar.initializeProjectMenu = function () {
         NavigationBar.project_persentation.addClass('hidden');
         NavigationBar.project_print.addClass('hidden');
     }
+
+    var userspectra = get_user().spectra_count;
+    $("#spectra-class").html(userspectra);
 };
 
 /**
