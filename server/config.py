@@ -80,6 +80,10 @@ require_email_verification = True
 failed_login_attemps_timeout = 5  # minutes
 failed_login_attemps_limit = 4
 
+# User Currency Information
+default_ddss = 500
+default_spectra_count = 5000
+
 # Coinbase api configs
 coinbase_api_key = 'NNLfvy0LB1hhzfpm'
 coinbase_api_secret = 'EG8tyrbVJ3Z8HGr7a20TJLl5FVxYJddl'

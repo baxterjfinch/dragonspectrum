@@ -9,6 +9,8 @@ function initialize(server_data) {
     var user = new User();
     user.initCurrentUser(server_data.user);
 
+    show_spectra_count();
+
     NavigationBar.initialize();
     Page.sendAnalytics();
     init_project_toolbar();
@@ -161,6 +163,7 @@ function mark_guided_tour_complete() {
 }
 
 function show_spectra_count () {
-    console.log("Your current balance is: " + User.current_user.spectra_count)
+
+    console.log(User.getCurrent().spectra_count)
+
 }
-show_spectra_count()

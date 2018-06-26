@@ -90,15 +90,15 @@ class User(AuthUser):
     account_expire_data = ndb.DateTimeProperty(required=True)
     coupon = ndb.KeyProperty()
 
+    # User Currency Information
+    ddss = ndb.IntegerProperty()
+    spectra_count = ndb.IntegerProperty()
+
     # Temp variables
     log = None
     current_token_id = None
     org_admin = None
     super_admin = None
-
-    # User Currency Information
-    ddss = ndb.IntegerProperty(default=0)
-    spectra_count = ndb.IntegerProperty(default=0)
 
     @staticmethod
     def new(request_user, verify_email=True, request=None, worldshare_group=None, organization=None):
@@ -554,7 +554,7 @@ class User(AuthUser):
             'ddss',
             'spectra_count',
         ]
-        d = super(AuthUser, self).to_dict(include=include)
+        d = super(User, self).to_dict(include=include)
 
         if d['modified_ts']:
             d['modified_ts'] = str(d['modified_ts'])
@@ -569,8 +569,12 @@ class User(AuthUser):
         if d['email_changed']:
             d['email_changed'] = time.mktime(d['email_changed'].timetuple())
         d['id'] = self.key.id()
-        d['spectra_count'] = self.spectra_count
-        d['ddss'] = self.ddss
+
+        gc = GlobalConfig.get_configs()
+        if self.ddss is None:
+            d['ddss'] = gc.default_ddss
+        if self.spectra_count is None:
+            d['spectra_count'] = gc.default_spectra_count
 
         if not self.is_world_user():
             d['full_name'] = self.full_name
