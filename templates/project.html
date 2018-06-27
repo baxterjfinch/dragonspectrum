@@ -657,8 +657,13 @@
 
         var user = new User();
         user.initCurrentUser(server_data.user);
+
         var project = new Project();
         project.initProject(server_data.project, server_data.loader_configs, true);
+
+        Project.getUserProjects(user, function (projects) {
+            ProjectTable.loadSideBarRankedTable(projects);
+        });
 
         Page.sendAnalytics();
         NavigationBar.initialize();
