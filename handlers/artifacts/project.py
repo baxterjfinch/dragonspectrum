@@ -254,6 +254,7 @@ class ProjectHandler(AuthorizationRequestHanlder):
                 'debug_level': debug_level,
             }),
             'display_name': short_name,
+            'project': self.project,
         }
 
         lr = tt_logging.construct_log(

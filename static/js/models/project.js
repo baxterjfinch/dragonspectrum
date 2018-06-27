@@ -610,7 +610,7 @@ Project.getUserProjects = function (user, cb) {
                 project = new Project();
                 project.initProject(data[i], null, false)
             }
-            
+
             if (cb)
                 cb(Project.projects);
         }

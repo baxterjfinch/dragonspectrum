@@ -137,13 +137,13 @@ body {
 #tvs-wrapper {
     position: relative;
     height: 100%;
+    width: 100%;
 }
 
 #tvs {
-    margin-top: 100px;
     height: 100%;
     border-radius: 0;
-    background: #ededed
+    background: none;
 }
 
 .dvs {
@@ -185,6 +185,7 @@ body {
 
 .dvs-anno-margin {
     padding-right: 10px;
+    background-color: #ffffff00 !important;
 }
 
 .force_re_render_button {
@@ -1868,8 +1869,9 @@ Jmpress END
 }
 
 .voting-buttons-div {
-  margin-top: 45px;
-  right: -60px;
+    right: -60px;
+    float: right;
+    margin-top: -55px;
 }
 
 .upper-right {
@@ -1907,13 +1909,16 @@ Jmpress END
 
 .profile-jumbotron-left {
     background-color: #626365;
+    max-height: 900px;
     color: white;
     box-shadow: 0px 4px 20px 1px #888888;
     font-size: 12px;
+    overflow-y: scroll;
 }
 
 .index-jumbotron-center {
     background-color: #001f3f !important;
+    min-height: 100px !important;
 }
 
 .profile-jumbotron-center {
@@ -1923,7 +1928,11 @@ Jmpress END
 }
 
 .profile-jumbotron-right {
-    background-color: #00ace6;
+    background-color: #224d5c;
+    min-height: 747px;
+    max-height: 747px;
+    overflow-y: scroll;
+    margin-top: 0px !important;
     color: white;
     box-shadow: 0px 4px 20px 1px #888888;
 }
@@ -1950,6 +1959,11 @@ Jmpress END
 
 #spectra-class {
     padding-left: 0;
+    display: inline;
+}
+
+.spectra-class-title {
+    display: inline;
 }
 
 .panel-titles {
@@ -1988,4 +2002,17 @@ Jmpress END
 
 .profile-form-class {
 
+}
+
+.project-page-height {
+    margin-top: 0px !important;
+}
+
+.project-panel-header {
+    font-size: 12px !important;
+}
+
+.document-text-class {
+    font-size: 12px !important;
+    color: white !important;
 }
