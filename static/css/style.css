@@ -5,7 +5,7 @@ BOOTSTRAP OVERRIDE START TODO put this in LESS file
 .row {
     margin-right: -10px;
     margin-left: -10px;
-    margin-top: 50px;
+    margin-top: 20px;
 }
 
 .col-xs-1,
@@ -148,9 +148,9 @@ body {
 
 .dvs {
     /*position: relative;*/
-    border-right: 1px solid #dddddd;
+    /*border-right: 1px solid #dddddd;
     border-left: 1px solid #dddddd;
-    border-bottom: 1px solid #dddddd;
+    border-bottom: 1px solid #dddddd;*/
 }
 
 #content-pane {
@@ -928,9 +928,9 @@ li span i.fa-circle {
 
 .note-editable {
     display: inline;
-    background-color: #94e0ff !important;
-    outline: 1px dotted #0900ff !important;
-    box-shadow: 0 0 0 1px yellow;
+    background-color: #ffeded36 !important;
+    outline: 1px dotted #0900ff00 !important;
+    box-shadow: 0 0 0 1px #3d05d000;
     padding: 1px 1px 1px 1px;
     margin: 0 1px 0 0;
     min-width: 12px;
@@ -1019,9 +1019,9 @@ ul.dynatree-container a:focus {
 }
 
 span.dynatree-active a {
-    color: black !important;
-    background-color: #00c5ff !important;
-    box-shadow:  0 0 2px 2px #0073ff7d;
+    color: white !important;
+    background-color: #e8faff00 !important;
+    box-shadow: 0 0 2px 2px #0e1a347d;
 }
 
 /*******************
@@ -1909,11 +1909,12 @@ Jmpress END
 
 .profile-jumbotron-left {
     background-color: #626365;
-    max-height: 900px;
+    max-height: 750px;
+    min-height: 750px;
     color: white;
     box-shadow: 0px 4px 20px 1px #888888;
     font-size: 12px;
-    overflow-y: scroll;
+    overflow-y: hidden;
 }
 
 .index-jumbotron-center {
@@ -1925,14 +1926,14 @@ Jmpress END
     background-color: #2ecc40;
     color: white;
     box-shadow: 0px 4px 20px 1px #888888;
+    margin-bottom: 0px !important;
 }
 
 .profile-jumbotron-right {
-    background-color: #224d5c;
+    background-color: #436572;
     min-height: 747px;
     max-height: 747px;
     overflow-y: scroll;
-    margin-top: 0px !important;
     color: white;
     box-shadow: 0px 4px 20px 1px #888888;
 }
@@ -2015,4 +2016,16 @@ Jmpress END
 .document-text-class {
     font-size: 12px !important;
     color: white !important;
+}
+
+.comments-section {
+    margin-top: 0px !important;
+}
+
+.main-document-viewer {
+    max-height: 400px !important;
+}
+
+.comments-section-background {
+    background-color: #ffffff00 !important;
 }

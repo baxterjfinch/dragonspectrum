@@ -147,65 +147,7 @@
 
 <div class ="container profile-page-container">
     <div class="row project-page-height">
-        <div class="col-md-3">
-                <div class="jumbotron profile-jumbotron profile-jumbotron-left">
-                    <ul class="nav nav-tabs" id="myTab" role="tablist">
-                      <li class="nav-item">
-                        <a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Projects</a>
-                      </li>
-                      <li class="nav-item active">
-                        <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Concepts</a>
-                      </li>
-                    </ul>
-                    <div class="tab-content" id="myTabContent">
-                      <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
-                          <table id="my_project_table_side_ranked" class="table table table-hover table-condensed project-table-side">
-                              <thead>
-                                  <tr>
-                                      <th class="project-voter"></th>
-                                      <th class="project-score">Score</th>
-                                      <th class="project-title" id="sidetitle">Title</th>
-                                      <th class="project-owner">Owner</th>
-                                      <th class="project-date">Date Created</th>
-                                  </tr>
-                              </thead>
-                              <tbody id="my-project-table-body-ranked">
-                              </tbody>
-                          </table>
-
-                      </div>
-                      <div class="tab-pane fade active in" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-
-                          <div id="tvs-wrapper" class="hidden-xs col-sm-4 col-md-3 col-lg-3">
-
-                              <div id="tvs" class="container">
-                                <div id="tvs-toolbar" style="margin-bottom: 2px; text-align: center;">
-
-                                  <div id="tvs-buttons" class="btn-group">
-                                      <button type="button" class="btn btn-xs" id="tvs-tool-bar-new" data-toggle="tooltip" data-placement="top" data-container="body" title="New Concept &lt;Enter&gt;"><i class="fa fa-plus"></i></button>
-                                      <button type="button" class="btn btn-xs" id="tvs-tool-bar-del" data-toggle="tooltip" data-placement="top" data-container="body" title="Delete Concept &lt;Delete&gt;"><i class="fa fa-minus"></i></button>
-                                      <button type="button" class="btn btn-xs" id="tvs-tool-bar-indent" data-toggle="tooltip" data-placement="top" data-container="body" title="Indent Concept &lt;Tab&gt;"><i class="fa fa-arrow-right"></i></button>
-                                      <button type="button" class="btn btn-xs" id="tvs-tool-bar-outdent" data-toggle="tooltip" data-placement="top" data-container="body" title="Outdent Concept &lt;Shift-Tab&gt;"><i class="fa fa-arrow-left"></i></button>
-                                      <button type="button" class="btn btn-xs" id="tvs-tool-bar-move-up" data-toggle="tooltip" data-placement="top" data-container="body" title="Move Concept Up &lt;Ctrl+Up&gt;"><i class="fa fa-arrow-up"></i></button>
-                                      <button type="button" class="btn btn-xs" id="tvs-tool-bar-move-down" data-toggle="tooltip" data-placement="top" data-container="body" title="Move Concept Down &lt;Ctrl+Down&gt;"><i class="fa fa-arrow-down"></i></button>
-                                      <button type="button" class="btn btn-xs" id="tvs-tool-bar-expand" data-toggle="tooltip" data-placement="top" data-container="body" title="Expand Children"><i class="fa fa-angle-double-down"></i></button>
-                                      <button type="button" class="btn btn-xs" id="tvs-tool-bar-collapse" data-toggle="tooltip" data-placement="top" data-container="body" title="Collapse Children"><i class="fa fa-angle-double-up"></i></button>
-                                      <button type="button" class="btn btn-xs" id="tvs-tool-bar-security" data-toggle="tooltip" data-placement="top" data-container="body" title="Project Security"><i id="project-security-icon" class="fa fa-shield"></i></button>
-                                  </div>
-                                </div>
-                                <br>
-                            <div id="scrollbar-tv">
-                                <div id="loading_tree_status"></div>
-                                <div id="tree"></div>
-                            </div>
-
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-9">
+            <div class="col-md-12">
                 <div class="jumbotron profile-jumbotron profile-jumbotron-center index-jumbotron-center">
                   <h5 class="lead panel-titles">{{ project.title }}</h5>
                     <h5 class="spectra-class-title">Spectra Count: </h5><h5 id="spectra-class"></h5>
@@ -221,9 +163,67 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-9">
+                <div class="col-md-3">
+            <div class="jumbotron profile-jumbotron profile-jumbotron-left">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                  <li class="nav-item">
+                    <a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Projects</a>
+                  </li>
+                  <li class="nav-item active">
+                    <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Concepts</a>
+                  </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                  <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
+                      <table id="my_project_table_side_ranked" class="table table table-hover table-condensed project-table-side">
+                          <thead>
+                              <tr>
+                                  <th class="project-voter"></th>
+                                  <th class="project-score">Score</th>
+                                  <th class="project-title" id="sidetitle">Title</th>
+                                  <th class="project-owner">Owner</th>
+                                  <th class="project-date">Date Created</th>
+                              </tr>
+                          </thead>
+                          <tbody id="my-project-table-body-ranked">
+                          </tbody>
+                      </table>
+
+                  </div>
+                  <div class="tab-pane fade active in" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+
+                      <div id="tvs-wrapper" class="hidden-xs col-sm-4 col-md-3 col-lg-3">
+
+                          <div id="tvs" class="container">
+                            <div id="tvs-toolbar" style="margin-bottom: 2px; text-align: center;">
+
+                              <div id="tvs-buttons" class="btn-group">
+                                  <button type="button" class="btn btn-xs" id="tvs-tool-bar-new" data-toggle="tooltip" data-placement="top" data-container="body" title="New Concept &lt;Enter&gt;"><i class="fa fa-plus"></i></button>
+                                  <button type="button" class="btn btn-xs" id="tvs-tool-bar-del" data-toggle="tooltip" data-placement="top" data-container="body" title="Delete Concept &lt;Delete&gt;"><i class="fa fa-minus"></i></button>
+                                  <button type="button" class="btn btn-xs" id="tvs-tool-bar-indent" data-toggle="tooltip" data-placement="top" data-container="body" title="Indent Concept &lt;Tab&gt;"><i class="fa fa-arrow-right"></i></button>
+                                  <button type="button" class="btn btn-xs" id="tvs-tool-bar-outdent" data-toggle="tooltip" data-placement="top" data-container="body" title="Outdent Concept &lt;Shift-Tab&gt;"><i class="fa fa-arrow-left"></i></button>
+                                  <button type="button" class="btn btn-xs" id="tvs-tool-bar-move-up" data-toggle="tooltip" data-placement="top" data-container="body" title="Move Concept Up &lt;Ctrl+Up&gt;"><i class="fa fa-arrow-up"></i></button>
+                                  <button type="button" class="btn btn-xs" id="tvs-tool-bar-move-down" data-toggle="tooltip" data-placement="top" data-container="body" title="Move Concept Down &lt;Ctrl+Down&gt;"><i class="fa fa-arrow-down"></i></button>
+                                  <button type="button" class="btn btn-xs" id="tvs-tool-bar-expand" data-toggle="tooltip" data-placement="top" data-container="body" title="Expand Children"><i class="fa fa-angle-double-down"></i></button>
+                                  <button type="button" class="btn btn-xs" id="tvs-tool-bar-collapse" data-toggle="tooltip" data-placement="top" data-container="body" title="Collapse Children"><i class="fa fa-angle-double-up"></i></button>
+                                  <button type="button" class="btn btn-xs" id="tvs-tool-bar-security" data-toggle="tooltip" data-placement="top" data-container="body" title="Project Security"><i id="project-security-icon" class="fa fa-shield"></i></button>
+                              </div>
+                            </div>
+                            <br>
+                        <div id="scrollbar-tv">
+                            <div id="loading_tree_status"></div>
+                            <div id="tree"></div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+            <div class="col-md-6">
                 <div class="jumbotron profile-jumbotron profile-jumbotron-right">
-                    <div id="right-pane" class="col-xs-12 col-sm-8 col-md-9 col-lg-9">
+                    <div id="right-pane">
                         <!-- Doc Tabs -->
                             <div class="col-lg-* project-panel-header">
                                 <div id="dvs-tabs" class="tabbable">
@@ -232,8 +232,8 @@
                             </div>
 
                         <!-- DVs -->
-                            <div class="col-lg-*">
-                                <div id="scrollbar-dv" class="dvs">
+                            <div class="col-lg-12">
+                                <div id="scrollbar-dv" class="dvs main-document-viewer">
                                     <div id="summary-well" class="well hidden">
                                         <h4 id="summary-heading">Summary</h4>
                                         <span> <span id="summary-current-word-count">0</span> of <span id="summary-word-count">250</span> words</span>
@@ -288,7 +288,69 @@
                                     </div>
                                 </div>
                             </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="jumbotron profile-jumbotron profile-jumbotron-left">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                  <li class="nav-item">
+                    <a class="nav-link active" id="comments-tab" data-toggle="tab" href="#comments" role="tab" aria-controls="comments" aria-selected="true">Comments</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="activity-tab" data-toggle="tab" href="#activity" role="tab" aria-controls="activity" aria-selected="false">Activity</a>
+                  </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                  <div class="tab-pane fade active in" id="comments" role="tabpanel" aria-labelledby="comments-tab">
+                <!-- COMMENTS TAB -->
+                    <div class="col-lg-12 comments-section" id="pvs_comments_tab">
+                        <div class="row">
+                            <!-- Annotation list -->
+                            <div class="col-xs-12 pvs-properties pvs-annotations">
+                                <div id="pvs-annos-list-panel" class="panel panel-info pvs-panel comments-section-background">
+                                    <div>
+                                        <button href="#" id="crt_new_anno_btn" class="anno-act-btn btn btn-primary btn-xs pull-right"><i class="fa fa-plus"></i></button>
+                                    </div>
+                                    <div id="anno_panel" class="panel-body pvs-panel-body pvs-scroll">
+                                        <table id="pvs_annos_table" class="table table-condensed">
+                                            <tbody id="pvs_annos_table_body">
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Comment thread -->
+                            <div class="col-xs-12 pvs-properties pvs-thread ">
+                                <div id="pvs-thread-list-panel" class="panel panel-info pvs-panel comments-section-background">
+                                    <div class="panel-heading pvs-panel-heading">
+                                        <h5 class="panel-title">Thread</h5>
+                                    </div>
+                                    <div class="panel-body pvs-panel-body">
+                                        <div id="comment-view">
+                                            <table id="pvs_comments_table" class="table table-condensed">
+                                                <tbody id="pvs_comments_table_body">
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div id="comment_input_div" class="chat_input">
+                                            <div class="input-group">
+                                                <input id="comment_input" type="text" class="form-control" >
+                                                <span class="input-group-btn">
+                                                    <button id="comment_input_send" class="btn btn-primary" type="button"><i class="fa fa-reply"></i></button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                  </div>
+                  <div class="tab-pane fade" id="activity" role="tabpanel" aria-labelledby="activity-tab">
+
+                  </div>
                 </div>
             </div>
         </div>
@@ -432,51 +494,7 @@
                             </div>
                             <br>
 
-                            <!-- COMMENTS TAB -->
-                            <div class="tab-pane" id="pvs_comments_tab" data-toggle="pill">
-                                <div class="row">
-                                    <!-- Annotation list -->
-                                    <div class="col-xs-6 pvs-properties pvs-annotations">
-                                        <div id="pvs-annos-list-panel" class="panel panel-info pvs-panel">
-                                            <div class="panel-heading clearfix pvs-panel-heading">
-                                                <h5 class="panel-title pull-left">Comments</h5>
-                                                <button href="#" id="crt_new_anno_btn" class="anno-act-btn btn btn-primary btn-xs pull-right"><i class="fa fa-plus"></i></button>
-                                            </div>
-                                            <div id="anno_panel" class="panel-body pvs-panel-body pvs-scroll">
-                                                <table id="pvs_annos_table" class="table table-condensed">
-                                                    <tbody id="pvs_annos_table_body">
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
 
-                                    <!-- Comment thread -->
-                                    <div class="col-xs-6 pvs-properties pvs-thread">
-                                        <div id="pvs-thread-list-panel" class="panel panel-info pvs-panel">
-                                            <div class="panel-heading pvs-panel-heading">
-                                                <h5 class="panel-title">Thread</h5>
-                                            </div>
-                                            <div class="panel-body pvs-panel-body">
-                                                <div id="comment-view">
-                                                    <table id="pvs_comments_table" class="table table-striped table-condensed">
-                                                        <tbody id="pvs_comments_table_body">
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                                <div id="comment_input_div" class="chat_input">
-                                                    <div class="input-group">
-                                                        <input id="comment_input" type="text" class="form-control" >
-                                                        <span class="input-group-btn">
-                                                            <button id="comment_input_send" class="btn btn-primary" type="button"><i class="fa fa-reply"></i></button>
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                             <br>
 
                             <!-- SEARCH TAB -->
