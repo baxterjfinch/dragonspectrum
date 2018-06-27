@@ -25,8 +25,6 @@ function User() {
     this.require_password_change = null;
     this.tour_home_complete = null;
     this.tour_project_complete = null;
-    this.spectra_count = 500;
-    this.ddss = 500000;
 }
 
 User.users = {};

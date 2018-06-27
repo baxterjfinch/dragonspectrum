@@ -31,103 +31,150 @@
             </div>
         </nav>
     </div>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-3"></div>
-            <div class="col-md-6">
-                <div id="alert-error" class="alert alert-danger hidden"></div>
-            </div>
-            <div class="col-md-3"></div>
-        </div>
-        <div class="row">
-            <div class="col-md-3"></div>
-            <div class="col-md-6">
-                <form role="form">
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-6 col-md-6">
-                            <div class="form-group">
-                                <input type="text" class="form-control input-lg" id="first-name"
-                                       value="{{ first_name }}">
-                            </div>
-                        </div>
-                        <div class="col-xs-12 col-sm-6 col-md-6">
-                            <div class="form-group">
-                                <input type="text" class="form-control input-lg" id="last-name"
-                                       value="{{ last_name }}">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-6 col-md-6">
-                            <div id="password-div" class="form-group">
-                                <input type="password" class="form-control input-lg" id="password"
-                                       placeholder="Change Password">
-                            </div>
-                        </div>
-                        <div id="confirm-pass-div" class="col-xs-12 col-sm-6 col-md-6">
-                            <div class="form-group">
-                                <input type="password" class="form-control input-lg" id="confirm-password"
-                                       placeholder="Confirm Password Change">
-                            </div>
-                        </div>
-                    </div>
-                    <div id="email-div" class="form-group">
-                        <input type="email" class="form-control input-lg" id="email" value="{{ email }}">
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-6 col-md-6">
-                            <div id="phone-number-div" class="form-group">
-                                <input type="text" class="form-control input-lg" id="phone_number"
-                                       value="{{ main_phone }}">
-                            </div>
-                        </div>
-                        <div class="col-xs-12 col-sm-6 col-md-6">
-                            <div id="cell-phone-number-div" class="form-group">
-                                <input type="text" class="form-control input-lg" id="cell_phone"
-                                       value="{{ cell_phone }}">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <input type="text" onfocus="(this.type='date')" class="form-control input-lg" id="birthday"
-                               value="{{ birthday }}">
-                    </div>
-                    <div class="form-group">
-                        <input type="text" class="form-control input-lg" id="street-address1"
-                               value="{{ street1 }}">
-                    </div>
-                    <div class="form-group">
-                        <input type="text" class="form-control input-lg" id="street-address2"
-                               value="{{ street2 }}">
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-7 col-md-7">
-                            <div class="form-group">
-                                <input type="text" class="form-control input-lg" id="city" value="{{ city }}">
-                            </div>
-                        </div>
-                        <div class="col-xs-12 col-sm-2 col-md-2">
-                            <div class="form-group">
-                                <input type="text" class="form-control input-lg" id="state" value="{{ state }}">
-                            </div>
-                        </div>
-                        <div class="col-xs-12 col-sm-3 col-md-3">
-                            <div class="form-group">
-                                <input type="text" class="form-control input-lg" id="zip-code"
-                                       value="{{ zipecode }}">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-12 col-md-6">
-                            <button class="btn btn-primary btn-block btn-lg" id="save">
-                                Save
-                            </button>
-                        </div>
-                    </div>
-                </form>
 
-                <br><br><br><br>
+<div class ="container profile-page-container">
+    <div class="row">
+        <div class="alert alert-success alert-dismissible col-md-4 profile-alert">
+          <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>SpectraPoints!</strong> <a href="#" class="alert-link">Click Here to learn more about the points system.</a>
+        </div>
+        <div class="col-md-4">
+            <div class="jumbotron profile-jumbotron profile-jumbotron-left">
+              <h5 class="lead panel-titles">Recent Posts</h5>
+              <hr class="my-4">
+                      <div class="tab-pane fade active in" id="home" role="tabpanel" aria-labelledby="home-tab">
+                          <table id="my_project_table_side" class="table table table-hover table-condensed project-table-side">
+                              <thead>
+                                  <tr>
+                                      <th class="project-voter"></th>
+                                      <th class="project-score">Score</th>
+                                      <th class="project-title" id="sidetitle">Title</th>
+                                      <th class="project-owner">Owner</th>
+                                      <th class="project-date">Date Created</th>
+                                  </tr>
+                              </thead>
+                              <tbody id="my-project-table-body-side">
+                              </tbody>
+                          </table>
+                      </div>
+
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="jumbotron profile-jumbotron profile-jumbotron-center">
+              <h5 class="lead panel-titles">Welcome, {{ display_name }}</h5>
+              <hr class="my-4">
+              <h5 class="spectra-count">Spectra Count: {{ spectra_count }}</h5>
+              <!--a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a-->
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="jumbotron profile-jumbotron profile-jumbotron-right">
+              <h5 class="lead panel-titles">My Activity</h5>
+              <hr class="my-4">
+              <p></p>
+
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class=" col-md-8">
+            <div class="jumbotron profile-jumbotron profile-user-information-form">
+                <h5 class="lead panel-titles">Account Details</h5>
+                    <hr class="my-4">
+                        <form role="form" class="profile-form-class">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control input-md" id="first-name"
+                                               value="{{ first_name }}">
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control input-md" id="last-name"
+                                               value="{{ last_name }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-6 col-md-6">
+                                    <div id="password-div" class="form-group">
+                                        <input type="password" class="form-control input-md" id="password"
+                                               placeholder="Change Password">
+                                    </div>
+                                </div>
+                                <div id="confirm-pass-div" class="col-xs-12 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <input type="password" class="form-control input-md" id="confirm-password"
+                                               placeholder="Confirm Password Change">
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="email-div" class="form-group">
+                                <input type="email" class="form-control input-md" id="email" value="{{ email }}">
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-6 col-md-6">
+                                    <div id="phone-number-div" class="form-group">
+                                        <input type="text" class="form-control input-md" id="phone_number"
+                                               value="{{ main_phone }}">
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-6 col-md-6">
+                                    <div id="cell-phone-number-div" class="form-group">
+                                        <input type="text" class="form-control input-md" id="cell_phone"
+                                               value="{{ cell_phone }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" onfocus="(this.type='date')" class="form-control input-md" id="birthday"
+                                       value="{{ birthday }}">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control input-md" id="street-address1"
+                                       value="{{ street1 }}">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control input-md" id="street-address2"
+                                       value="{{ street2 }}">
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-7 col-md-7">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control input-md" id="city" value="{{ city }}">
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-2 col-md-2">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control input-md" id="state" value="{{ state }}">
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3 col-md-3">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control input-md" id="zip-code"
+                                               value="{{ zipecode }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 col-md-6">
+                                    <button class="btn btn-primary btn-block btn-md" id="save">
+                                        Save
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            <div class="col-md-4">
+                <div class="jumbotron profile-jumbotron profile-bottom-right-form">
+                </div>
+        </div>
+    </div>
+</div>
+    <br><br><br><br>
                 <p><a href="https://docs.google.com/document/d/1sFq009P-qp8JjU29azy_9Eigyrt6vXsopn81svHsdU8/edit?usp=sharing" target="_blank">Terms of Service and Privacy Policy</a></p>
             </div>
             <div class="col-md-3"></div>

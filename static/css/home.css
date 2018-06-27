@@ -111,9 +111,11 @@
     width: 35px;
 }
 
-#my-project-table-body-side {
+#my-project-table-body-side tbody tr a:hover{
     font-size: 12px;
+    color: darkslategrey;
 }
+
 
 #my-project-table-body-side .tr {
     font-size: 12px;
@@ -381,4 +383,115 @@ a {
 
 .right-nav {
   right: 0;
+}
+
+.profile-jumbotron {
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    min-height: 300px;
+    padding: 10px;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+
+}
+
+.profile-alert {
+    text-align: center;
+    display: block;
+    width: 80%;
+    left: 10%;
+    margin-top: 10px;
+    box-shadow: 0px 2px 15px 0.001px #888888;
+}
+
+.profile-jumbotron-left {
+    background-color: black;
+    color: white;
+    box-shadow: 0px 4px 20px 1px #888888;
+}
+
+.profile-jumbotron-left, a {
+    color: white;
+}
+
+.profile-jumbotron-left, tr:hover {
+    color: darkslategrey;
+}
+
+.profile-jumbotron-center {
+    background-color: #2ecc40;
+    color: white;
+    box-shadow: 0px 4px 20px 1px #888888;
+}
+
+.profile-jumbotron-right {
+    background-color: #00ace6;
+    color: white;
+    box-shadow: 0px 4px 20px 1px #888888;
+}
+
+
+.profile-user-information-form {
+    margin-bottom: 100px;
+    min-height: 500px;
+    padding-bottom: 100px !important;
+    padding-left: 200px !important;
+    padding-right: 200px !important;
+    background-color: #4c4c4c;
+    box-shadow: 0px 4px 20px 1px #888888;
+}
+
+.profile-bottom-right-form {
+    margin-bottom: 100px;
+    min-height: 500px;
+    padding: 40px;
+    background-color: indianred;
+    box-shadow: 0px 4px 20px 1px #888888;
+}
+
+
+#spectra-class {
+    padding-left: 0;
+}
+
+.panel-titles {
+    color: white;
+}
+
+.profile-page-container {
+    height: 100%;
+    width: 100%;
+    overflow-y: scroll;
+}
+
+.profile-jumbotron-left:hover {
+     transform: scale(1.004);
+}
+
+.profile-jumbotron-center:hover {
+     transform: scale(1.004);
+}
+
+.profile-jumbotron-right:hover {
+     transform: scale(1.004);
+}
+
+.profile-alert:hover {
+     transform: scale(1.004);
+}
+
+.profile-user-information-form:hover {
+    transform: scale(1.002);
+}
+
+.profile-bottom-right-form:hover {
+    transform: scale(1.004);
+}
+
+.profile-form-class {
+    padding: 50px;
+
+.project-table-side tbody tr:hover td, .table-hover tbody tr:hover th {
+  background-color: pink !important;
 }

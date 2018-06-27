@@ -488,6 +488,7 @@ class UserAccountProfileHandler(AuthorizationRequestHanlder):
             'city': user.address['city'] if user.address else 'City',
             'state': user.address['state'] if user.address else 'State',
             'zipecode': user.address['zip_code'] if user.address else 'Zip Code',
+            'spectra_count': self.user.spectra_count,
             'data': {
                 'user': json.dumps(user.to_dict(user=self.user))
             },

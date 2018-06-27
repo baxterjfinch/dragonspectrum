@@ -14,6 +14,7 @@ ProjectTable.my_table_body_ranked = $('#my-project-table-body-ranked');
 ProjectTable.shared_table_body = $('#shared-project-table-body');
 ProjectTable.world_table_body = $('#world-project-table-body');
 ProjectTable.search_table_body = $('#search-project-table-body');
+ProjectTable.recent_posts_table = $('#recent-posts-table');
 
 ProjectTable.check_all_my = $('#check-all-project-my');
 ProjectTable.check_all_shared = $('#check-all-project-shared');
@@ -75,6 +76,7 @@ ProjectTable.loadTables = function (projects) {
     ProjectTable.clearUserTable();
     ProjectTable.clearUserSideTable();
     ProjectTable.clearUserSideTableRanked();
+    ProjectTable.clearRecentPostsProfileTable();
     ProjectTable.clearSharedTable();
     ProjectTable.clearWorldShareTable();
     ProjectTable.clearSearchTable();
@@ -88,6 +90,7 @@ ProjectTable.loadTables = function (projects) {
             ProjectTable.addToUserTable(projects[i]);
             ProjectTable.addToUserSideTable(projects[i]);
             ProjectTable.addToUserSideTableRanked(projects[i]);
+            ProjectTable.addToUserProfileTable(projects[i]);
         }
 
         ProjectTable.addToSearchTable(projects[i]);
@@ -109,6 +112,10 @@ ProjectTable.clearUserTable = function () {
 
 ProjectTable.clearUserSideTable = function () {
     ProjectTable.my_table_body_side.empty();
+};
+
+ProjectTable.clearRecentPostsProfileTable = function () {
+    ProjectTable.recent_posts_table.empty();
 };
 
 ProjectTable.clearUserSideTableRanked = function () {
@@ -208,7 +215,7 @@ ProjectTable.buildSideTableRow = function (table, project) {
     var project_row = new ProjectTableRow();
     var tr = $('<tr></tr>');
     project_row.setTableRow(tr);
-
+    tr.addClass('table-rows');
     var td = $('<td></td>');
 
     var upvote_icon = $('<i></i>');
@@ -240,6 +247,7 @@ ProjectTable.buildSideTableRow = function (table, project) {
     var title = $('<a></a>');
     title.attr('href', project.getURL());
     title.attr('target', '_blank');
+    title.addClass('recent-posts-title');
     title.append(project.getTitle());
     td.addClass(ProjectTable.title_column_classes);
     td.append(title);
@@ -411,6 +419,12 @@ ProjectTable.addToUserSideTableRanked = function (project) {
     ProjectTable.my_table_body_ranked.append(row.getTableRow());
 };
 
+ProjectTable.addToUserProfileTable = function (project) {
+  var row = project.getTableRow(ProjectTable.USER_RANKED_SIDEBAR);
+  if (!row)
+      row = ProjectTable.buildSideTableRankedRow(ProjectTable.USER_RANKED_SIDEBAR, project);
+    ProjectTable.recent_posts_table.append(row.getTableRow());
+};
 
 ProjectTable.addToUserTable = function (project) {
     var row = project.getTableRow(ProjectTable.USER);
