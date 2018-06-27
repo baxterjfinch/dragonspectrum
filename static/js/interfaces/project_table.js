@@ -94,7 +94,6 @@ ProjectTable.loadTables = function (projects) {
         }
 
         ProjectTable.addToSearchTable(projects[i]);
-
     }
 };
 
@@ -102,7 +101,6 @@ ProjectTable.loadSideBarRankedTable = function (projects) {
     ProjectTable.clearUserSideTableRanked();
     for (var i = 0; i < projects.length; i++) {
         ProjectTable.addToUserSideTableRanked(projects[i]);
-
     }
 };
 
