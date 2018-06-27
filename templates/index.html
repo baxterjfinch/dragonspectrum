@@ -35,8 +35,6 @@
                         <li class="divider"></li>
                         <li><a id="nar_bar_restore_project" href="#"><i class="fa fa-file"></i> Restore Project</a></li>
                     </ul>
-                    <a>Spectra Count:</a><a id="spectra-class"></a>
-                </li>
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
@@ -84,50 +82,50 @@
     </nav>
 </div>
 
-<div class="sidenav container my_project_table_side_container" style="padding-top: 45px;">
-    <ul class="nav nav-tabs" id="myTab" role="tablist">
-      <li class="nav-item active">
-        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Projects</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Concepts</a>
-      </li>
-    </ul>
-    <div class="tab-content" id="myTabContent">
-      <div class="tab-pane fade active in" id="home" role="tabpanel" aria-labelledby="home-tab">
-          <table id="my_project_table_side" class="table table table-hover table-condensed project-table-side">
-              <thead>
-                  <tr>
-                      <th class="project-voter"></th>
-                      <th class="project-score">Score</th>
-                      <th class="project-title" id="sidetitle">Title</th>
-                      <th class="project-owner">Owner</th>
-                      <th class="project-date">Date Created</th>
-                  </tr>
-              </thead>
-              <tbody id="my-project-table-body-side">
-              </tbody>
-          </table>
-      </div>
-      <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-          <!--table id="my_project_table_side_ranked" class="table table table-hover table-condensed project-table-side">
-              <thead>
-                  <tr>
-                      <th class="project-voter"></th>
-                      <th class="project-score">Score</th>
-                      <th class="project-title" id="sidetitle">Title</th>
-                      <th class="project-owner">Owner</th>
-                      <th class="project-date">Date Created</th>
-                  </tr>
-              </thead>
-              <tbody id="my-project-table-body-ranked">
-              </tbody>
-          </table-->
-      </div>
+
+
+<div class ="container profile-page-container">
+    <div class="row">
+        <div class="alert alert-success alert-dismissible col-md-4 profile-alert">
+          <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>SpectraPoints!</strong> <a href="#" class="alert-link">Click Here to learn more about the points system.</a>
+        </div>
+        <div class="col-md-4">
+            <div class="jumbotron profile-jumbotron profile-jumbotron-left">
+                <h5 class="lead panel-titles">Recent Posts</h5>
+                  <div class="tab-pane fade active in" id="home" role="tabpanel" aria-labelledby="home-tab">
+                      <table id="my_project_table_side" class="table table table-hover table-condensed project-table-side">
+                          <thead>
+                              <tr>
+                                  <th class="project-voter"></th>
+                                  <th class="project-score">Score</th>
+                                  <th class="project-title" id="sidetitle">Title</th>
+                                  <th class="project-owner">Owner</th>
+                                  <th class="project-date">Date Created</th>
+                              </tr>
+                          </thead>
+                          <tbody id="my-project-table-body-side">
+                          </tbody>
+                      </table>
+                  </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="jumbotron profile-jumbotron profile-jumbotron-center">
+              <h5 class="lead panel-titles">Welcome, {{ display_name }}</h5>
+                <h5>Spectra Count: </h5><h5 id="spectra-class"></h5>
+              <!--a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a-->
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="jumbotron profile-jumbotron profile-jumbotron-right">
+              <h5 class="lead panel-titles">My Activity</h5>
+              <p></p>
+
+            </div>
+        </div>
     </div>
-
 </div>
-
 
   <div id="project-panel" class="panel panel-default container mainview">
       <!-- Default panel contents -->
@@ -223,116 +221,6 @@
               </table>
           </div>
       </div>
-
-       <div class="sidenav-right container my_project_table_side_container_right" style="margin-top: 50px;">
-            <ul class="nav nav-tabs" id="myTab" role="tablist">
-              <li class="nav-item">
-                <a class="nav-link" id="chat-tab" data-toggle="tab" href="#chat" role="tab" aria-controls="chat" aria-selected="true">Chat</a>
-              </li>
-              <li class="nav-item active">
-                <a class="nav-link active" id="comment-tab" data-toggle="tab" href="#comment" role="tab" aria-controls="comment" aria-selected="false">Comments</a>
-              </li>
-            </ul>
-            <div class="tab-content" id="myTabContent">
-              <div class="tab-pane fade" id="chat" role="tabpanel" aria-labelledby="chat-tab">
-               <div class="tab-pane" id="pvs_collaboration_tab">
-                    <div class="row">
-                        <div id="pvs-collaboration-users" class="col-xs-4 pvs-properties right-panels">
-                            <div id="pvs-collaboration-panel" class="panel panel-info pvs-panel">
-                                <div class="panel-heading pvs-panel-heading">
-                                    <h5 class="panel-title">Users</h5>
-                                </div>
-                                <div class="panel-body pvs-panel-body pvs-scroll">
-                                    <table class="table table-condensed">
-                                        <tbody id="col_user_tb_body">
-                                            <tr>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Document properties -->
-                        <div id="pvs-document-properties" class="col-xs-8 pvs-properties right-panels">
-                            <div id="pvs-document-properties-panel" class="panel panel-info pvs-panel">
-                                <div class="panel-heading pvs-panel-heading">
-                                    <h5 class="panel-title">Chat</h5>
-                                </div>
-                                <div id="chat_panel" class="panel-body pvs-panel-body">
-                                    <!-- see here: http://www.bootply.com/RMQctuZqHJ -->
-                                    <div id="doc_chat" class="chat doc_chat">
-                                        <div id="doc_chat_view" class="chat doc_chat_view">
-                                            <table id="chat-table" class="table table-striped table-condensed ">
-                                                <tbody id="chat_messages" class="chat_messages"></tbody>
-                                            </table>
-                                        </div>
-                                        <div id="doc_chat_input" class="chat chat_input right-inputs">
-                                            <div class="input-group">
-                                                <input id="grp_chat_input" type="text" class="form-control">
-                                                <span class="input-group-btn">
-                                                    <button id="grp_chat_input_send" class="btn btn-primary" type="button"><i class="fa fa-send"></i></button>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-              </div>
-              <div class="tab-pane fade active in" id="comment" role="tabpanel" aria-labelledby="comment-tab">
-                  <div class="tab-pane" id="pvs_comments_tab" data-toggle="pill">
-                    <div class="row">
-                        <!-- Annotation list -->
-                        <div class="col-xs-6 pvs-properties pvs-annotations right-panels">
-                            <div id="pvs-annos-list-panel" class="panel panel-info pvs-panel">
-                                <div class="panel-heading clearfix pvs-panel-heading">
-                                    <h5 class="panel-title pull-left">Comments</h5>
-                                    <button href="#" id="crt_new_anno_btn" class="anno-act-btn btn btn-primary btn-xs pull-right"><i class="fa fa-plus"></i></button>
-                                </div>
-                                <div id="anno_panel" class="panel-body pvs-panel-body pvs-scroll">
-                                    <table id="pvs_annos_table" class="table table-condensed">
-                                        <tbody id="pvs_annos_table_body">
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                        <br><br>
-                        <!-- Comment thread -->
-                        <div class="col-xs-6 pvs-properties pvs-thread right-panels">
-                            <div id="pvs-thread-list-panel" class="panel panel-info pvs-panel">
-                                <div class="panel-heading pvs-panel-heading">
-                                    <h5 class="panel-title">Thread</h5>
-                                </div>
-                                <div class="panel-body pvs-panel-body">
-                                    <div id="comment-view">
-                                        <table id="pvs_comments_table" class="table table-striped table-condensed">
-                                            <tbody id="pvs_comments_table_body">
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div id="comment_input_div" class="chat_input right-inputs">
-                                        <div class="input-group">
-                                            <input id="comment_input" type="text" class="form-control" >
-                                            <span class="input-group-btn">
-                                                <button id="comment_input_send" class="btn btn-primary" type="button"><i class="fa fa-reply"></i></button>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-              </div>
-            </div>
-
-
-  </div>
-
-
 {% include 'bootstrap_modal.html' %}
 {% include 'modals/permission_settings.html' %}
 {% include 'modals/project_create.html' %}

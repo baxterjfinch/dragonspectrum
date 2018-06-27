@@ -210,7 +210,7 @@ ProjectTable.buildSideTableRow = function (table, project) {
     var project_row = new ProjectTableRow();
     var tr = $('<tr></tr>');
     project_row.setTableRow(tr);
-
+    tr.addClass('table-rows');
     var td = $('<td></td>');
 
     var upvote_icon = $('<i></i>');
@@ -242,6 +242,7 @@ ProjectTable.buildSideTableRow = function (table, project) {
     var title = $('<a></a>');
     title.attr('href', project.getURL());
     title.attr('target', '_blank');
+    title.addClass('recent-posts-title');
     title.append(project.getTitle());
     td.addClass(ProjectTable.title_column_classes);
     td.append(title);
