@@ -608,9 +608,9 @@ Project.getUserProjects = function (user, cb) {
         success: function (data) {
             for (var i = 0; i < data.length; i++) {
                 project = new Project();
-                project.initProject(data[i], null, false);
+                project.initProject(data[i], null, false)
             }
-
+            
             if (cb)
                 cb(Project.projects);
         }

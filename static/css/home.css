@@ -111,12 +111,6 @@
     width: 35px;
 }
 
-#my-project-table-body-side tbody tr a:hover{
-    font-size: 12px;
-    color: darkslategrey;
-}
-
-
 #my-project-table-body-side .tr {
     font-size: 12px;
 }
@@ -413,10 +407,6 @@ a {
 
 .profile-jumbotron-left, a {
     color: white;
-}
-
-.profile-jumbotron-left, tr:hover {
-    color: darkslategrey;
 }
 
 .profile-jumbotron-center {

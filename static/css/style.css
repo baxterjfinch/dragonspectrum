@@ -1912,6 +1912,10 @@ Jmpress END
     font-size: 12px;
 }
 
+.index-jumbotron-center {
+    background-color: #001f3f !important;
+}
+
 .profile-jumbotron-center {
     background-color: #2ecc40;
     color: white;
