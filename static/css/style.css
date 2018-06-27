@@ -1895,32 +1895,55 @@ Jmpress END
 
 }
 
-.profile-jumbotron-right {
-    background-color: #00ace6;
-    color: white;
-}
-
-.profile-jumbotron-center {
-    background-color: #2ecc40;
-    color: white;
-}
-
-.profile-jumbotron-left {
-    background-color: #688F9E;
-    color: white;
-
-}
-
-#spectra-class {
-    padding-left: 0;
-}
-
 .profile-alert {
     text-align: center;
     display: block;
     width: 80%;
     left: 10%;
     margin-top: 10px;
+    box-shadow: 0px 2px 15px 0.001px #888888;
+}
+
+.profile-jumbotron-left {
+    background-color: #5375ab;
+    color: white;
+    box-shadow: 0px 4px 20px 1px #888888;
+}
+
+.profile-jumbotron-center {
+    background-color: #2ecc40;
+    color: white;
+    box-shadow: 0px 4px 20px 1px #888888;
+}
+
+.profile-jumbotron-right {
+    background-color: #00ace6;
+    color: white;
+    box-shadow: 0px 4px 20px 1px #888888;
+}
+
+
+.profile-user-information-form {
+    margin-bottom: 100px;
+    min-height: 500px;
+    padding-bottom: 100px !important;
+    padding-left: 200px !important;
+    padding-right: 200px !important;
+    background-color: #4c4c4c;
+    box-shadow: 0px 4px 20px 1px #888888;
+}
+
+.profile-bottom-right-form {
+    margin-bottom: 100px;
+    min-height: 500px;
+    padding: 40px;
+    background-color: indianred;
+    box-shadow: 0px 4px 20px 1px #888888;
+}
+
+
+#spectra-class {
+    padding-left: 0;
 }
 
 .panel-titles {
@@ -1933,18 +1956,30 @@ Jmpress END
     overflow-y: scroll;
 }
 
-.user-information-form {
-    margin-bottom: 100px;
-    min-height: 500px;
-    padding-bottom: 100px !important;
-    padding-left: 200px !important;
-    padding-right: 200px !important;
-    background-color: #4c4c4c;
+.profile-jumbotron-left:hover {
+     transform: scale(1.004);
 }
 
-.bottom-right-form {
-    margin-bottom: 100px;
-    min-height: 500px;
-    padding: 40px;
-    background-color: indianred;
+.profile-jumbotron-center:hover {
+     transform: scale(1.004);
+}
+
+.profile-jumbotron-right:hover {
+     transform: scale(1.004);
+}
+
+.profile-alert:hover {
+     transform: scale(1.004);
+}
+
+.profile-user-information-form:hover {
+     transform: scale(1.002);
+}
+
+.profile-bottom-right-form:hover {
+     transform: scale(1.004);
+}
+
+.profile-form-class {
+    padding: 50px;
 }
