@@ -10,7 +10,10 @@ function initialize() {
     if (server_data == null) {
         log.error('no server data given');
     }
-    set_user(JSON.parse(server_data.user));
+
+    var user = new User();
+    user.initCurrentUser(JSON.parse(server_data.user));
+
     $("#save").click(function (e) {
         e.preventDefault();
         update_user_profile();

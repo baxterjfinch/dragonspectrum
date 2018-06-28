@@ -7,16 +7,20 @@ function initialize() {
     if (server_data == null) {
         log.error('no server data given');
     }
-    set_user(JSON.parse(server_data.user));
+
+    var user = new User();
+    user.initCurrentUser(JSON.parse(server_data.user));
+
     $("#save").click(function (e) {
         e.preventDefault();
         update_user_profile();
     });
+
     $("#projects_nav").click(function () {
         location.href = '/';
     });
     $("#billing_nav").click(function () {
-        location.href = '/user/billing/' + get_user().username;
+        location.href = '/user/billing/' + user.getUserName();
     });
     $("#first-name").bind("paste keyup", function() {
         update_first_name = true;
@@ -69,25 +73,28 @@ function check_if_passwords_match() {
         clearTimeout(password_check_timeout);
     }
     password_check_timeout = setTimeout(function () {
-        if (password.val() == confirm_password.val() &&
-                confirm_password.val() != '' && password.val() != '') {
-            $("#confirm-pass-div").removeClass('has-error');
-            $("#password-div").removeClass('has-error');
-            $("#confirm-pass-div").addClass('has-success');
+        var confirm_pass_div = $("#confirm-pass-div");
+        var password_div = $("#password-div");
+
+        if (password.val() === confirm_password.val() &&
+                confirm_password.val() !== '' && password.val() !== '') {
+            confirm_pass_div.removeClass('has-error');
+            password_div.removeClass('has-error');
+            confirm_pass_div.addClass('has-success');
             password_valid = true;
-            $("#password-div").addClass('has-success');
-        } else if (password.val() == '' && confirm_password.val() == ''){
-            $("#confirm-pass-div").removeClass('has-success');
-            $("#password-div").removeClass('has-success');
-            $("#confirm-pass-div").removeClass('has-error');
+            password_div.addClass('has-success');
+        } else if (password.val() === '' && confirm_password.val() === ''){
+            confirm_pass_div.removeClass('has-success');
+            password_div.removeClass('has-success');
+            confirm_pass_div.removeClass('has-error');
             password_valid = false;
-            $("#password-div").removeClass('has-error');
+            password_div.removeClass('has-error');
         }else {
-            $("#confirm-pass-div").removeClass('has-success');
-            $("#password-div").removeClass('has-success');
-            $("#confirm-pass-div").addClass('has-error');
+            confirm_pass_div.removeClass('has-success');
+            password_div.removeClass('has-success');
+            confirm_pass_div.addClass('has-error');
             password_valid = false;
-            $("#password-div").addClass('has-error');
+            password_div.addClass('has-error');
         }
     }, 500);
 
@@ -102,35 +109,38 @@ var update_cell_phone;
 var update_birthday;
 var update_address;
 function update_user_profile() {
+    var user = User.getCurrent();
     if (update_first_name) {
-        change_user_first_name($("#first-name").val());
+        user.setFirstName($("#first-name").val());
     }
     if (update_last_name) {
-        change_user_last_name($("#last-name").val());
+        user.setLastName($("#last-name").val());
     }
     if (update_password) {
         if (password_valid) {
-            change_user_password($("#password").val());
+            user.setPassword($("#password").val());
         } else {
             tt_notify.alert('Password is not valid');
         }
     }
     if (update_email) {
-        change_user_email($("#email").val());
+        user.setEmail($("#email").val());
     }
     if (update_main_phone) {
-        change_user_phone_number('main', $("#phone_number").val());
+        user.setPhoneNumber('main', $("#phone_number").val());
     }
     if (update_cell_phone) {
-        change_user_phone_number('cell', $("#cell_number").val());
+        user.setPhoneNumber('cell', $("#cell_number").val());
     }
     if (update_birthday) {
-        change_user_birthday($("#birthday").val())
+        user.setBirthday($("#birthday").val());
     }
     if (update_address) {
-        change_user_address($("#street-address1").val(), $("#street-address2").val(),
+        user.setAddress($("#street-address1").val(), $("#street-address2").val(),
                             $("#city").val(), $("#state").val(), $("#zip-code").val());
     }
+
+    user.save();
 }
 
 window.onerror = function(message, url, line) {

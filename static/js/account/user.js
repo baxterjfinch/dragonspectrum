@@ -114,7 +114,7 @@ User.prototype.getOrganization = function () {
     return this.organization;
 };
 
-User.prototype.setUsername = function (username) {
+User.prototype.setUserName = function (username) {
     this.username = username;
 };
 
@@ -155,8 +155,30 @@ User.prototype.getAccountType = function () {
     return this.account_type;
 };
 
-User.prototype.setAddress = function (address) {
-    this.address = address;
+User.prototype.setAddress = function (street1, street2, city, state, zip_code) {
+    var addr = {};
+    if (street1.trim() !== '') {
+        addr.street1 = street1;
+    }
+    if (street2.trim() !== '') {
+        addr.street2 = street2;
+    }
+    if (city.trim() !== '') {
+        addr.city = city;
+    }
+    if (state.trim() !== '') {
+        addr.state = state;
+    }
+    if (zip_code.trim() !== '') {
+        addr.zip_code = zip_code;
+    }
+
+    this.address = addr;
+    var self = this;
+    comms.post(function () {return {
+        url: ACCOUNT_URLS.user + self.getUserName(),
+        data: {'address': this.address}
+    }});
 };
 
 User.prototype.getAddress = function () {
@@ -243,12 +265,28 @@ User.prototype.getModifiedTs = function () {
     return this.modified_timestamp;
 };
 
+User.prototype.setPassword = function (password) {
+    var self = this;
+    comms.post(function () {return {
+        url: ACCOUNT_URLS.user + self.getUserName(),
+        data: {'password': password}
+    }});
+};
+
 User.prototype.setPasswordExpirationTs = function (ts) {
     this.password_expiration_timestamp = ts;
 };
 
 User.prototype.getPasswordExpirationTs = function () {
     return this.password_expiration_timestamp;
+};
+
+User.prototype.setPhoneNumber = function (type, number) {
+    var self = this;
+    comms.post(function () {return {
+        url: ACCOUNT_URLS.user + self.getUserName(),
+        data: {'phone_type': type, 'phone_number': number}
+    }});
 };
 
 User.prototype.setPhoneNumbers = function (numbers) {
@@ -292,7 +330,23 @@ User.prototype.getTourProjectComplete = function () {
 };
 
 User.prototype.isAnonymous = function () {
-    return this.getUserName() == 'anonymous';
+    return this.getUserName() === 'anonymous';
+};
+
+User.prototype.save = function () {
+    var self = this;
+    comms.post(function () {return {
+        url: ACCOUNT_URLS.user + self.getUserName(),
+        data: {
+            'address': self.address,
+            'birthday': self.birthday,
+            'display_name': self.display_name,
+            'email': self.email,
+            'first_name': self.first_name,
+            'last_name': self.last_name,
+            'full_name': self.full_name,
+        }
+    }});
 };
 
 User.get = function (id) {

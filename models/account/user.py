@@ -312,7 +312,7 @@ class User(AuthUser):
                                                       log_type=tt_logging.USER, affected_user=self,
                                                       request_user=request_user, request=request, artifact=group)
                         log.info(lr['dict_msg']['msg'], extra=lr)
-        if request_data.get('first_name'):
+        if request_data.get('first_name') and request_data.get('first_name') != self.first_name:
             old_first_name = self.first_name
             self.first_name = request_data.get('first_name')
             lr = tt_logging.construct_log(msg_short='User Fist Name Was Change',
@@ -321,7 +321,7 @@ class User(AuthUser):
                                           log_type=tt_logging.USER, affected_user=self,
                                           request_user=request_user, request=request)
             log.info(lr['dict_msg']['msg'], extra=lr)
-        if request_data.get('last_name'):
+        if request_data.get('last_name') and request_data.get('last_name') != self.last_name:
             old_last_name = self.last_name
             self.last_name = request_data.get('last_name')
             lr = tt_logging.construct_log(msg_short='User Last Name Was Change',
@@ -330,7 +330,7 @@ class User(AuthUser):
                                           log_type=tt_logging.USER, affected_user=self,
                                           request_user=request_user, request=request)
             log.info(lr['dict_msg']['msg'], extra=lr)
-        if request_data.get('display_name'):
+        if request_data.get('display_name') and request_data.get('display_name') != self.display_name:
             old_display_name = self.display_name
             self.display_name = request_data.get('display_name')
             lr = tt_logging.construct_log(msg_short='User Dislay Name Was Change',
@@ -340,14 +340,13 @@ class User(AuthUser):
                                           request_user=request_user, request=request)
             log.info(lr['dict_msg']['msg'], extra=lr)
         if request_data.get('password'):
-            creds = GenericCredentials(self.username, request_data.get('password'))
-            self.password = Password(creds.password)
+            self.password = Password(request_data.get('password'))
             lr = tt_logging.construct_log(msg_short='User Password Was Changed',
                                           msg='Request not recorded to protect new password',
                                           log_type=tt_logging.USER, affected_user=self,
                                           request_user=request_user)
             log.info(lr['dict_msg']['msg'], extra=lr)
-        if request_data.get('email'):
+        if request_data.get('email') and request_data.get('email') != self.email:
             old_email = self.email
             self.email = request_data.get('email')
             lr = tt_logging.construct_log(msg_short='User Email Was Change',
