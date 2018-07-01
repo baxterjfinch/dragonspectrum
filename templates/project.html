@@ -28,6 +28,9 @@
 
         <div id="navbar-collapse-menus" class="collapse navbar-collapse navbar-collapse-item">
             <ul class="nav navbar-nav">
+                <li >
+                    <h5 class="spectra-header">Spectra Count: </h5><h5 id="spectra-class"></h5>
+                </li>
                 <li id="project-menu-item">
                     <a id="project_dropdown" class="dropdown-toggle" data-toggle="dropdown" role="button" href="#">
                         Project
@@ -147,23 +150,7 @@
 
 <div class ="container profile-page-container">
     <div class="row project-page-height">
-            <div class="col-md-12">
-                <div class="jumbotron profile-jumbotron profile-jumbotron-center index-jumbotron-center">
-                  <h5 class="lead panel-titles">{{ project.title }}</h5>
-                    <h5 class="spectra-class-title">Spectra Count: </h5><h5 id="spectra-class"></h5>
-                  <!--a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a-->
-                    <div class="voting-buttons-div">
-                          <button type="button" class="btn btn-secondary btn-sm voting-buttons" data-toggle="button" aria-pressed="false" autocomplete="off" id="voterrrrr_up">
-                            <i class="fas fa-chevron-circle-up"></i>
-                          </button>
-                            <h4 id="pscorer"></h4>
-                          <button type="button" class="btn btn-secondary btn-sm voting-buttons" data-toggle="button" aria-pressed="false" autocomplete="off" id="voter_down">
-                            <i class="fas fa-chevron-circle-down"></i>
-                          </button>
-                    </div>
-                </div>
-            </div>
-                <div class="col-md-3">
+        <div class="col-md-3">
             <div class="jumbotron profile-jumbotron profile-jumbotron-left">
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                   <li class="nav-item">
@@ -223,7 +210,9 @@
         </div>
             <div class="col-md-6">
                 <div class="jumbotron profile-jumbotron profile-jumbotron-right">
-                    <div id="right-pane">
+                    <h5 class="lead panel-titles">{{ project.title }}</h5>
+
+                    <div id="right-pane" class="col-md-11">
                         <!-- Doc Tabs -->
                             <div class="col-lg-* project-panel-header">
                                 <div id="dvs-tabs" class="tabbable">
@@ -288,7 +277,16 @@
                                     </div>
                                 </div>
                             </div>
-                </div>
+                        </div>
+                    <div class="voting-buttons-div col-md-1">
+                          <button type="button" class="btn btn-secondary btn-sm voting-buttons" data-toggle="button" aria-pressed="false" autocomplete="off" id="voterrrrr_up">
+                            <i class="fas fa-chevron-circle-up"></i>
+                          </button>
+                            <h4 id="pscorer"></h4>
+                          <button type="button" class="btn btn-secondary btn-sm voting-buttons" data-toggle="button" aria-pressed="false" autocomplete="off" id="voter_down">
+                            <i class="fas fa-chevron-circle-down"></i>
+                          </button>
+                    </div>
             </div>
         </div>
         <div class="col-md-3">
