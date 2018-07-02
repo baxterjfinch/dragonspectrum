@@ -6,6 +6,8 @@ import datetime
 
 from google.appengine.ext import ndb, deferred
 from google.appengine.api import channel, memcache
+
+
 # noinspection PyUnresolvedReferences
 from cerberus import handlers as cerberus_handlers
 
@@ -1039,7 +1041,7 @@ class ChannelTokenHandler(AuthorizationRequestHanlder):
             raise HttpErrorException.bad_request('invalid project id')
 
         client_id = server.create_uuid()
-        token = channel.create_channel(client_id)
+        token = self._create_custom_token(self.user.user_id + '_' + project.id)
 
         color = self.get_previous_color(project)
         if not color:
@@ -1062,6 +1064,17 @@ class ChannelTokenHandler(AuthorizationRequestHanlder):
         if len(channel_tokens) > 0:
             return channel_tokens[0].color
         return None
+
+    def _create_custom_token(self, uid, valid_minutes=60):
+        """Create a secure token for the given id.
+
+        This method is used to create secure custom JWT tokens to be passed to
+        clients. It takes a unique id (uid) that will be used by Firebase's
+        security rules to prevent unauthorized access. In this case, the uid will
+        be the channel id which is a combination of user_id and game_key
+        """
+        custom_token = auth.create_custom_token(uid)
+        return custom_token
 
 
 class ChannelUsersHandler(AuthorizationRequestHanlder):

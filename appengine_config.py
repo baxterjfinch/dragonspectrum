@@ -1,7 +1,11 @@
-__author__ = 'amiller'
+import os.path
 
+from google.appengine.ext import vendor
 
-# def webapp_add_wsgi_middleware(app):
-#     from google.appengine.ext.appstats import recording
-#     app = recording.appstats_wsgi_middleware(app)
-#     return app
+# Add any libraries installed in the "lib" folder.
+vendor.add('lib')
+
+# bla bla
+# Patch os.path.expanduser. This should be fixed in GAE
+# versions released after Nov 2016.
+os.path.expanduser = lambda path: path
