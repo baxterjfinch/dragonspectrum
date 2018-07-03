@@ -2,12 +2,6 @@
 BOOTSTRAP OVERRIDE START TODO put this in LESS file
 *************************************/
 
-.row {
-    margin-right: -10px;
-    margin-left: -10px;
-    margin-top: 20px;
-    height: 100%;
-}
 
 .col-xs-1,
 .col-sm-1,
@@ -58,7 +52,6 @@ BOOTSTRAP OVERRIDE START TODO put this in LESS file
 .col-md-12,
 .col-lg-12 {
     position: relative;
-    height: 100%;
     padding-right: 6px;
     padding-left: 6px;
 }
@@ -1887,10 +1880,9 @@ Jmpress END
 }
 
 .profile-jumbotron {
-    margin-top: 10px;
-    margin-left: 10px;
+    margin-top: 0px;
+    margin-left: 0px;
     margin-right: 10px;
-    min-height: 94%;
     padding: 10px;
     padding-left: 10px !important;
     padding-right: 10px !important;
@@ -1902,39 +1894,44 @@ Jmpress END
     display: block;
     width: 80%;
     left: 10%;
-    margin-top: 10px;
+    margin-top: 50px;
     box-shadow: 0px 2px 15px 0.001px #888888;
 }
 
 .profile-jumbotron-left {
     background-color: #f2f2f2;
-    height: 98%;
+    height: 95%;
+    width: 25%;
     color: black;
     box-shadow: 0px 4px 20px 1px #888888;
     font-size: 12px;
     overflow-y: scroll;
+    position: fixed;
 }
 
 .index-jumbotron-center {
     background-color: #001f3f !important;
-    min-height: 94%;
+    height: 95%;
+
 }
 
 .profile-jumbotron-center {
-    background-color: #2ecc40;
+    background-color: #f2f2f2;
     color: white;
-    box-shadow: 0px 4px 20px 1px #888888;
-    margin-bottom: 0px !important;
-    min-height: 94%;
+    box-shadow: 0px 4px 20px 1px #888888;;
+    height: 50%;
+    margin-bottom: 10px !important;
+    float: right;
 
 }
 
 .profile-jumbotron-right {
     background-color: #f2f2f2;
-    height: 98%;
+    height: 50%;
     overflow-y: scroll;
     color: white;
     box-shadow: 0px 4px 20px 1px #888888;
+    float: right;
 }
 
 
@@ -2039,3 +2036,19 @@ Jmpress END
     color: white !important;
     display: inline;
 }
+
+.nav-row {
+    height: 5%;
+}
+
+.body-row {
+    height: 95%;
+    margin-top: 5px;
+    overflow-y: scroll;
+}
+
+.body-right-container {
+    width: 73%;
+    float: right;
+}
+
