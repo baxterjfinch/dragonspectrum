@@ -116,6 +116,7 @@ function initGame(gameKey, me, token, channelId, initialMessage) {
    * the data stored in Firebase
    */
   function onMessage(newState) {
+    console.log('newState', newState);
     updateGame(newState);
 
     // now check to see if there is a winner
@@ -144,8 +145,8 @@ function initGame(gameKey, me, token, channelId, initialMessage) {
     // setup a database reference at path /channels/channelId
     channel = firebase.database().ref('channels/' + channelId);
     // add a listener to the path that fires any time the value of the data changes
-    channel.on('value', function(data) {
-      onMessage(data.val());
+    channel.on('child_added', function(data) {
+      onMessage(JSON.parse(data.val()));
     });
     // [END add_listener]
     onOpened();

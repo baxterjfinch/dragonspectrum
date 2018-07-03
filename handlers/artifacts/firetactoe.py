@@ -37,6 +37,7 @@ from firebase_admin import db
 from firebase_admin import auth
 from firebase_admin import credentials
 
+from server import create_uuid
 from server.httperrorexception import HttpErrorException
 from server.handlers import AuthorizationRequestHanlder, JINJA_ENVIRONMENT
 
@@ -61,7 +62,7 @@ def _send_firebase_message(u_id, message=None):
      http method. If no message is provided, then the data at this location
      is deleted using the DELETE http method
      """
-    root = db.reference()
+    root = db.reference(path='channels')
     if message:
         new_user = root.child(u_id).push(message)
 
@@ -95,13 +96,13 @@ class Game(ndb.Model):
     def send_update(self):
         """Updates Firebase's copy of the board."""
         message = self.to_json()
+
         # send updated game state to user X
-        _send_firebase_message(
-            self.userX.id() + self.key.id(), message=message)
+        _send_firebase_message(self.userX.id() + self.key.id(), message=message)
+
         # send updated game state to user O
-        if self.userO:
-            _send_firebase_message(
-                self.userO.id() + self.key.id(), message=message)
+        if self.userO is not None:
+            _send_firebase_message(self.userO.id() + self.key.id(), message=message)
 
     def _check_win(self):
         if self.moveX:
@@ -127,8 +128,9 @@ class Game(ndb.Model):
         # If the user is a player, and it's their move
         userX = self.userX.get()
         userO = self.userO.get()
-        if (user in (userX, userO)) and (
-                self.moveX == (user == userX)):
+
+        if (user.key.id() in (userX.key.id(), userO.key.id())) and \
+                (self.moveX == (user.key.id() == userX.key.id())):
             boardList = list(self.board)
             # If the spot you want to move to is blank
             if (boardList[position] == ' '):
@@ -156,7 +158,7 @@ class FBTestDelete(AuthorizationRequestHanlder):
         game = Game.get_by_id(self.request.get('g'))
         if not game:
             raise HttpErrorException.bad_request('failed')
-        _send_firebase_message(self.user.user_id + game.key.id(), message=None)
+        _send_firebase_message(self.user.key.id() + game.key.id(), message=None)
         self.write_json_response({})
 
 
@@ -176,20 +178,20 @@ class FBTestMainPage(AuthorizationRequestHanlder):
         game_key = self.request.get('g')
 
         if not game_key:
-            game_key = self.user.user_id
+            game_key = create_uuid()
             game = Game(id=game_key, userX=self.user.key, moveX=True, board=' '*9)
             game.put()
         else:
             game = Game.get_by_id(game_key)
             if not game:
                 raise HttpErrorException.bad_request('failed')
-            if not game.userO:
+            if not game.userO and game.userX != self.user.key:
                 game.userO = self.user.key
                 game.put()
 
         # [START pass_token]
         # choose a unique identifier for channel_id
-        channel_id = self.user.user_id + game_key
+        channel_id = self.user.key.id() + game_key
         # encrypt the channel_id and send it as a custom token to the
         # client
         # Firebase's data security rules will be able to decrypt the
@@ -199,14 +201,16 @@ class FBTestMainPage(AuthorizationRequestHanlder):
 
         # game_link is a url that you can open in another browser to play
         # against this player
-        game_link = '{}?g={}'.format(self.request.host, game_key)
+        game_link = 'https://oval-sunset-207817.appspot.com/fb?g={}'.format(game_key)
 
         # push all the data to the html template so the client will
         # have access
         template_values = {
+            'is_user_x': True if self.user.key == game.userX else False,
+            'is_user_o': True if self.user.key == game.userO else False,
             'token': client_auth_token,
             'channel_id': channel_id,
-            'me': self.user.user_id,
+            'me': self.user.key.id(),
             'game_key': game_key,
             'game_link': game_link,
             'initial_message': urllib.unquote(game.to_json())
