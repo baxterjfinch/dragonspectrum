@@ -153,13 +153,13 @@ TVS._onCustomRender = function (tvsNode) {
     } else if (dvsRender.isRenderedUnorderedListItem()) {
         icon = '<i class="fa fa-circle tvs-icon"></i>';
     } else if (dvsRender.isRenderedParagraph()) {
-        icon = '<i class="fa fa-paragraph tvs-icon"></i>';
+        icon = '<i class="fa fa-comment tvs-icon"></i>';
     } else if (concept.isParent()) {
         icon = '<i class="fa fa-files-o tvs-icon"></i>';
     } else if (attribute && attribute.isImage()) {
         icon = '<i class="fa fa-picture-o tvs-icon"></i>';
     } else {
-        icon = '<i class="fa fa-file-o tvs-icon"></i>';
+        icon = '<i class="fa fa-comments tvs-icon"></i>';
     }
 
     // security icon
