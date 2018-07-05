@@ -9,7 +9,6 @@ from google.appengine.ext import ndb, deferred
 # noinspection PyUnresolvedReferences
 from cerberus import handlers as cerberus_handlers
 
-from firebase_admin import db
 from firebase_admin import auth
 
 import server
@@ -835,8 +834,8 @@ class ChannelTokenHandler(AuthorizationRequestHanlder):
         )
 
         channel_token.send_message({'channel_op': 'ping'})
-
         channel_token.put()
+
         self.write_json_response({
             'channel_id': channel_id,
             'auth_token': client_auth_token,

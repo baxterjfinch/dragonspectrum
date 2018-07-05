@@ -81,7 +81,7 @@ CollaborationTable.validUsers = function (channel_ids) {
     var users = CollaborationUser.getAll();
 
     for (var i = 0; i < users.length; i++) {
-        if (channel_ids.indexOf(users[i].channel_id()) < 0)
+        if (channel_ids.indexOf(users[i].channel_id) < 0)
             remove_users.push(users[i])
     }
 
