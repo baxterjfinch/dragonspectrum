@@ -36,7 +36,6 @@ function Concept() {
     this.mediaReady = null;
     this.mediaMineType = null;
     this.operations_list = ['admin', 'read', 'write', 'edit_children'];
-
     this.new = false;
     this.is_expanded = null;
     this.is_activated = false;
@@ -44,6 +43,8 @@ function Concept() {
     this.init_index = null;
     this.link_proxies = [];
     this.is_new = false;
+    this.concept_score = 0;
+    this.user_vote = null;
 }
 
 Concept.prototype = Object.create(ProjectNode.prototype);
@@ -187,12 +188,44 @@ Concept.prototype.initConcept = function (concept) {
             this.presentation_crawlcontext_by_doc_id[crawl.getDocument().getId()] = crawl;
     }
 
+        downvote_icon = $("#concept-down");
+        downvote_class = $("fas fa-chevron-circle-down")
+        upvote_icon = $("#concept-up");
+        upvote_class = $("fas fa-chevron-circle-up")
+        total_score = $("#pscorer");
+
+        downvote_icon.click(function (){
+          ConceptEventListener.downvote(Concept.concept, null, function () {
+              total_score.empty();
+              total_score.append(Concept.concept.getConceptScore());
+              Concept.concept.user_vote = "direction:down";
+              if (Concept.concept.user_vote.direction != "down") {
+                $( "div.voting-buttons-div i" ).removeClass("up");
+                $( "div.voting-buttons-div i" ).addClass("down");
+              }
+          }, true);
+        });
+
+        upvote_icon.click(function (){
+          ConceptEventListener.upvote(Concept.concept, null, function () {
+              total_score.empty();
+              total_score.append(Concept.concept.getConceptScore());
+              Concept.concept.user_vote = "direction:up";
+              if (Concept.concept.user_vote.direction != "up") {
+                $( "div.voting-buttons-div i" ).removeClass("down");
+                $( "div.voting-buttons-div i" ).addClass("up");
+              }
+          }, true);
+        });
+
+
     this.mediaId = concept.mediaId;
     this.mediaReady = concept.mediaReady;
     this.mediaMineType = concept.mediaMineType;
     this.init_index = concept.index;
     this.is_deleted = concept.deleted;
     this.project_id = concept.project;
+    this.concept_score = concept.concept_score;
 
     Concept.concepts[this.getId()] = this;
 };
@@ -727,6 +760,14 @@ Concept.prototype.updatePresentationCrawlContextId = function (old_id) {
     var crawlcontext = this.presentation_crawlcontext[old_id];
     delete this.presentation_crawlcontext[old_id];
     this.presentation_crawlcontext[crawlcontext.getId()] = crawlcontext;
+};
+
+Concept.prototype.setConceptScore = function (concept_score) {
+    this.concept_score = concept_score;
+};
+
+Concept.prototype.getConceptScore = function () {
+    return this.concept_score;
 };
 
 Concept.prototype.loadSubChildren = function () {

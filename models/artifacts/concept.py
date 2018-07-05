@@ -11,11 +11,23 @@ from artifact import ProjectNode, CorruptedArtifactException
 __all__ = [
     'Concept',
     'ConceptLink',
+    'ConceptUserVotes',
 ]
 
 
 log = logging.getLogger('tt')
 
+class ConceptUserVotes(ndb.Model):
+    concept = ndb.KeyProperty(required=True)
+    user = ndb.KeyProperty(required=True)
+    direction = ndb.StringProperty(required=True)
+
+    def to_dict(self):
+        return {
+            'concept': self.concept.id(),
+            'user': self.user.id(),
+            'direction': self.direction
+        }
 
 class ConceptLink(ndb.Model):
     link_id = ndb.StringProperty()
@@ -52,6 +64,7 @@ class Concept(ProjectNode):
     media_ready = ndb.BooleanProperty(default=True)
     media_mime_type = ndb.StringProperty()
     linked_to = ndb.StructuredProperty(ConceptLink, repeated=True)
+    concept_score = ndb.IntegerProperty(default=0)
 
     # Deprecated
     # TODO: If this is deprecated, than it needs removed
@@ -140,6 +153,18 @@ class Concept(ProjectNode):
 
         new_parent.put()
         self.put()
+
+    def get_user_vote(self, user):
+        q = ConceptUserVotes.query()
+        q = q.filter(ConceptUserVotes.concept == self.key)
+        q = q.filter(ConceptUserVotes.user == user.key)
+
+        vote = None
+        for vote in q.iter():
+            vote = vote
+            break
+
+        return vote
 
     def get_parent_id_list(self, user):
         if self.parent is None:
@@ -646,6 +671,12 @@ class Concept(ProjectNode):
                 continue
             if phrasing.has_permission(user, 'read'):
                 d['phrasings'].append(phrasing.to_dict(user))
+
+        d['concept_score'] = self.concept_score
+        user_vote = self.get_user_vote(user)
+        d['user_vote'] = None
+        if user_vote is not None:
+            d['user_vote'] = user_vote.to_dict()
 
         d['selected_phrasings'] = []
         selected_phrasings = ndb.get_multi(self.selected_phrasings)

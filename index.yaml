@@ -153,6 +153,11 @@ indexes:
   - name: total_production
     direction: desc
 
+- kind: ConceptUserVotes
+  properties:
+  - name: concept
+  - name: user
+
 - kind: OrgAnalyticsDailyStat
   properties:
   - name: entity

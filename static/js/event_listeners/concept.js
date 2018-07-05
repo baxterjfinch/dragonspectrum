@@ -279,6 +279,94 @@ ConceptEventListener.activate = function (concept, notifyTVS, notifyServer, skip
     }
 };
 
+
+
+/** UpVote **
+ * Event Listener for upvoting
+ */
+ConceptEventListener.upvoteMouseClick = function () {
+    var concept = concept.getConcept();
+    if (!concept.hasPermissionWrite()) {
+        Notify.alert.warning('You do not have permission to Up Vote this project');
+        return;
+    }
+
+    ConceptEventListener.upvote(concept, null, true);
+};
+
+ConceptEventListener.upvoteCollab = function (user, message) {
+    // TODO: This will need tested after UI is put in
+    var transaction = new Transaction();
+    message.transaction.user = user;
+    transaction.initializeTransaction(message.transaction);
+
+    ConceptEventListener.upvote(Concept.getConcept(), transaction.getActionData().concept_score, false);
+};
+
+ConceptEventListener.upvote = function (concept, concept_score, call_back, notifyServer) {
+    console.log("UPVOTED");
+    if (notifyServer) {
+        comms.post({
+            url: ARTIFACT_URLS.project + concept.getRequestId(),
+            data: {up_vote: true},
+            success: function (data) {
+                concept.setConceptScore(data.concept_score);
+                concept.user_vote = data.user_vote;
+                call_back();
+            }
+        })
+    } else {
+        concept.setConceptScore(concept_score);
+    }
+    var userspectra = User.getCurrent().spectra_count;
+    $("#spectra-class").html(userspectra);
+};
+
+/** DownVote **
+ * Event Listener for downvoting
+ */
+ConceptEventListener.downvoteMouseClick = function () {
+    var concept = Concept.getConcept();
+    if (!concept.hasPermissionWrite()) {
+        Notify.alert.warning('You do not have permission to Down Vote this project');
+        return;
+    }
+
+    ConceptEventListener.downvote(concept, null, true);
+};
+
+ConceptEventListener.downvoteCollab = function (user, message) {
+    // TODO: This will need tested after UI is put in
+    var transaction = new Transaction();
+    message.transaction.user = user;
+    transaction.initializeTransaction(message.transaction);
+
+    ConceptEventListener.downvote(Concept.getConcept(), transaction.getActionData().concept_score, false);
+};
+
+ConceptEventListener.downvote = function (concept, concept_score, call_back, notifyServer) {
+    console.log("DOWNVOTED");
+    if (notifyServer) {
+        comms.post({
+            url: ARTIFACT_URLS.project + concept.getRequestId(),
+            data: {down_vote: true},
+            success: function (data) {
+                concept.setConceptScore(data.concept_score);
+                concept.user_vote = data.user_vote;
+                call_back();
+            }
+        })
+    } else {
+        concept.setConceptScore(concept_score);
+    }
+    var userspectra = get_user().spectra_count;
+    $("#spectra-class").html(userspectra);
+};
+
+
+
+
+
 /** EXPAND **
  * Event Listener for expand events
  */

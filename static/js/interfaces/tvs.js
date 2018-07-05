@@ -134,6 +134,7 @@ TVS._onCustomRender = function (tvsNode) {
     var attribute = concept.getDocumentAttribute(document);
     var dvsRender = concept.getDvsRender();
     var title = concept.getDocumentPhrasing(document).getText();
+    var cscore = concept.getConceptScore();
 
     // main icon
     if (concept.isQueuedLoading()) {
@@ -153,7 +154,7 @@ TVS._onCustomRender = function (tvsNode) {
     } else if (dvsRender.isRenderedUnorderedListItem()) {
         icon = '<i class="fa fa-circle tvs-icon"></i>';
     } else if (dvsRender.isRenderedParagraph()) {
-        icon = '<i class="fa fa-comment tvs-icon"></i>';
+        icon = '<a id="cscorer"></a>';
     } else if (concept.isParent()) {
         icon = '<i class="fa fa-files-o tvs-icon"></i>';
     } else if (attribute && attribute.isImage()) {
@@ -183,7 +184,7 @@ TVS._onCustomRender = function (tvsNode) {
     else
         classes = 'node_context';
 
-    return ' ' + icon + sec_icon + '<a class="' + classes + ' ' + user_classes + '" id="' + concept.getId() + '-tvs" class="dynatree-title" href="#">' + title + '</a>';
+    return ' ' + '<i class="fas fa-chevron-circle-up concept-up"></i>' + '   ' + concept.getConceptScore() + '   ' + '<i class="fas fa-chevron-circle-down concept-down"></i>' + ' ' + '<a class="' + classes + ' ' + user_classes + '" id="' + concept.getId() + '-tvs" class="dynatree-title" href="#">' + title + '</a>';
 };
 
 TVS._onSelect = function (select, tvsNode, over_ride_summary) {
