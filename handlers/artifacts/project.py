@@ -833,7 +833,9 @@ class ChannelTokenHandler(AuthorizationRequestHanlder):
             color=color,
         )
 
+        channel_token.set_status(True)
         channel_token.send_message({'channel_op': 'ping'})
+
         channel_token.put()
 
         self.write_json_response({

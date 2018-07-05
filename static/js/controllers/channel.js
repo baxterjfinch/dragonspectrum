@@ -60,18 +60,20 @@ Channel._open = function () {
         console.log('Error message: ', error.message);
     });
 
+    var onlineStatus = firebase.database().ref('collaboration/' + Channel.user.getId() + '/' + Channel.channel_id + '/status');
+    onlineStatus.set(true);
+    onlineStatus.onDisconnect().set(false);
+    
     Channel.channel = firebase.database().ref('collaboration/' + Channel.user.getId() + '/' + Channel.channel_id);
+    // Channel.channel.onDisconnect().set("I disconnected!");
 
     Channel.channel.on('child_added', function(data) {
         Channel._onMessage(JSON.parse(data.val()));
     });
 
-    // Channel.channel = new goog.appengine.Channel(Channel.auth_token);
-    // Channel.socket = Channel.channel.open();
-    // Channel.socket.onopen = Channel._onOpened;
-    // Channel.socket.onmessage = Channel._onMessage;
-    // Channel.socket.onerror = Channel._onError;
-    // Channel.socket.onclose = Channel._onClose;
+    Channel.channel.on('child_removed', function(data) {
+        console.log(JSON.parse(data.val()));
+    });
 };
 
 /**
