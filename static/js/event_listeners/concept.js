@@ -285,7 +285,7 @@ ConceptEventListener.activate = function (concept, notifyTVS, notifyServer, skip
  * Event Listener for upvoting
  */
 ConceptEventListener.upvoteMouseClick = function () {
-    var concept = concept.getConcept();
+    var concept = Concept.concept;
     if (!concept.hasPermissionWrite()) {
         Notify.alert.warning('You do not have permission to Up Vote this project');
         return;
@@ -307,7 +307,7 @@ ConceptEventListener.upvote = function (concept, concept_score, call_back, notif
     console.log("UPVOTED");
     if (notifyServer) {
         comms.post({
-            url: ARTIFACT_URLS.project + concept.getRequestId(),
+            url: ARTIFACT_URLS.concept + concept.getRequestId(),
             data: {up_vote: true},
             success: function (data) {
                 concept.setConceptScore(data.concept_score);
@@ -326,7 +326,7 @@ ConceptEventListener.upvote = function (concept, concept_score, call_back, notif
  * Event Listener for downvoting
  */
 ConceptEventListener.downvoteMouseClick = function () {
-    var concept = Concept.getConcept();
+    var concept = Concept.concept;
     if (!concept.hasPermissionWrite()) {
         Notify.alert.warning('You do not have permission to Down Vote this project');
         return;
@@ -348,7 +348,7 @@ ConceptEventListener.downvote = function (concept, concept_score, call_back, not
     console.log("DOWNVOTED");
     if (notifyServer) {
         comms.post({
-            url: ARTIFACT_URLS.project + concept.getRequestId(),
+            url: ARTIFACT_URLS.concept + concept.getRequestId(),
             data: {down_vote: true},
             success: function (data) {
                 concept.setConceptScore(data.concept_score);

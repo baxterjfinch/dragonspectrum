@@ -188,37 +188,6 @@ Concept.prototype.initConcept = function (concept) {
             this.presentation_crawlcontext_by_doc_id[crawl.getDocument().getId()] = crawl;
     }
 
-        downvote_icon = $("#concept-down");
-        downvote_class = $("fas fa-chevron-circle-down")
-        upvote_icon = $("#concept-up");
-        upvote_class = $("fas fa-chevron-circle-up")
-        total_score = $("#pscorer");
-
-        downvote_icon.click(function (){
-          ConceptEventListener.downvote(Concept.concept, null, function () {
-              total_score.empty();
-              total_score.append(Concept.concept.getConceptScore());
-              Concept.concept.user_vote = "direction:down";
-              if (Concept.concept.user_vote.direction != "down") {
-                $( "div.voting-buttons-div i" ).removeClass("up");
-                $( "div.voting-buttons-div i" ).addClass("down");
-              }
-          }, true);
-        });
-
-        upvote_icon.click(function (){
-          ConceptEventListener.upvote(Concept.concept, null, function () {
-              total_score.empty();
-              total_score.append(Concept.concept.getConceptScore());
-              Concept.concept.user_vote = "direction:up";
-              if (Concept.concept.user_vote.direction != "up") {
-                $( "div.voting-buttons-div i" ).removeClass("down");
-                $( "div.voting-buttons-div i" ).addClass("up");
-              }
-          }, true);
-        });
-
-
     this.mediaId = concept.mediaId;
     this.mediaReady = concept.mediaReady;
     this.mediaMineType = concept.mediaMineType;
@@ -228,6 +197,39 @@ Concept.prototype.initConcept = function (concept) {
     this.concept_score = concept.concept_score;
 
     Concept.concepts[this.getId()] = this;
+
+
+    concept_downvote_icon = $("#concept-down");
+    concept_downvote_class = $("fas fa-chevron-circle-down")
+    concept_upvote_icon = $("#concept-up");
+    concept_upvote_class = $("fas fa-chevron-circle-up")
+    concept_total_score = $("#pscorer");
+
+    concept_downvote_icon.click(function (){
+        console.log("Upvoted");
+      ConceptEventListener.downvote(Concept.concept, null, function () {
+          total_score.empty();
+          total_score.append(Concept.concept.getConceptScore());
+          Concept.concept.user_vote = "direction:down";
+          if (Concept.concept.user_vote.direction != "down") {
+            $( "div.voting-buttons-div i" ).removeClass("up");
+            $( "div.voting-buttons-div i" ).addClass("down");
+          }
+      }, true);
+    });
+
+    concept_upvote_icon.click(function (){
+        console.log("Downvoted");
+      ConceptEventListener.upvote(Concept.concept, null, function () {
+          total_score.empty();
+          total_score.append(Concept.concept.getConceptScore());
+          Concept.concept.user_vote = "direction:up";
+          if (Concept.concept.user_vote.direction != "up") {
+            $( "div.voting-buttons-div i" ).removeClass("down");
+            $( "div.voting-buttons-div i" ).addClass("up");
+          }
+      }, true);
+    });
 };
 
 Concept.prototype.updateId = function (old_id) {
