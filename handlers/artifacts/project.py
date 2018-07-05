@@ -219,7 +219,7 @@ class ProjectHandler(AuthorizationRequestHanlder):
         self.response.write(template_index.render(template_data))
 
     def _serve_project_page(self, doc, act_con_path,):
-        open_chal = True
+        open_chal = False
         if self.request.get('open_chal').lower() == 'false':
             open_chal = False
 

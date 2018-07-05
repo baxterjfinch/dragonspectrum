@@ -284,8 +284,10 @@ ConceptEventListener.activate = function (concept, notifyTVS, notifyServer, skip
 /** UpVote **
  * Event Listener for upvoting
  */
-ConceptEventListener.upvoteMouseClick = function () {
-    var concept = Concept.concept;
+ConceptEventListener.upvoteMouseClick = function (event) {
+    var concept_id = $(event).data('concept');
+    var concept = Concept.get(concept_id);
+
     if (!concept.hasPermissionWrite()) {
         Notify.alert.warning('You do not have permission to Up Vote this project');
         return;
@@ -326,7 +328,9 @@ ConceptEventListener.upvote = function (concept, concept_score, call_back, notif
  * Event Listener for downvoting
  */
 ConceptEventListener.downvoteMouseClick = function () {
-    var concept = Concept.concept;
+    var concept_id = $(event).data('concept');
+    var concept = Concept.get(concept_id);
+
     if (!concept.hasPermissionWrite()) {
         Notify.alert.warning('You do not have permission to Down Vote this project');
         return;
