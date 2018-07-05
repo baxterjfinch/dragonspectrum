@@ -307,12 +307,17 @@ ConceptEventListener.upvoteCollab = function (user, message) {
 
 ConceptEventListener.upvote = function (concept, concept_score, call_back, notifyServer) {
     console.log("UPVOTED");
+
+    var new_score = concept.getConceptScore();
+    new_score++;
+    $('#cscore-' + concept.id).html(new_score);
+
     if (notifyServer) {
         comms.post({
             url: ARTIFACT_URLS.concept + concept.getRequestId(),
             data: {up_vote: true},
             success: function (data) {
-                concept.setConceptScore(data.concept_score);
+                concept.setConceptScore(data.new_score);
                 concept.user_vote = data.user_vote;
                 call_back();
             }
@@ -327,7 +332,7 @@ ConceptEventListener.upvote = function (concept, concept_score, call_back, notif
 /** DownVote **
  * Event Listener for downvoting
  */
-ConceptEventListener.downvoteMouseClick = function () {
+ConceptEventListener.downvoteMouseClick = function (event) {
     var concept_id = $(event).data('concept');
     var concept = Concept.get(concept_id);
 
@@ -350,12 +355,17 @@ ConceptEventListener.downvoteCollab = function (user, message) {
 
 ConceptEventListener.downvote = function (concept, concept_score, call_back, notifyServer) {
     console.log("DOWNVOTED");
+
+    var new_score = concept.getConceptScore();
+    new_score--;
+    $('#cscore-' + concept.id).html(new_score);
+
     if (notifyServer) {
         comms.post({
             url: ARTIFACT_URLS.concept + concept.getRequestId(),
             data: {down_vote: true},
             success: function (data) {
-                concept.setConceptScore(data.concept_score);
+                concept.setConceptScore(data.new_score);
                 concept.user_vote = data.user_vote;
                 call_back();
             }
