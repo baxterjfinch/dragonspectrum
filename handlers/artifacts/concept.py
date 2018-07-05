@@ -352,6 +352,10 @@ class ConceptHandler(AuthorizationRequestHanlder):
             self._concept_shared()
         if self.json_request.get('link_concept'):
             self._link_concept()
+        if self.json_request.get('up_vote'):
+            self._up_vote()
+        if self.json_request.get('down_vote'):
+            self._down_vote()
 
         if modify_ts:
             project = self.concept.project.get()
@@ -726,6 +730,103 @@ class ConceptHandler(AuthorizationRequestHanlder):
             'transaction': trans.to_dict(self.user)
         }
         ChannelToken.broadcast_message(channel_tokens, message)
+
+
+    def _up_vote(self):
+        if not self.concept.has_permission_write(self.user):
+            raise HttpErrorException.forbidden()
+
+        vote_changed = True
+
+        cvote = self.concept.get_user_vote(self.user)
+
+        # If there is no previous vote, they can vote up or down
+        if cvote is None:
+            self.concept.concept_score += 1
+            cvote = ConceptUserVotes(concept=self.concept.key, user=self.user.key, direction='up')
+            cvote.put()
+
+        # If there was a previous vote and its down. We remove their vote, otherwise they are trying
+        # to vote up again and we disallow that.
+        elif cvote is not None and cvote.direction == 'down':
+            self.concept.concept_score += 1
+            cvote.key.delete()
+
+        else:
+            vote_changed = False
+
+        if vote_changed:
+            cost = spectra.calculate_cost('pro_up_vote', user=self.user, artifact=self.concept)
+            if not spectra.has_sufficient_points(cost, self.user):
+                raise HttpErrorException.forbidden()
+            self.user.sub_spectra_cost(cost)
+
+        action_data = {'concept_score': self.concept.concept_score}
+        trans = Transaction(
+            action='pro_up_vote',
+            user=self.user.key,
+            artifact=self.concept.key,
+            concept=self.concept.key,
+            action_data=action_data
+        )
+        trans.put()
+
+        self.get_channel_token()
+        channel_tokens = ChannelToken.get_by_concept_key(self.concept.key, self.user_channel_token)
+        channel_tokens = ChannelToken.remove_unauthorized_users(channel_tokens, [self.concept])
+        message = {
+            'user': self.get_user_channel_data(),
+            'transaction': trans.to_dict(self.user)
+        }
+        ChannelToken.broadcast_message(channel_tokens, message)
+
+    def _down_vote(self):
+        if not self.concept.has_permission_write(self.user):
+            raise HttpErrorException.forbidden()
+
+        vote_changed = True
+
+        # If there is no previous vote, they can vote up or down
+        cvote = self.concept.get_user_vote(self.user)
+        if cvote is None:
+            self.concept.concept_score -= 1
+            cvote = ConceptUserVotes(concept=self.concept.key, user=self.user.key, direction='down')
+            cvote.put()
+
+        # If there was a previous vote and its down. We remove their vote, otherwise they are trying
+        # to vote up again and we disallow that.
+        elif cvote is not None and cvote.direction == 'up':
+            self.concept.concept_score -= 1
+            cvote.key.delete()
+
+        else:
+            vote_changed = False
+
+        if vote_changed:
+            cost = spectra.calculate_cost('pro_down_vote', user=self.user, artifact=self.project)
+            if not spectra.has_sufficient_points(cost, self.user):
+                raise HttpErrorException.forbidden()
+            self.user.sub_spectra_cost(cost)
+
+        action_data = {'concept_score': self.concept.concept_score}
+        trans = Transaction(
+            action='pro_down_vote',
+            user=self.user.key,
+            artifact=self.concept.key,
+            project=self.concept.key,
+            action_data=action_data
+        )
+        trans.put()
+
+        self.get_channel_token()
+        channel_tokens = ChannelToken.get_by_concept_key(self.concept.key, self.user_channel_token)
+        channel_tokens = ChannelToken.remove_unauthorized_users(channel_tokens, [self.concept])
+        message = {
+            'user': self.get_user_channel_data(),
+            'transaction': trans.to_dict(self.user)
+        }
+        ChannelToken.broadcast_message(channel_tokens, message)
+
 
     def _concept_shared(self):
         self.get_analytic_session()
