@@ -1,0 +1,8 @@
+requests
+requests_toolbelt
+oauth2client
+firebase-admin
+google-auth
+googleapis-common-protos
+lxml
+Jinja2

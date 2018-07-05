@@ -198,10 +198,10 @@ CollaborationEventListener.ACTIONS = {
 };
 
 CollaborationEventListener.event = function (message) {
-    var user = CollaborationUser.get(message.user.client_id);
+    var user = CollaborationUser.get(message.user.channel_id);
     if (!user) {
-        if (message.user.client_id == '') {
-            console.warn('Received collab message from user with no client_id');
+        if (message.user.channel_id == '') {
+            console.warn('Received collab message from user with no channel_id');
             return;
         }
         user = new CollaborationUser();

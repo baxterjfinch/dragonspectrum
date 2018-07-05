@@ -3,24 +3,22 @@ import server
 import random
 from datetime import datetime, timedelta
 from artifact import Artifact
+
+from firebase_admin import db
 from google.appengine.ext import ndb
-from google.appengine.api import channel
 from colour.colour import make_color_factory, HSL_equivalence, RGB_color_picker
 
 
 class ChannelToken(Artifact):
-    token = ndb.StringProperty()
     user = ndb.KeyProperty()
     color = ndb.StringProperty()
     concept = ndb.KeyProperty()
     link_id = ndb.StringProperty()
     document = ndb.KeyProperty()
-    connected = ndb.BooleanProperty(default=False)  # Tell if the client ever connected
-                                                    # not if they are connected
+    connected = ndb.BooleanProperty(default=False)
 
-    @property
-    def client_id(self):
-        return self.key.id()
+    def send_message(self, message):
+        return ChannelToken.broadcast_message([self], message)
 
     @staticmethod
     def generate_color():
@@ -35,8 +33,8 @@ class ChannelToken(Artifact):
                              luminance=server.config.channel_user_luminance_adjustment).hex_l)
 
     @staticmethod
-    def get_by_project_key(key, request_user_token=None):
-        channel_tokens = ChannelToken.query(ChannelToken.project == key).fetch()
+    def get_by_project_key(pro_key, request_user_token=None):
+        channel_tokens = ChannelToken.query(ChannelToken.project == pro_key).fetch()
 
         cut_off_time1 = datetime.now() - timedelta(hours=2, minutes=15)
         cut_off_time2 = datetime.now() - timedelta(minutes=3)
@@ -45,7 +43,7 @@ class ChannelToken(Artifact):
         invalid_tokens = []
         for channel_token in channel_tokens:
             # Remove expired tokens
-            if request_user_token and request_user_token.client_id == channel_token.client_id:
+            if request_user_token and request_user_token.id == channel_token.id:
                 continue
             elif channel_token.created_ts < cut_off_time1:
                 invalid_tokens.append(channel_token.key)
@@ -55,6 +53,7 @@ class ChannelToken(Artifact):
             else:
                 valid_tokens.append(channel_token)
         ndb.delete_multi(invalid_tokens)
+
         return valid_tokens
 
     @staticmethod
@@ -78,5 +77,7 @@ class ChannelToken(Artifact):
     def broadcast_message(channel_tokens, message):
         if not isinstance(message, basestring):
             message = json.dumps(message)
+
         for channel_token in channel_tokens:
-            channel.send_message(channel_token.client_id, message)
+            root = db.reference(path='collaboration/' + channel_token.user.id())
+            root.child(channel_token.id).push(message)
