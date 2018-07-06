@@ -101,6 +101,10 @@ ProjectEventListener.upvoteCollab = function (user, message) {
 };
 
 ProjectEventListener.upvote = function (project, project_score, call_back, notifyServer) {
+    project.setProjectScore(project.getProjectScore()+1);
+    if (call_back) {
+        call_back();
+    }
     if (notifyServer) {
         comms.post({
             url: ARTIFACT_URLS.project + project.getRequestId(),
@@ -108,7 +112,9 @@ ProjectEventListener.upvote = function (project, project_score, call_back, notif
             success: function (data) {
                 project.setProjectScore(data.project_score);
                 project.user_vote = data.user_vote;
-                call_back();
+                if (call_back) {
+                    call_back();
+                }
             }
         })
     } else {

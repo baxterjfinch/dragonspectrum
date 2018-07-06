@@ -675,9 +675,9 @@ class Concept(ProjectNode):
         d['concept_score'] = self.concept_score
         user_vote = self.get_user_vote(user)
         d['user_vote'] = None
+
         if user_vote is not None:
             d['user_vote'] = user_vote.to_dict()
-
         d['selected_phrasings'] = []
         selected_phrasings = ndb.get_multi(self.selected_phrasings)
         for selected in selected_phrasings:

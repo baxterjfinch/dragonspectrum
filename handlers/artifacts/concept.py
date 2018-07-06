@@ -17,7 +17,8 @@ from models.artifacts import Document, Marker
 from server import tt_logging
 from models.account.user import User
 from server.httperrorexception import HttpErrorException
-from models.artifacts import Concept
+from models.artifacts import Concept, ConceptUserVotes
+from server import spectra
 from models.artifacts.transaction import Transaction
 from models.artifacts.artifact import CorruptedArtifactException
 from server.handlers import AuthorizationRequestHanlder, JINJA_ENVIRONMENT
@@ -363,6 +364,7 @@ class ConceptHandler(AuthorizationRequestHanlder):
             project.put()
 
         self.concept.put()
+        self.write_json_response(self.concept.to_dict(self.user))
 
     def _init_post(self, concept_id):
         if not Concept.valid_id(concept_id):
@@ -765,15 +767,15 @@ class ConceptHandler(AuthorizationRequestHanlder):
         trans = Transaction(
             action='pro_up_vote',
             user=self.user.key,
+            project=self.project.key,
             artifact=self.concept.key,
-            concept=self.concept.key,
             action_data=action_data
         )
         trans.put()
 
         self.get_channel_token()
-        channel_tokens = ChannelToken.get_by_concept_key(self.concept.key, self.user_channel_token)
-        channel_tokens = ChannelToken.remove_unauthorized_users(channel_tokens, [self.concept])
+        channel_tokens = ChannelToken.get_by_project_key(self.project.key, self.user_channel_token)
+        channel_tokens = ChannelToken.remove_unauthorized_users(channel_tokens, [self.project])
         message = {
             'user': self.get_user_channel_data(),
             'transaction': trans.to_dict(self.user)
@@ -803,24 +805,25 @@ class ConceptHandler(AuthorizationRequestHanlder):
             vote_changed = False
 
         if vote_changed:
-            cost = spectra.calculate_cost('pro_down_vote', user=self.user, artifact=self.project)
+            cost = spectra.calculate_cost('pro_down_vote', user=self.user, artifact=self.concept)
             if not spectra.has_sufficient_points(cost, self.user):
                 raise HttpErrorException.forbidden()
             self.user.sub_spectra_cost(cost)
+
 
         action_data = {'concept_score': self.concept.concept_score}
         trans = Transaction(
             action='pro_down_vote',
             user=self.user.key,
             artifact=self.concept.key,
-            project=self.concept.key,
+            project=self.project.key,
             action_data=action_data
         )
         trans.put()
 
         self.get_channel_token()
-        channel_tokens = ChannelToken.get_by_concept_key(self.concept.key, self.user_channel_token)
-        channel_tokens = ChannelToken.remove_unauthorized_users(channel_tokens, [self.concept])
+        channel_tokens = ChannelToken.get_by_project_key(self.project.key, self.user_channel_token)
+        channel_tokens = ChannelToken.remove_unauthorized_users(channel_tokens, [self.project])
         message = {
             'user': self.get_user_channel_data(),
             'transaction': trans.to_dict(self.user)

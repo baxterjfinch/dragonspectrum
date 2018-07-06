@@ -184,8 +184,8 @@ TVS._onCustomRender = function (tvsNode) {
     else
         classes = 'node_context';
 
-    return ' ' + '<i class="fas fa-chevron-circle-up concept-up" data-concept="' + concept.id + '" onclick="ConceptEventListener.upvoteMouseClick(this)" ></i>' +
-       '<span id="cscore-' + concept.id + '">' + cscore + '</span>' +  '<i class="fas fa-chevron-circle-down concept-down" data-concept="' + concept.id + '"  onclick="ConceptEventListener.downvoteMouseClick(this)" ></i>' + ' ' +
+    return ' ' + '<i class="fas fa-chevron-circle-up concept-up"  data-concept="' + concept.id + '"' + 'id="change-vote-up-' + concept.id + '" onclick="ConceptEventListener.upvoteMouseClick(this)" ></i>' +
+        '<span id="cscore-' + concept.id + '">' + cscore + '</span>' + '<i class="fas fa-chevron-circle-down concept-down" data-concept="' + concept.id + '"' + 'id="change-vote-down-' + concept.id +  '"  onclick="ConceptEventListener.downvoteMouseClick(this)" ></i>' + ' ' +
         '<a class="' + classes + ' ' + user_classes + '" id="' + concept.getId() + '-tvs" class="dynatree-title" href="#">' + title + '</a>';
 };
 
@@ -248,7 +248,17 @@ TVS._onExpand = function (flag, tvsNode) {
 TVS._onRender = function (tvsNode, nodeSpan) {
     var concept = tvsNode.data.concept;
     var doc = Document.getCurrent();
+
+    console.log("*************************" + concept.user_vote);
+
+    if (concept.user_vote !== null && concept.user_vote.direction === "up") {
+        $(tvsNode).find("#change-vote-up-" + concept.id).addClass("up");
+    } else {
+        $(tvsNode).find("#change-vote-down-" + concept.id).addClass("down");
+    }
+
     if (doc.getState() == Document.STATE_SUMMARY) {
+
         $(nodeSpan).find('.dynatree-checkbox').unbind();
         $(nodeSpan).find('.dynatree-checkbox').click(function () {
             if ($(nodeSpan).hasClass('dynatree-selected')) {
