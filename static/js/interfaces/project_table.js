@@ -187,6 +187,7 @@ ProjectTable.buildSideTableRow = function (table, project) {
     var upvote_icon = $('<i></i>');
     upvote_icon.addClass('fas fa-chevron-circle-up');
     td.append(upvote_icon);
+
     td.append($('<br>'));
 
     var downvote_icon = $('<i></i>');
@@ -241,23 +242,13 @@ ProjectTable.buildSideTableRow = function (table, project) {
         ProjectEventListener.upvote(project, null, function () {
             score.empty();
             score.append(project.getProjectScore());
-            downvote_icon.removeClass("down", "up")
-            upvote_icon.addClass("up")
         }, true);
-
     });
-
     downvote_icon.click(function (){
         ProjectEventListener.downvote(project, null, function () {
             score.empty();
             score.append(project.getProjectScore());
         }, true);
-
-        if (project.user_vote != null) {
-          upvote_icon.removeClass("up", "down")
-          downvote_icon.addClass("down")
-
-        };
     });
 
     return project_row;

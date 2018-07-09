@@ -21,7 +21,6 @@ function Project() {
     this.documents = {};
     this.import_url = null;
     this.project_score = 0;
-    this.user_vote = null;
     this.operations_list = ['admin', 'read', 'write', 'delete', 'edit_children'];
 
     this.is_owned = false;
@@ -67,7 +66,6 @@ Project.prototype.initProject = function (project, conceptLoaderConfigs, loadDvs
     this.current_document = this.distilled_document;
     this.import_url = project.inportURL;
     this.project_score = project.project_score;
-    this.user_vote = project.user_vote;
     this.pw_modified_ts = project.pw_modified_ts;
 
     if (project.shared)
