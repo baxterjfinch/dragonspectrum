@@ -41,11 +41,13 @@ class DocumentHandler(AuthorizationRequestHanlder):
     def put(self, document_id=None):
         if not self.json_request.get('project') and not Project.valid_id(self.json_request.get('project')):
             raise HttpErrorException.bad_request('invalid project id')
+
         pro = Project.get_by_id(self.json_request.get('project'))
         if not pro:
             raise HttpErrorException.bad_request('invalid project id')
         if not pro.has_permission_read(self.user):
             raise HttpErrorException.forbidden()
+
         if not self.json_request.get('title'):
             raise HttpErrorException.bad_request('invalid title')
 
@@ -59,26 +61,41 @@ class DocumentHandler(AuthorizationRequestHanlder):
         doc.copyright_text = self.json_request.get('copyright')
         doc.description = self.json_request.get('description')
         doc.owner.append(self.user.key)
-        doc_perm = Permission(permissions=Permission.init_perm_struct(Document.operations_list),
-                              key=Permission.create_key(), project=pro.key)
+
+        doc_perm = Permission(
+            permissions=Permission.init_perm_struct(Document.operations_list),
+            key=Permission.create_key(),
+            project=pro.key
+        )
         doc_perm.artifact = doc.key
         doc_perm.put()
         doc.permissions = doc_perm.key
+
         if self.user.in_org():
             doc.organization = self.user.organization
+
         doc.parent_perms = [pro.permissions, pro.distilled_document.get().permissions]
         doc.put()
+
         pro.documents.append(doc.key)
+
         indexes = self.user.get_put_index()
         doc.index(indexes)
+
         pro.pw_modified_ts = datetime.datetime.now()
         pro.put()
+
         self.write_json_response(doc.to_dict(self.user))
 
         action_data = {'document': doc.to_dict(self.user)}
 
-        trans = Transaction(action='doc_new', user=self.user.key, artifact=doc.key,
-                            project=pro.key, action_data=action_data)
+        trans = Transaction(
+            action='doc_new',
+            user=self.user.key,
+            artifact=doc.key,
+            project=pro.key,
+            action_data=action_data
+        )
         trans.put()
 
         self.get_channel_token()
@@ -99,14 +116,18 @@ class DocumentHandler(AuthorizationRequestHanlder):
     def post(self, document_id=None):
         self.get_channel_token()
         modify_ts = True
+
         if not document_id and not Document.valid_id(document_id):
             raise HttpErrorException.bad_request('invalid document id')
+
         self.document = Document.get_by_id(document_id)
         if not self.document:
             raise HttpErrorException.bad_request('invalid document id')
+
         self.project = self.document.project.get()
         if not self.document.has_permission_read(self.user):
             raise HttpErrorException.forbidden()
+
         if self.json_request.get('active_document'):
             modify_ts = False
             self._activate_document()
@@ -173,11 +194,16 @@ class DocumentHandler(AuthorizationRequestHanlder):
             project = self.document.project.get()
             project.pw_modified_ts = datetime.datetime.now()
             project.put()
+
         self.document.put()
 
     def _activate_document(self):
-        trans = Transaction(action='doc_act', user=self.user.key, artifact=self.document.key,
-                            project=self.document.project)
+        trans = Transaction(
+            action='doc_act',
+            user=self.user.key,
+            artifact=self.document.key,
+            project=self.document.project
+        )
         trans.put()
 
         channel_tokens = ChannelToken.get_by_project_key(self.project.key, self.user_channel_token)
@@ -191,6 +217,7 @@ class DocumentHandler(AuthorizationRequestHanlder):
     def _add_perm(self):
         if not self.document.has_permission_write(self.user):
             raise HttpErrorException.forbidden()
+
         group, required = self.document.validate_add_perm_request(self.json_request, self.user)
         self.document.add_group_perm(group, self.json_request.get('operation'),
                                      self.json_request.get('permission'), required)
@@ -203,8 +230,13 @@ class DocumentHandler(AuthorizationRequestHanlder):
             'hidden': False,
         }
 
-        trans = Transaction(action='doc_perm_add', user=self.user.key, artifact=self.document.key,
-                            project=self.project.key, action_data=action_data)
+        trans = Transaction(
+            action='doc_perm_add',
+            user=self.user.key,
+            artifact=self.document.key,
+            project=self.project.key,
+            action_data=action_data
+        )
         trans.put()
         org = self.document.organization.get()
 
@@ -240,6 +272,7 @@ class DocumentHandler(AuthorizationRequestHanlder):
     def _rm_perm(self):
         if not self.document.has_permission_write(self.user):
             raise HttpErrorException.forbidden()
+
         group, required = self.document.validate_rm_perm_request(self.json_request, self.user)
         self.document.remove_group_perm(group, self.json_request.get('operation'), required)
 
@@ -250,8 +283,13 @@ class DocumentHandler(AuthorizationRequestHanlder):
             'hidden': False,
         }
 
-        trans = Transaction(action='doc_perm_rmv', user=self.user.key, artifact=self.document.key,
-                            project=self.project.key, action_data=action_data)
+        trans = Transaction(
+            action='doc_perm_rmv',
+            user=self.user.key,
+            artifact=self.document.key,
+            project=self.project.key,
+            action_data=action_data
+        )
         trans.put()
         org = self.document.organization.get()
 
@@ -297,8 +335,13 @@ class DocumentHandler(AuthorizationRequestHanlder):
             'hidden': False,
         }
 
-        trans = Transaction(action='doc_grp_rmv', user=self.user.key, artifact=self.document.key,
-                            project=self.project.key, action_data=action_data)
+        trans = Transaction(
+            action='doc_grp_rmv',
+            user=self.user.key,
+            artifact=self.document.key,
+            project=self.project.key,
+            action_data=action_data
+        )
         trans.put()
         org = self.document.organization.get()
 
@@ -334,6 +377,7 @@ class DocumentHandler(AuthorizationRequestHanlder):
     def _set_title(self):
         if not self.document.has_permission_write(self.user):
             raise HttpErrorException.forbidden()
+
         title = self.json_request.get('title', '').rstrip()
         if title == '':
             raise HttpErrorException.bad_request('title can not be empty')
@@ -373,6 +417,7 @@ class DocumentHandler(AuthorizationRequestHanlder):
     def delete(self, document_id=None):
         if not document_id and not Document.valid_id(document_id):
             raise HttpErrorException.bad_request('invalid document id')
+
         self.document = Document.get_by_id(document_id)
         if not self.document:
             raise HttpErrorException.bad_request('invalid document id')
@@ -381,8 +426,12 @@ class DocumentHandler(AuthorizationRequestHanlder):
         if self.document.is_distilled_document():
             raise HttpErrorException.bad_request('can not delete distilled document')
 
-        trans = Transaction(action='doc_del', user=self.user.key, artifact=self.document.key,
-                            project=self.document.project)
+        trans = Transaction(
+            action='doc_del',
+            user=self.user.key,
+            artifact=self.document.key,
+            project=self.document.project
+        )
         trans.put()
 
         self.get_channel_token()
@@ -397,6 +446,7 @@ class DocumentHandler(AuthorizationRequestHanlder):
         ChannelToken.broadcast_message(channel_tokens, message)
 
         self._delete_document()
+
         project = self.document.project.get()
         project.modified_ts = datetime.datetime.now()
         project.pw_modified_ts = datetime.datetime.now()

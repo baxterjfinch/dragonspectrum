@@ -34,6 +34,7 @@ class DocumentPublishStatus(AuthorizationRequestHanlder):
     def get(self, publish):
         if not publish:
             raise HttpErrorException.bad_request('invalid publish id given')
+
         pub = memcache.get(publish, namespace='document_publish')
         if not pub:
             raise HttpErrorException.not_found()
@@ -97,10 +98,13 @@ class DocumentPublish(AuthorizationRequestHanlder):
             project=self.project.key,
             referer=self.request.referer,
         )
+
         if not self.user.is_world_user():
             analytic_session.user = self.user.key
+
         analytic_session.put()
         memcache.add(analytic_session.key.id(), analytic_session, namespace='analytics')
+
         self.analytic_session = analytic_session
 
     @cerberus_handlers.exception_callback
@@ -108,14 +112,17 @@ class DocumentPublish(AuthorizationRequestHanlder):
         publish = PublishDocument.get_by_id(publish)
         if not publish:
             raise HttpErrorException.bad_request('invalid publish id')
+
         document = publish.document.get()
         if not document:
             raise HttpErrorException.bad_request('document does not exists')
         if not document.has_permission_write(self.user):
             raise HttpErrorException.forbidden()
+
         if publish.key in document.published:
             document.published.remove(publish.key)
             document.put()
+
         publish.key.delete()
 
     def on_authentication_fail(self, method):
@@ -204,10 +211,13 @@ class SummaryPublish(AuthorizationRequestHanlder):
             project=self.project.key,
             referer=self.request.referer,
         )
+
         if not self.user.is_world_user():
             analytic_session.user = self.user.key
+
         analytic_session.put()
         memcache.add(analytic_session.key.id(), analytic_session, namespace='analytics')
+
         self.analytic_session = analytic_session
 
     @cerberus_handlers.exception_callback
@@ -215,11 +225,13 @@ class SummaryPublish(AuthorizationRequestHanlder):
         publish = PublishSummary.get_by_id(publish)
         if not publish:
             raise HttpErrorException.bad_request('invalid publish id')
+
         document = publish.document.get()
         if not document:
             raise HttpErrorException.bad_request('document does not exists')
         if not document.has_permission_write(self.user):
             raise HttpErrorException.forbidden()
+
         publish.key.delete()
 
     def on_authentication_fail(self, method):
@@ -308,10 +320,13 @@ class PresentationPublish(AuthorizationRequestHanlder):
             project=self.project.key,
             referer=self.request.referer,
         )
+
         if not self.user.is_world_user():
             analytic_session.user = self.user.key
+
         analytic_session.put()
         memcache.add(analytic_session.key.id(), analytic_session, namespace='analytics')
+
         self.analytic_session = analytic_session
 
     @cerberus_handlers.exception_callback
@@ -319,11 +334,13 @@ class PresentationPublish(AuthorizationRequestHanlder):
         publish = PublishPresentation.get_by_id(publish)
         if not publish:
             raise HttpErrorException.bad_request('invalid publish id')
+
         document = publish.document.get()
         if not document:
             raise HttpErrorException.bad_request('document does not exists')
         if not document.has_permission_write(self.user):
             raise HttpErrorException.forbidden()
+
         publish.key.delete()
 
     def on_authentication_fail(self, method):

@@ -63,6 +63,7 @@ class ChannelToken(Artifact):
         valid_tokens = []
         invalid_token = []
         invalid_token_keys = []
+
         for channel_token in channel_tokens:
             if request_user_token and request_user_token.id == channel_token.id:
                 continue

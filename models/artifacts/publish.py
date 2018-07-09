@@ -38,13 +38,14 @@ class PublishEntity(Artifact):
         d['document'] = self.document.id()
         d['group'] = self.group.id()
         d['owner'] = []
-        # noinspection PyTypeChecker
+
         for owner in self.owner:
             d['owner'].append(owner.id())
         if d['organization']:
             d['organization'] = d['organization'].id()
         if not html:
             del d['html']
+
         return d
 
     @classmethod

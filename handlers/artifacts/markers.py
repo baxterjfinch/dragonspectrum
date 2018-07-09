@@ -37,17 +37,21 @@ class AnnotationHandler(AuthorizationRequestHanlder):
         if doc:
             q = q.filter(Marker.document == doc.key)
             docs[doc.id] = doc
+
         annos = []
         for ann in q.iter():
             doc = docs.get(ann.document.id())
             if not doc:
                 doc = ann.document.get()
+
             if not doc:
                 ann.corrupted = True
                 ann.put()
                 continue
+
             if doc.has_permission_annotation_read(self.user):
                 annos.append(ann.to_dict())
+
         self.write_json_response(annos)
 
     @cerberus_handlers.enable_json(True)
@@ -82,8 +86,14 @@ class AnnotationHandler(AuthorizationRequestHanlder):
 
         anno_com = AnnotationComment(user=self.user.key, comment=comment)
 
-        anno = Marker(key=Marker.create_key(), type='anno', project=concept.project,
-                      document=document.key, concept=concept.key, comments=[anno_com])
+        anno = Marker(
+            key=Marker.create_key(),
+            type='anno',
+            project=concept.project,
+            document=document.key,
+            concept=concept.key,
+            comments=[anno_com]
+        )
 
         if self.user.organization:
             anno.organization = self.user.organization
@@ -100,8 +110,14 @@ class AnnotationHandler(AuthorizationRequestHanlder):
         action_data = {
             'annotation': anno.to_dict()
         }
-        trans = Transaction(action='anno_new', user=self.user.key, artifact=anno.key,
-                            project=project.key, document=document, action_data=action_data)
+        trans = Transaction(
+            action='anno_new',
+            user=self.user.key,
+            artifact=anno.key,
+            project=project.key,
+            document=document,
+            action_data=action_data
+        )
         trans.put()
 
         channel_tokens = ChannelToken.get_by_project_key(project.key, self.user_channel_token)
@@ -159,13 +175,18 @@ class AnnotationHandler(AuthorizationRequestHanlder):
             'id': anno.key.id(),
             'comment': comment,
         }
-        trans = Transaction(action='anno_rply', user=self.user.key, artifact=anno.key,
-                            project=project.key, document=document, action_data=action_data)
+        trans = Transaction(
+            action='anno_rply',
+            user=self.user.key,
+            artifact=anno.key,
+            project=project.key,
+            document=document,
+            action_data=action_data
+        )
         trans.put()
 
         channel_tokens = ChannelToken.get_by_project_key(project.key, self.user_channel_token)
-        channel_tokens = ChannelToken.remove_unauthorized_users(channel_tokens,
-                                                                [anno.concept.get(), document])
+        channel_tokens = ChannelToken.remove_unauthorized_users(channel_tokens, [anno.concept.get(), document])
         message = {
             'user': self.get_user_channel_data(),
             'transaction': trans.to_dict(self.user)
@@ -176,9 +197,11 @@ class AnnotationHandler(AuthorizationRequestHanlder):
     def delete(self, annotation=''):
         self.get_channel_token()
         self.user.current_token_id = self.request.get('token_id')
+
         anno = Marker.get_by_id(annotation)
         if not anno:
             raise HttpErrorException.bad_request('invalid annotation')
+
         document = anno.document.get()
         if not document.has_permission_annotation_write(self.user):
             raise HttpErrorException.forbidden()
@@ -186,12 +209,19 @@ class AnnotationHandler(AuthorizationRequestHanlder):
         project = anno.project.get()
 
         action_data = {'id': anno.key.id()}
-        trans = Transaction(action='anno_del', user=self.user.key, artifact=anno.key,
-                            project=project.key, document=document, action_data=action_data)
+        trans = Transaction(
+            action='anno_del',
+            user=self.user.key,
+            artifact=anno.key,
+            project=project.key,
+            document=document,
+            action_data=action_data
+        )
         trans.put()
 
         anno.key.delete()
         index = self.user.get_indexes()
+
         while True:
             doc_ids = ttindex.ttsearch(index, {'anno': anno.id}, limit=1000, ids_only=True,
                                        cache_cursor=False, use_cursor=False)
@@ -200,10 +230,8 @@ class AnnotationHandler(AuthorizationRequestHanlder):
             for i in xrange(0, len(doc_ids), 200):
                 ttindex.index_delete(index, doc_ids[i:i + 200])
 
-
         channel_tokens = ChannelToken.get_by_project_key(project.key, self.user_channel_token)
-        channel_tokens = ChannelToken.remove_unauthorized_users(channel_tokens,
-                                                                [anno.concept.get(), document])
+        channel_tokens = ChannelToken.remove_unauthorized_users(channel_tokens, [anno.concept.get(), document])
         message = {
             'user': self.get_user_channel_data(),
             'transaction': trans.to_dict(self.user)
@@ -213,4 +241,3 @@ class AnnotationHandler(AuthorizationRequestHanlder):
     def on_authentication_fail(self, method):
         self.user = User.get_world_user()
         return True
-        # raise HttpErrorException.unauthorized()7

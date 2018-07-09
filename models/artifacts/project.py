@@ -14,7 +14,21 @@ log = logging.getLogger('tt')
 
 __all__ = [
     'Project',
+    'ProjectUserVotes',
 ]
+
+
+class ProjectUserVotes(ndb.Model):
+    project = ndb.KeyProperty(required=True)
+    user = ndb.KeyProperty(required=True)
+    direction = ndb.StringProperty(required=True)
+
+    def to_dict(self):
+        return {
+            'project': self.project.id(),
+            'user': self.user.id(),
+            'direction': self.direction
+        }
 
 
 class Project(ProjectNode):
@@ -24,20 +38,25 @@ class Project(ProjectNode):
     orphan_concept = ndb.KeyProperty(repeated=True)
     documents = ndb.KeyProperty(kind='Document', repeated=True)
     distilled_document = ndb.KeyProperty(kind='Document', required=True)
+    project_score = ndb.IntegerProperty(default=0)
     operations_list = ['admin', 'read', 'write', 'delete', 'edit_children']
     import_url = ndb.TextProperty()
 
     def delete(self, request_user):
         self.owner = []
         self.put()
+
         if self.organization:
             mod_groups = []
             groups = self.organization.get().get_all_group_objects()
+
             for group in groups:
                 if self.key in group.artifacts:
                     group.artifacts.remove(self.key)
                     mod_groups.append(group)
+
             ndb.put_multi(mod_groups)
+
         deferred.defer(self.delete_project, request_user, _queue='projectDel')
 
     def delete_project(self, user):
@@ -46,10 +65,10 @@ class Project(ProjectNode):
         if self.distilled_document is not None and self.distilled_document not in self.documents:
             self.documents.append(self.distilled_document)
 
-        # noinspection PyTypeChecker
         if len(self.documents) > 0:
             documents = ndb.get_multi(self.documents)
             perms = []
+
             for doc in documents:
                 perms.append(doc.permissions)
 
@@ -84,22 +103,29 @@ class Project(ProjectNode):
                     m.key.delete()
 
                 doc.index_delete(indexes)
+
             ndb.delete_multi(perms)
             ndb.delete_multi(self.documents)
+
         concept = self.get_children()
         indexes = user.get_indexes()
+
         for con in concept:
             if not con:
                 continue
+
             if con.node_type == 'LinkedConcept':
                 con.delete(user, touch_concept=True, force=True)
             else:
                 con.rdelete(user, indexes)
+
         groups = self.get_groups()
         for group in groups:
             if self.key in group.artifacts:
                 group.artifacts.remove(self.key)
+
         ndb.put_multi(groups)
+
         self.permissions.delete()
         self.index_delete(indexes)
         self.key.delete()
@@ -154,9 +180,11 @@ class Project(ProjectNode):
     def get_user_projects(user):
         q = Project.query(Project.owner == user.key)
         projects = []
+
         for results in q.iter():
             results.has_permission(user, 'read')
             projects.append(results)
+
         groups = ndb.get_multi(user.groups)
         for group in groups:
             pros = ndb.get_multi(group.artifacts)
@@ -166,25 +194,42 @@ class Project(ProjectNode):
                 if pro.has_permission(user, 'read'):
                     if pro not in projects:
                         projects.append(pro)
+
         project_list = []
         for project in projects:
             try:
                 project_list.append(project.to_dict(user))
             except CorruptedArtifactException:
                 pass  # Do nothing, just continue
+
         return project_list
 
     @staticmethod
     def get_org_projects(org, user):
         q = Project.query()
         q = q.filter(Project.organization == org.key)
+
         project_array = []
+
         for project in q.iter():
             try:
                 project_array.append(project.to_dict(0, user))
             except CorruptedArtifactException:
                 pass
+
         return project_array
+
+    def get_user_vote(self, user):
+        q = ProjectUserVotes.query()
+        q = q.filter(ProjectUserVotes.project == self.key)
+        q = q.filter(ProjectUserVotes.user == user.key)
+
+        vote = None
+        for vote in q.iter():
+            vote = vote
+            break
+
+        return vote
 
     def get_document_ids(self):
         doc_ids = [self.distilled_document.id()]
@@ -219,8 +264,10 @@ class Project(ProjectNode):
         index = user.get_indexes(create_new=False)
         search_results = ttindex.ttsearch(index, query_dict, limit=1000, use_cursor=False, user=user)
         project_ids = []
+
         while len(project_ids) < 20 and search_results is not None:
             pro_ids = []
+
             for sr in search_results:
                 if sr['fields']['typ'] != 'pro':
                     if sr['fields']['pro'] not in project_ids:
@@ -228,12 +275,15 @@ class Project(ProjectNode):
                 else:
                     if sr['id'] not in project_ids:
                         pro_ids.append(sr['id'])
+
             for pro_id in pro_ids:
                 project = Project.get_by_id(pro_id)
                 if project:
                     if project.has_permission(user, 'read') and pro_id not in project_ids:
                         project_ids.append(pro_id)
+
             search_results = ttindex.ttsearch(index, query_dict, limit=1000, user=user)
+
         return project_ids
 
     def index(self, index_):
@@ -291,6 +341,12 @@ class Project(ProjectNode):
         pw_modified_ts = d['pw_modified_ts']
         d['pw_modified_ts'] = time.mktime(d['pw_modified_ts'].timetuple()) * 1000
         d['pw_modified'] = pw_modified_ts.strftime(DATETIME_FORMATE)
+
+        d['project_score'] = self.project_score
+        user_vote = self.get_user_vote(user)
+        d['user_vote'] = None
+        if user_vote is not None:
+            d['user_vote'] = user_vote.to_dict()
 
         # Remove the world group from the user to test if a project is share to them
         # or just world shared

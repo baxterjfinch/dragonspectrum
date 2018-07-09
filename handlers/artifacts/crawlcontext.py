@@ -25,19 +25,23 @@ class CrawlContextHandler(AuthorizationRequestHanlder):
     def post(self, concept_id=None):
         if not concept_id and not Concept.valid_id(concept_id):
             raise HttpErrorException.bad_request('invalid concept id')
+
         concept = Concept.get_by_id(concept_id)
         if not concept:
             raise HttpErrorException.bad_request('invalid concept id')
         if not self.json_request.get('document_id') and not Document.valid_id(self.json_request.get('document_id')):
             raise HttpErrorException.bad_request('invalid document id')
+
         document = Document.get_by_id(self.json_request.get('document_id'))
         if not document:
             raise HttpErrorException.bad_request('invalid document  id')
         if not document.has_permission_set_crawlcontext(self.user):
             raise HttpErrorException.forbidden()
+
         project = document.project.get()
         if not isinstance(self.json_request.get('crawl'), bool):
             raise HttpErrorException.bad_request('invalid crawl')
+
         crawlcontexts = ndb.get_multi(concept.crawlcontext)
         for crawl in crawlcontexts:
             if crawl.document == document.key:
@@ -46,12 +50,17 @@ class CrawlContextHandler(AuthorizationRequestHanlder):
                 crawlcontext = crawl
                 break
         else:
-            crawl = CrawlContext(key=CrawlContext.create_key(), project=project.key,
-                                 document=document.key, crawl=self.json_request.get('crawl'))
+            crawl = CrawlContext(
+                key=CrawlContext.create_key(),
+                project=project.key,
+                document=document.key,
+                crawl=self.json_request.get('crawl')
+            )
             crawl.put()
             concept.crawlcontext.append(crawl.key)
             concept.put()
             crawlcontext = crawl
+
         project.pw_modified_ts = datetime.datetime.now()
         project.put()
 
@@ -93,11 +102,13 @@ class SummaryCrawlContextHandler(AuthorizationRequestHanlder):
     def post(self, concept_id=None):
         if not concept_id and not Concept.valid_id(concept_id):
             raise HttpErrorException.bad_request('invalid concept id')
+
         concept = Concept.get_by_id(concept_id)
         if not concept:
             raise HttpErrorException.bad_request('invalid concept id')
         if not self.json_request.get('document_id') and not Document.valid_id(self.json_request.get('document_id')):
             raise HttpErrorException.bad_request('invalid document id')
+
         document = Document.get_by_id(self.json_request.get('document_id'))
         if not document:
             raise HttpErrorException.bad_request('invalid document  id')
@@ -113,6 +124,7 @@ class SummaryCrawlContextHandler(AuthorizationRequestHanlder):
         project = document.project.get()
         if not isinstance(self.json_request.get('crawl'), bool):
             raise HttpErrorException.bad_request('invalid crawl')
+
         crawlcontexts = ndb.get_multi(concept.summary_crawlcontext)
 
         temp = self.json_request.get('temp', None)
@@ -134,9 +146,14 @@ class SummaryCrawlContextHandler(AuthorizationRequestHanlder):
                     crawl.put()
                     break
             else:
-                crawl = SummaryCrawlContext(key=SummaryCrawlContext.create_key(), project=project.key,
-                                            document=document.key, crawl=self.json_request.get('crawl'))
+                crawl = SummaryCrawlContext(
+                    key=SummaryCrawlContext.create_key(),
+                    project=project.key,
+                    document=document.key,
+                    crawl=self.json_request.get('crawl')
+                )
                 crawl.put()
+
                 concept.summary_crawlcontext.append(crawl.key)
                 concept.put()
 
@@ -153,11 +170,13 @@ class PresentationCrawlContextHandler(AuthorizationRequestHanlder):
     def post(self, concept_id=None):
         if not concept_id and not Concept.valid_id(concept_id):
             raise HttpErrorException.bad_request('invalid concept id')
+
         concept = Concept.get_by_id(concept_id)
         if not concept:
             raise HttpErrorException.bad_request('invalid concept id')
         if not self.json_request.get('document_id') and not Document.valid_id(self.json_request.get('document_id')):
             raise HttpErrorException.bad_request('invalid document id')
+
         document = Document.get_by_id(self.json_request.get('document_id'))
         if not document:
             raise HttpErrorException.bad_request('invalid document  id')
@@ -166,6 +185,7 @@ class PresentationCrawlContextHandler(AuthorizationRequestHanlder):
 
         if document.presentation_document is None:
             raise HttpErrorException.bad_request('document has not summary')
+
         presentation_document = document.presentation_document.get()
         if document.presentation_document is None:
             raise HttpErrorException.bad_request('document has not summary')
@@ -173,12 +193,12 @@ class PresentationCrawlContextHandler(AuthorizationRequestHanlder):
         project = document.project.get()
         if not isinstance(self.json_request.get('crawl'), bool):
             raise HttpErrorException.bad_request('invalid crawl')
-        crawlcontexts = ndb.get_multi(concept.presentation_crawlcontext)
 
         temp = self.json_request.get('temp', None)
         if temp is None:
             raise HttpErrorException.bad_request('no temp giving')
 
+        crawlcontexts = ndb.get_multi(concept.presentation_crawlcontext)
         if temp:
             for crawl in crawlcontexts:
                 if crawl.document == presentation_document.key:
@@ -194,11 +214,14 @@ class PresentationCrawlContextHandler(AuthorizationRequestHanlder):
                     crawl.put()
                     break
             else:
-                crawl = PresentationCrawlContext(key=PresentationCrawlContext.create_key(),
-                                                 project=project.key,
-                                                 document=presentation_document.key,
-                                                 crawl=self.json_request.get('crawl'))
+                crawl = PresentationCrawlContext(
+                    key=PresentationCrawlContext.create_key(),
+                    project=project.key,
+                    document=presentation_document.key,
+                    crawl=self.json_request.get('crawl')
+                )
                 crawl.put()
+
                 concept.presentation_crawlcontext.append(crawl.key)
                 concept.put()
 

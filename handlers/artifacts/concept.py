@@ -45,6 +45,7 @@ class ConceptHandler(AuthorizationRequestHanlder):
             concept_id = None
             if self.request.get('concept_id').strip() != '':
                 concept_id = self.request.get('concept_id').strip()
+
         if concept_id is None and self.request.get('parent_id') == '':
             self._serve_project_children_json()
         else:
@@ -107,6 +108,7 @@ class ConceptHandler(AuthorizationRequestHanlder):
         project_id = self.request.get('project_id')
         if project_id is None and Project.valid_id(project_id):
             raise HttpErrorException.bad_request('invalid project id')
+
         concept_json = []
         depth = 0
         if self.request.get('depth') != '':
@@ -115,14 +117,15 @@ class ConceptHandler(AuthorizationRequestHanlder):
         project = Project.get_by_id(project_id)
         concepts = ndb.get_multi(project.children)
         index = 0
+
         for concept in concepts:
             if concept:  # TODO: we need to setup a recover process for dead children keys
                 if concept.has_permission_read(self.user):
                     if self.request.get('get_treeview') is not None:
                         try:
-                            con_dict = concept.to_dict(depth, self.user,
-                                                       get_treeview=self.request.get('get_treeview'),
-                                                       request=self.request)
+                            con_dict = concept.to_dict(
+                                depth, self.user, get_treeview=self.request.get('get_treeview'), request=self.request
+                            )
                             if con_dict:
                                 concept_json.append(con_dict)
                         except CorruptedArtifactException:
@@ -131,13 +134,17 @@ class ConceptHandler(AuthorizationRequestHanlder):
                 broken_key = project.children[index]
                 project.children.remove(project.children[index])
                 project.put()
-                lr = tt_logging.construct_log(msg_short='Project Has Broken Child Key',
-                                              msg='Found broken concept key (%s) in project children list\n'
-                                                  'Key has been removed' % str(broken_key),
-                                              log_type=tt_logging.USER, request=self.request, artifact=project,
-                                              request_user=self.user)
+                lr = tt_logging.construct_log(
+                    msg_short='Project Has Broken Child Key',
+                    msg='Found broken concept key (%s) in project children list\n'
+                        'Key has been removed' % str(broken_key),
+                    log_type=tt_logging.USER, request=self.request, artifact=project,
+                    request_user=self.user
+                )
                 log.error(lr['dict_msg']['msg'], extra=lr)
+
             index += 1
+
         self.write_json_response(concept_json)
 
     def _serve_parent_list(self):
@@ -157,35 +164,46 @@ class ConceptHandler(AuthorizationRequestHanlder):
         depth = 0
         if self.request.get('depth') != '':
             depth = int(self.request.get('depth'))
+
         get_treeview = False
         if self.request.get('get_treeview').lower() == 'true':
             get_treeview = True
+
         try:
-            concept_json = self.concept.to_dict(depth, self.user, get_treeview=get_treeview, request=self.request,
-                                                keep_dist=self.concept.project.get().distilled_document.id())
+            concept_json = self.concept.to_dict(
+                depth, self.user, get_treeview=get_treeview, request=self.request,
+                keep_dist=self.concept.project.get().distilled_document.id()
+            )
         except CorruptedArtifactException:
-            lr = tt_logging.construct_log(msg_short='User Tried to Read Currupted Concept',
-                                          log_type=tt_logging.EXCEPTION, request=self.request, artifact=self.concept,
-                                          request_user=self.user)
+            lr = tt_logging.construct_log(
+                msg_short='User Tried to Read Currupted Concept',
+                log_type=tt_logging.EXCEPTION, request=self.request, artifact=self.concept,
+                request_user=self.user
+            )
             log.error(lr['dict_msg']['msg'], extra=lr)
             raise
+
         self.write_json_response(concept_json)
 
     def _serve_concepts_children_json(self):
         max_return_size = 100
         non_parents = []
+
         project = Project.get_by_id(self.request.get('project'))
         if not project:
             raise HttpErrorException.bad_request('invalid project id')
+
         parent_ids = self.request.get_all('parent_id')
         if not parent_ids:
             raise HttpErrorException.bad_request('no parent ids')
+
         parent_keys = Concept.ids_to_keys(parent_ids)
         parents = ndb.get_multi(parent_keys)
         children = []
         first = True
-        unproccessed_parent_ids = []
+        unprocessed_parent_ids = []
         index = -1
+
         for parent in parents:
             index += 1
             if not parent:
@@ -195,22 +213,27 @@ class ConceptHandler(AuthorizationRequestHanlder):
             if first or len(parent.children) + len(children) < max_return_size:
                 children += parent.get_children()
             elif len(parent.children) > 0:
-                unproccessed_parent_ids.append(parent.key.id())
+                unprocessed_parent_ids.append(parent.key.id())
             if len(parent.children) == 0:
                 non_parents.append(parent.key.id())
             first = False
+
         children_processed = []
         dist_doc = project.distilled_document.id()
+
         for child in children:
-            if child is not None:
-                if child.has_permission_read(self.user):
-                    try:
-                        children_processed.append(child.to_dict(self.user, project, keep_dist=dist_doc))
-                    except CorruptedArtifactException:
-                        pass  # Nothing to do, its all handler internally. We just skip and more on
-        results = {'non_parents': non_parents, 'unprocced_parents': unproccessed_parent_ids, 'children': children_processed}
-        # print results
-        # self.response.write(str(results))
+            if child is not None and child.has_permission_read(self.user):
+                try:
+                    children_processed.append(child.to_dict(self.user, project, keep_dist=dist_doc))
+                except CorruptedArtifactException:
+                    pass  # Nothing to do, its all handler internally. We just skip and more on
+
+        results = {
+            'non_parents': non_parents,
+            'unprocessed_parents': unprocessed_parent_ids,
+            'children': children_processed
+        }
+
         self.write_json_response(results)
 
     def _serve_concept_page(self):
@@ -219,6 +242,7 @@ class ConceptHandler(AuthorizationRequestHanlder):
             raise HttpErrorException.bad_request('no doc id given')
         if not Document.valid_id(self.request.get('doc')):
             raise HttpErrorException.bad_request('invalid document id')
+
         doc = Document.get_by_id(self.request.get('doc'))
         if not doc:
             raise HttpErrorException.bad_request('invalid doc id given')
@@ -226,13 +250,17 @@ class ConceptHandler(AuthorizationRequestHanlder):
             raise HttpErrorException.bad_request('invalid doc id given')
         if not doc.has_permission_read(self.user):
             raise HttpErrorException.forbidden()
+
         tree = False
         nav = False
+
         if self.request.get('nav') == 'true':
             nav = True
+
         limit_depth = False
         if self.request.get('limit_depth') == 'true' or not nav:
             limit_depth = True
+
         depth = -1
         if self.request.get('depth') != '':
             if self.request.get('depth') in ['all', 'max']:
@@ -242,6 +270,7 @@ class ConceptHandler(AuthorizationRequestHanlder):
                     depth = int(self.request.get('depth'))
                 except ValueError:
                     raise HttpErrorException.bad_request('depth must be an int')
+
         project_dict = project.to_dict(self.user)
         # The user may not have permission to view this project, so we will need to create a fake one
         if not project_dict:
@@ -256,15 +285,18 @@ class ConceptHandler(AuthorizationRequestHanlder):
                 'permissions': Permission.init_perm_struct(Project.operations_list),
                 'title': self.concept.get_phrasing(doc),
             }
+
         if project.distilled_document.id() != doc.key.id():
             project_dict['distilled_document'] = {
                 'id': project.distilled_document.id(),
                 'permissions': Permission.init_perm_struct(Document.operations_list)
             }
             project_dict['documents'].append(project_dict['distilled_document'])
+
         concept_json = self.concept.to_dict(self.user, project=project, keep_dist=project.distilled_document.id())
         self._get_concept_loader_configs()
         project_dict['children'] = [concept_json]
+
         template_data = {
             'data': json.dumps({
                 'project': project_dict,
@@ -282,6 +314,7 @@ class ConceptHandler(AuthorizationRequestHanlder):
             'tree': tree,
             'nav': nav,
         }
+
         template_index = JINJA_ENVIRONMENT.get_template('concept.html')
         self.response.write(template_index.render(template_data))
 
@@ -289,8 +322,10 @@ class ConceptHandler(AuthorizationRequestHanlder):
     @cerberus_handlers.exception_callback
     def post(self, concept_id=None):
         self.get_channel_token()
-        modify_ts = True
         self._init_post(concept_id)
+
+        modify_ts = True
+
         if self.json_request.get('parent') and not self.json_request.get('link_concept'):
             self._set_parent()
         if self.json_request.get('activated'):
@@ -314,15 +349,18 @@ class ConceptHandler(AuthorizationRequestHanlder):
             self._concept_shared()
         if self.json_request.get('link_concept'):
             self._link_concept()
+
         if modify_ts:
             project = self.concept.project.get()
             project.pw_modified_ts = datetime.now()
             project.put()
+
         self.concept.put()
 
     def _init_post(self, concept_id):
         if not Concept.valid_id(concept_id):
             raise HttpErrorException.bad_request('invalid concept id')
+
         self.concept = Concept.get_by_id(concept_id)
         if not self.concept:
             raise HttpErrorException.bad_request('invalid concept id')
@@ -330,18 +368,22 @@ class ConceptHandler(AuthorizationRequestHanlder):
             raise HttpErrorException.forbidden()
         if not self.json_request.get('project', None):
             raise HttpErrorException.bad_request('invalid project id')
+
         self.project = Project.get_by_id(self.json_request.get('project'))
         if not self.project:
             raise HttpErrorException.bad_request('invalid project id')
+
         self.get_analytic_session()
 
     def _activate_concept(self):
         meta_data = {'depth': self.concept.depth}
         project_key = self.concept.project
+
         link_id = None
         if self.json_request.get('link'):
             link_id = self.json_request.get('link')
             meta_data['link'] = link_id
+
             for link in self.concept.linked_to:
                 if link.link_id == link_id:
                     project_key = link.project
@@ -349,13 +391,16 @@ class ConceptHandler(AuthorizationRequestHanlder):
         document = None
         if self.user_channel_token:
             self.user_channel_token.concept = self.concept.key
+
             if link_id:
                 self.user_channel_token.link_id = link_id
             else:
                 self.user_channel_token.link_id = None
+
             document = Document.get_by_id(self.json_request.get('document', 'none'))
             if document:
                 self.user_channel_token.document = document.key
+
             self.user_channel_token.put()
 
         self.concept.record_analytic('con_nav', self.analytic_session, project=project_key, meta_data=meta_data)
@@ -392,6 +437,7 @@ class ConceptHandler(AuthorizationRequestHanlder):
     def _set_parent(self):
         if not Concept.valid_id(self.json_request.get('parent')):
             raise HttpErrorException.bad_request('invalid parent id')
+
         new_parent = Concept.get_by_id(self.json_request.get('parent'))
         if not new_parent:
             new_parent = Project.get_by_id(self.json_request.get('parent'))
@@ -404,13 +450,17 @@ class ConceptHandler(AuthorizationRequestHanlder):
             cur_parent = link.parent.get()
         else:
             cur_parent = self.concept.get_parent()
+
         if (not cur_parent.has_permission_edit_children(self.user) and not
                 new_parent.has_permission_edit_children(self.user)):
             raise HttpErrorException.forbidden()
+
         if self.json_request.get('nextSibling') and not Concept.valid_id(self.json_request.get('nextSibling')):
             raise HttpErrorException.bad_request('invalid nextSibling id')
+
         if not self.json_request.get('project', None):
             raise HttpErrorException.bad_request('invalid project id')
+
         project = Project.get_by_id(self.json_request.get('project'))
         if not project:
             raise HttpErrorException.bad_request('invalid project id')
@@ -438,6 +488,7 @@ class ConceptHandler(AuthorizationRequestHanlder):
         # Loop through each channel token to test permissions on next sibling
         for channel_token in channel_tokens:
             ns = next_sibling
+
             # check if channel token has permission to view the concept or its new parent
             auth_channel_token = ChannelToken.remove_unauthorized_users(channel_token, [self.concept, new_parent])
             # if nothing is returned continue to next token
@@ -611,6 +662,7 @@ class ConceptHandler(AuthorizationRequestHanlder):
 
     def _add_attribute(self):
         r_attr = self.json_request.get('add_attribute')
+
         if not r_attr:
             raise ValueError('no attribute given')
         if not isinstance(r_attr, basestring):
@@ -619,14 +671,15 @@ class ConceptHandler(AuthorizationRequestHanlder):
             raise ValueError('no document id given')
         if not Document.valid_id(self.json_request.get('document')):
             raise HttpErrorException.bad_request('invalid document id')
+
         doc = Document.get_by_id(self.json_request.get('document'))
         if not doc.has_permission_write(self.user):
             raise HttpErrorException.forbidden()
         if not doc:
             raise ValueError('invalid document id given')
+
         attr = self.concept.get_attr_by_doc(doc)
         if attr:
-
             if r_attr == 'h' and 'noh' in attr.attributes:
                 attr.attributes.remove('noh')
             if r_attr == 'noh' and 'h' in attr.attributes:
@@ -643,16 +696,15 @@ class ConceptHandler(AuthorizationRequestHanlder):
                 attr.attributes.remove('ol')
             if r_attr == 'nol' and 'ul' in attr.attributes:
                 attr.attributes.remove('ul')
-
             if r_attr not in attr.attributes:
                 attr.attributes.append(r_attr)
             attr.put()
-
         else:
             attr = [r_attr] if r_attr != 'attr' else []
             attr = Attributes(project=self.concept.project, document=doc.key, attributes=attr)
             attr.put()
             self.concept.attributes.append(attr.key)
+
         self.concept.record_analytic('con_attr_cha', self.analytic_session, meta_data={'to': r_attr})
         self.write_json_response(attr.to_dict())
 
@@ -680,9 +732,11 @@ class ConceptHandler(AuthorizationRequestHanlder):
         project = Project.get_by_id(self.json_request.get('project', ''))
         if not project:
             raise HttpErrorException.bad_request('invalid project id')
+
         link_document = Document.get_by_id(self.json_request.get('document', ''))
         if not link_document:
             raise HttpErrorException.bad_request('invalid document id')
+
         if self.json_request.get('parent', '') != project.key.id():
             parent = Concept.get_by_id(self.json_request.get('parent', ''))
             if not parent:
@@ -768,10 +822,13 @@ class ConceptHandler(AuthorizationRequestHanlder):
     def put(self, concept_id=None):
         self.get_analytic_session()
         concept_json = self.json_request
-        project = concept_json.get('project', None)
-        project = Project.get_by_id(project)
+
+        project_id = concept_json.get('project', None)
+        project = Project.get_by_id(project_id)
+
         if not project:
             raise HttpErrorException.bad_request('invalid project id')
+
         parent = concept_json.get('parent', None)
         if parent == project.key.id():
             parent = None
@@ -779,42 +836,75 @@ class ConceptHandler(AuthorizationRequestHanlder):
             parent = Concept.get_by_id(parent)
             if not parent:
                 raise HttpErrorException.bad_request('invalid parent id')
+
         if not parent:
             if not project.has_permission_edit_children(self.user):
                 raise HttpErrorException.forbidden()
         else:
             if not parent.has_permission_edit_children(self.user):
                 raise HttpErrorException.forbidden()
+
         document = project.get_distilled_document()
         attributes = concept_json.get('attributes', None)
         attribute = None
+
         if attributes:
-            attribute = Attributes(key=Attributes.create_key(), project=project.key,
-                                   document=document.key, attributes=attributes)
-        crawlcontext = CrawlContext(key=CrawlContext.create_key(), project=project.key,
-                                    document=document.key, crawl=True)
+            attribute = Attributes(
+                key=Attributes.create_key(),
+                project=project.key,
+                document=document.key,
+                attributes=attributes
+            )
+
+        crawlcontext = CrawlContext(
+            key=CrawlContext.create_key(),
+            project=project.key,
+            document=document.key,
+            crawl=True
+        )
+
         phrasing_text = concept_json.get('phrasing_text', '')
-        phr_perm = Permission(key=Permission.create_key(), permissions=Permission.init_perm_struct(
-            Phrasing.operations_list), project=project.key)
-        phrasing = Phrasing(key=Phrasing.create_key(), text=phrasing_text, owner=[self.user.key],
-                            permissions=phr_perm.key, project=project.key)
+        phr_perm = Permission(
+            key=Permission.create_key(),
+            permissions=Permission.init_perm_struct(Phrasing.operations_list),
+            project=project.key
+        )
+
+        phrasing = Phrasing(
+            key=Phrasing.create_key(),
+            text=phrasing_text,
+            owner=[self.user.key],
+            permissions=phr_perm.key,
+            project=project.key
+        )
+
         phr_perm.artifact = phrasing.key
-        con_perm = Permission(key=Permission.create_key(), permissions=Permission.init_perm_struct(
-            Concept.operations_list), project=project.key)
-        concept = Concept(key=Concept.create_key(),
-                          owner=[self.user.key],
-                          project=project.key,
-                          distilled_phrasing=phrasing.key,
-                          phrasings=[phrasing.key],
-                          crawlcontext=[crawlcontext.key],
-                          permissions=con_perm.key)
+
+        con_perm = Permission(
+            key=Permission.create_key(),
+            permissions=Permission.init_perm_struct(Concept.operations_list),
+            project=project.key
+        )
+
+        concept = Concept(
+            key=Concept.create_key(),
+            owner=[self.user.key],
+            project=project.key,
+            distilled_phrasing=phrasing.key,
+            phrasings=[phrasing.key],
+            crawlcontext=[crawlcontext.key],
+            permissions=con_perm.key
+        )
+
         con_perm.artifact = concept.key
         phrasing.concept = concept.key
         phrasing.originating_document = document.key
         crawlcontext.concept = concept.key
+
         if attribute:
             concept.attributes = [attribute.key]
             attribute.put()
+
         if not parent:
             parent = project
             concept.parent_perms.append(project.permissions)
@@ -822,9 +912,11 @@ class ConceptHandler(AuthorizationRequestHanlder):
             concept.parent = parent.key
             concept.parent_perms = parent.parent_perms
             concept.parent_perms.append(parent.permissions)
+
         next_sibling_id = concept_json.get('nextSibling', None)
         next_sibling = None
         index = len(parent.children)
+
         if next_sibling_id:
             next_sibling = Concept.get_by_id(next_sibling_id)
             if not next_sibling:
@@ -833,13 +925,16 @@ class ConceptHandler(AuthorizationRequestHanlder):
                 raise HttpErrorException.forbidden()
             if next_sibling:
                 index = parent.get_concept_index(next_sibling)
+
         parent.children.insert(index, concept.key)
         media_url = concept_json.get('media_url', None)
+
         if media_url:
             r = requests.get(media_url, stream=True)
             concept.media_id = server.create_uuid()
             filename = '/' + server.GCS_BUCKET_NAME + '/' + concept.media_id
             image_data = StringIO(r.content).getvalue()
+
             if 'image' not in r.headers['content-type']:
                 raise HttpErrorException.bad_request('media must be an image')
             else:
@@ -848,17 +943,22 @@ class ConceptHandler(AuthorizationRequestHanlder):
                 f.close()
                 concept.media_blob = blobstore.create_gs_key('/gs' + filename)
                 concept.media_ready = True
+
         if self.user.in_org():
             phrasing.organization = self.user.organization
             concept.organization = self.user.organization
+
         ndb.put_multi([crawlcontext, phrasing, phr_perm, con_perm, concept, parent])
-        concept_dict = concept.to_dict(self.user, project)
+
         index = self.user.get_put_index()
         concept.index_phrasings(index)
+
         project.pw_modified_ts = datetime.now()
         project.put()
+
         concept.record_analytic('con_new', self.analytic_session, meta_data={'depth': concept.depth})
-        self.write_json_response(concept_dict)
+
+        self.write_json_response(concept.to_dict(self.user, project))
 
         self.get_channel_token()
         action_data = {
@@ -907,21 +1007,27 @@ class ConceptHandler(AuthorizationRequestHanlder):
     def delete(self, concept_id=None):
         if self.request.get('token_id') is None:
             raise HttpErrorException.bad_request('no token id given')
+
         self.user.current_token_id = self.request.get('token_id')
+
         if not concept_id:
             raise HttpErrorException.bad_request('no concept id given')
+
         if len(concept_id) > 32:
             concept = Concept.get_by_id(concept_id[:32])
             link_id = concept_id[32:]
         else:
             concept = Concept.get_by_id(concept_id)
             link_id = None
+
         if not concept:
             raise HttpErrorException.bad_request('invalid concept id')
         if not concept.has_permission_write(self.user):
             raise HttpErrorException.forbidden()
+
         self.get_analytic_session()
         link = None
+
         if link_id:
             link = concept.get_link(link_id)
         project = concept.project.get() if not link else link.project.get()
@@ -946,6 +1052,7 @@ class ConceptHandler(AuthorizationRequestHanlder):
             parent = link.parent.get()
             parent.children.remove(concept.key)
             parent.put()
+
         project.pw_modified_ts = datetime.now()
         project.put()
 
@@ -967,17 +1074,22 @@ class ConceptChildrenHandler(AuthorizationRequestHanlder):
         project = Project.get_by_id(self.request.get('project', 'none'))
         if not project:
             raise HttpErrorException.bad_request('invalid project id')
+
         if parent == project.id:
             parent = project
         else:
             parent = Concept.get_by_id(parent)
+
         if not parent:
             raise HttpErrorException.bad_request('invalid concept id')
+
         children = ndb.get_multi(parent.children)
         children_ids = []
+
         for child in children:
             if child and child.has_permission_read(self.user):
                 children_ids.append(child.id)
+
         self.write_json_response({'children': children_ids})
 
 
@@ -986,18 +1098,22 @@ class MediaDownloadHandler(blobstore_handlers.BlobstoreDownloadHandler, Authoriz
     def get(self, concept=None):
         if not concept and not Concept.valid_id(concept):
             raise HttpErrorException.bad_request('invalid concept id')
+
         concept = Concept.get_by_id(concept)
         if not concept:
             raise HttpErrorException.bad_request('invalid concept id')
         if not concept.has_permission_read(self.user):
             raise HttpErrorException.forbidden()
+
         bucket = server.GCS_BUCKET_NAME
         if not concept.media_id:
             # concept.corrupted = True
             # concept.put()
             raise HttpErrorException.not_found('image not found')
+
         concept.record_analytic('con_med_vw', self.analytic_session, meta_data={'mime_type': concept.media_mime_type})
         filename = '/' + bucket + '/' + concept.media_id
+
         if self.request.get('type') == 'base64':
             f = gcs.open(filename, mode='r')
             stats = gcs.stat(filename)
@@ -1018,21 +1134,26 @@ class MediaUploadHandler(blobstore_handlers.BlobstoreUploadHandler, Authorizatio
     def post(self, concept=None):
         if not concept:
             raise HttpErrorException.bad_request('no concept id given')
+
         concept = Concept.get_by_id(concept)
         if not concept:
             raise HttpErrorException.bad_request('invalid concept id given')
         if not concept.has_permission_write(self.user):
             raise HttpErrorException.forbidden()
+
         bucket = server.GCS_BUCKET_NAME
         media_data = self.request.POST.get('image')
         concept.media_id = server.create_uuid()
         concept.media_mime_type = media_data.type
+
         filename = '/' + bucket + '/' + concept.media_id
         f = gcs.open(filename, mode='w', content_type=media_data.type)
         f.write(media_data.value)
         f.close()
+
         concept.media_blob = blobstore.create_gs_key('/gs' + filename)
         concept.put()
+
         project = concept.project.get()
         project.pw_modified_ts = datetime.now()
         project.put()
