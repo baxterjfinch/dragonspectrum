@@ -65,8 +65,6 @@ Channel._open = function () {
     onlineStatus.onDisconnect().set(false);
     
     Channel.channel = firebase.database().ref('collaboration/' + Channel.user.getId() + '/' + Channel.channel_id);
-    // Channel.channel.onDisconnect().set("I disconnected!");
-
     Channel.channel.on('child_added', function(data) {
         Channel._onMessage(JSON.parse(data.val()));
     });
@@ -111,7 +109,7 @@ Channel._onOpened = function () {
  * @private
  */
 Channel._onMessage = function (message) {
-    console.debug('Channel Message: %O', message);
+    console.info('Channel Message: %O', message);
 
     if (message.channel_op) {
         if (message.channel_op === 'ping') {

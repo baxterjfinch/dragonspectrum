@@ -41,7 +41,7 @@ class ChannelToken(Artifact):
                              luminance=server.config.channel_user_luminance_adjustment).hex_l)
 
     @staticmethod
-    def _delete_user_old_channels(user):
+    def delete_user_old_channels(user):
         deleted_channels = []
         if user is not None:
             user_channels = db.reference(path='collaboration/' + user.user.id()).get()
@@ -54,7 +54,7 @@ class ChannelToken(Artifact):
 
     @staticmethod
     def get_by_project_key(pro_key, request_user_token=None):
-        deleted_channels = ChannelToken._delete_user_old_channels(request_user_token)
+        deleted_channels = ChannelToken.delete_user_old_channels(request_user_token)
         channel_tokens = ChannelToken.query(ChannelToken.project == pro_key).fetch()
 
         cut_off_time1 = datetime.now() - timedelta(hours=2, minutes=15)
