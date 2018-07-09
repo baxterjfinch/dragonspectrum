@@ -105,13 +105,14 @@ class Transaction(SecureArtifact):
                 self.operations_list = art.operations_list
                 perm = art.get_permission_object()
 
-                self.permissions = Permission(
+                perm = Permission(
                     key=Permission.create_key(),
                     permissions=perm.calculated_permissions,
                     project=self.project,
                     artifact=self.key
                 )
-                self.permissions.put()
+                perm.put()
+                self.permissions = perm.key
 
             elif document:
                 self.organization = document.organization
