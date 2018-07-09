@@ -24,7 +24,6 @@ class Project(ProjectNode):
     orphan_concept = ndb.KeyProperty(repeated=True)
     documents = ndb.KeyProperty(kind='Document', repeated=True)
     distilled_document = ndb.KeyProperty(kind='Document', required=True)
-    project_score = ndb.IntegerProperty(default=0)
     operations_list = ['admin', 'read', 'write', 'delete', 'edit_children']
     import_url = ndb.TextProperty()
 
@@ -315,8 +314,6 @@ class Project(ProjectNode):
         pw_modified_ts = d['pw_modified_ts']
         d['pw_modified_ts'] = time.mktime(d['pw_modified_ts'].timetuple()) * 1000
         d['pw_modified'] = pw_modified_ts.strftime(DATETIME_FORMATE)
-
-        d['project_score'] = self.project_score
 
         # Remove the world group from the user to test if a project is share to them
         # or just world shared
