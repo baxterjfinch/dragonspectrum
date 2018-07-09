@@ -136,6 +136,16 @@ TVS._onCustomRender = function (tvsNode) {
     var title = concept.getDocumentPhrasing(document).getText();
     var cscore = concept.getConceptScore();
 
+    if (concept.user_vote !== null) {
+        console.log("*************************" + concept.user_vote.direction);
+    }
+
+    if (concept.user_vote !== null && concept.user_vote.direction === "up") {
+        $(tvsNode).find("#change-vote-up-" + concept.id).addClass("up");
+    } else {
+        $(tvsNode).find("#change-vote-down-" + concept.id).addClass("down");
+    }
+
     // main icon
     if (concept.isQueuedLoading()) {
         icon = '<i class="fa fa-clock-o"></i>';
@@ -248,14 +258,6 @@ TVS._onExpand = function (flag, tvsNode) {
 TVS._onRender = function (tvsNode, nodeSpan) {
     var concept = tvsNode.data.concept;
     var doc = Document.getCurrent();
-
-    console.log("*************************" + concept.user_vote);
-
-    if (concept.user_vote !== null && concept.user_vote.direction === "up") {
-        $(tvsNode).find("#change-vote-up-" + concept.id).addClass("up");
-    } else {
-        $(tvsNode).find("#change-vote-down-" + concept.id).addClass("down");
-    }
 
     if (doc.getState() == Document.STATE_SUMMARY) {
 

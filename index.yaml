@@ -156,6 +156,12 @@ indexes:
 - kind: ConceptUserVotes
   properties:
   - name: concept
+  - name: concept_score
+    direction: desc
+
+- kind: ConceptUserVotes
+  properties:
+  - name: concept
   - name: user
 
 - kind: OrgAnalyticsDailyStat

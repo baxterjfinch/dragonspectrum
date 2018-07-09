@@ -382,7 +382,6 @@ a {
 .profile-jumbotron {
     margin-top: 10px;
     margin-left: 10px;
-    margin-right: 10px;
     padding: 10px;
     padding-left: 10px !important;
     padding-right: 10px !important;
@@ -412,6 +411,13 @@ a {
     background-color: #2ecc40;
     color: white;
     box-shadow: 0px 4px 20px 1px #888888;
+}
+
+.index-jumbotron-right {
+    background-color: #0d3349;
+    color: white;
+    box-shadow: 0px 4px 20px 1px #888888;
+    display: inline;
 }
 
 .profile-jumbotron-right {
@@ -484,3 +490,4 @@ a {
 .project-table-side tbody tr:hover td, .table-hover tbody tr:hover th {
   background-color: pink !important;
 }
+

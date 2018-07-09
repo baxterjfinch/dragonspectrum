@@ -285,8 +285,11 @@ ConceptEventListener.activate = function (concept, notifyTVS, notifyServer, skip
 ConceptEventListener.upvoteMouseClick = function (event) {
     var concept_id = $(event).data('concept');
     var concept = Concept.get(concept_id);
-    $("#change-vote-down-" + concept_id).removeClass("down");
-    $("#change-vote-up-" + concept_id).addClass("up");
+    if (concept.user_vote === null || (concept.user_vote && concept.user_vote.direction !== "down")) {
+        $("#change-vote-up-" + concept_id).addClass("up");
+        $("#change-vote-down-" + concept_id).removeClass("down");
+        console.log(concept.user_vote);
+    }
 
     if (!concept.hasPermissionWrite()) {
         Notify.alert.warning('You do not have permission to Up Vote this project');
@@ -325,7 +328,9 @@ ConceptEventListener.upvote = function (concept, concept_score, call_back, notif
         concept.setConceptScore(concept_score);
     }
     var userspectra = User.getCurrent().spectra_count;
+    var username = User.getCurrent().id;
     $("#spectra-class").html(userspectra);
+    $("#username-class").html(username);
 };
 
 /** DownVote **
@@ -334,9 +339,11 @@ ConceptEventListener.upvote = function (concept, concept_score, call_back, notif
 ConceptEventListener.downvoteMouseClick = function (event) {
     var concept_id = $(event).data('concept');
     var concept = Concept.get(concept_id);
-    $("#change-vote-up-" + concept_id).removeClass("up");
-    $("#change-vote-down-" + concept_id).addClass("down");
-
+    if (concept.user_vote === null || (concept.user_vote && concept.user_vote.direction !== "up")) {
+        $("#change-vote-up-" + concept_id).removeClass("up");
+        $("#change-vote-down-" + concept_id).addClass("down");
+        console.log(concept.user_vote);
+    }
     if (!concept.hasPermissionWrite()) {
         Notify.alert.warning('You do not have permission to Down Vote this project');
         return;
