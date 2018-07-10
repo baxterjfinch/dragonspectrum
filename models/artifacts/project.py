@@ -4,8 +4,9 @@ import logging
 from google.appengine.ext import ndb, deferred
 
 from server import ttindex
-from artifact import CorruptedArtifactException, ProjectNode, DATETIME_FORMATE
 from markers import Marker
+from concept import Concept
+from artifact import CorruptedArtifactException, ProjectNode, DATETIME_FORMATE
 from document import PresentationDocument, SummaryDocument
 from publish import PublishDocument, PublishPresentation, PublishSummary
 
@@ -30,8 +31,6 @@ class ProjectUserVotes(ndb.Model):
         }
 
 
-
-
 class Project(ProjectNode):
     project = None  # Want to overide the Artifact's requirement for this
     pw_modified_ts = ndb.DateTimeProperty(auto_now_add=True)
@@ -39,7 +38,6 @@ class Project(ProjectNode):
     orphan_concept = ndb.KeyProperty(repeated=True)
     documents = ndb.KeyProperty(kind='Document', repeated=True)
     distilled_document = ndb.KeyProperty(kind='Document', required=True)
-    project_score = ndb.IntegerProperty(default=0)
     operations_list = ['admin', 'read', 'write', 'delete', 'edit_children']
     import_url = ndb.TextProperty()
 
@@ -108,7 +106,7 @@ class Project(ProjectNode):
             ndb.delete_multi(perms)
             ndb.delete_multi(self.documents)
 
-        concept = ndb.get_multi(self.children)
+        concept = self.get_children()
         indexes = user.get_indexes()
 
         for con in concept:
@@ -139,6 +137,43 @@ class Project(ProjectNode):
             if document_key in self.documents:
                 self.documents.remove(document_key)
                 self.put()
+
+    def get_children(self, user=None):
+        q = Concept.query()
+        q = q.filter(
+            ndb.AND(
+                Concept.project == self.key,
+                ndb.OR(Concept.parent == None, Concept.parent == self.key)
+            )
+        )
+
+        children_by_id = {}
+        for child in q.iter():
+            children_by_id[child.id] = child
+
+        changed = self._check_children_dups()
+        children = []
+        for child_key in self.children:
+            c = children_by_id.get(child_key.id())
+            if c is not None:
+                children.append(c)
+                del children_by_id[child_key.id()]
+            else:
+                self.children.remove(child_key)
+                changed = True
+
+        children = children + children_by_id.values()
+
+        if changed:
+            self.put()
+
+        if not user:
+            return children
+        c = []
+        for child in children:
+            if child and child.has_permission_read(user):
+                c.append(child)
+        return c
 
     @staticmethod
     def get_user_projects(user):
@@ -182,18 +217,6 @@ class Project(ProjectNode):
                 pass
 
         return project_array
-
-    def get_user_vote(self, user):
-        q = ProjectUserVotes.query()
-        q = q.filter(ProjectUserVotes.project == self.key)
-        q = q.filter(ProjectUserVotes.user == user.key)
-
-        vote = None
-        for vote in q.iter():
-            vote = vote
-            break
-
-        return vote
 
     def get_document_ids(self):
         doc_ids = [self.distilled_document.id()]
@@ -305,12 +328,6 @@ class Project(ProjectNode):
         pw_modified_ts = d['pw_modified_ts']
         d['pw_modified_ts'] = time.mktime(d['pw_modified_ts'].timetuple()) * 1000
         d['pw_modified'] = pw_modified_ts.strftime(DATETIME_FORMATE)
-
-        d['project_score'] = self.project_score
-        user_vote = self.get_user_vote(user)
-        d['user_vote'] = None
-        if user_vote is not None:
-            d['user_vote'] = user_vote.to_dict()
 
         # Remove the world group from the user to test if a project is share to them
         # or just world shared

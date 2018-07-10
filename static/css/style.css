@@ -108,7 +108,6 @@ body {
     position: relative;
     height: 75%;
     margin: -15px 80px 0 -30%;
-
 }
 
 #content-pane {
@@ -499,7 +498,7 @@ i.synchronized {
 }
 
 .activate_concept {
-    background: #0084ff40 !important
+    background: #0084ff40 !important;
     box-shadow: 0 0 2px 2px #007eff;
 }
 

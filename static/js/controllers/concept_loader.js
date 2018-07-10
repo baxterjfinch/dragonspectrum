@@ -241,6 +241,7 @@ ChildLoader.prototype = {
 
         if (TVS.inUse())
             TVS.redraw();
+        Project.renderAll();
 
         query += parentIds.join('&parent_id=');
         this._make_ajax_call(query, parentBatch);
@@ -284,6 +285,8 @@ ChildLoader.prototype = {
                 parent.setBeingFetched(false);
                 parent.setLoaded(false);
                 parent.setIsParent(false);
+
+                Project.renderAll();
             }
 
             var unprocessed_parents = data['unprocessed_parents'];

@@ -24,8 +24,6 @@ ACTIONS = [
     'pro_attr_add',
     'pro_attr_chg',
     'pro_attr_rmv',
-    'pro_up_vote',
-    'pro_down_vote',
 
     # Document
     'doc_new',
@@ -106,6 +104,15 @@ class Transaction(SecureArtifact):
                 self.owner = art.owner
                 self.operations_list = art.operations_list
                 perm = art.get_permission_object()
+
+                perm = Permission(
+                    key=Permission.create_key(),
+                    permissions=perm.calculated_permissions,
+                    project=self.project,
+                    artifact=self.key
+                )
+                perm.put()
+                self.permissions = perm.key
 
             elif document:
                 self.organization = document.organization

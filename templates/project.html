@@ -4,8 +4,7 @@
 <head>
     <title>thinkTank</title>
     {% include 'head_links.html' %}
-    {% include 'home_links.html' %}
-
+    {% include "_firebase_config.html" %}
     <link href="/css/summernote.css" rel="stylesheet">
     <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
@@ -426,11 +425,12 @@
             show_guided_tour_offering();
 
         if (server_data.open_chal) {
-            Channel.initialize();
+            Channel.initialize(user);
             CollaborationTable.initialize();
             DocumentChat.initialize();
         }
 
+        new ClipboardJS('.copy-btn');
     }
 
     $(window).resize(function () {

@@ -5,3 +5,4 @@ dev_data/
 *.py[cod]
 .directory
 venv/
+firebase-serviceAccountKey.json

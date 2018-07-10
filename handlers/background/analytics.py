@@ -416,7 +416,7 @@ class RunDailyAnalyticsHandler(RunAnalyticsHandler):
             now = datetime.now()
 
             # Check if this is the first time running
-            last_ana = AnalyticsDailyStat.get_last()
+            last_ana = cls.get_last()
             if last_ana is None:  # This is the first time running
                 start_time = cls.__base__.get_first_ts()
                 log.info('first: %s', start_time)

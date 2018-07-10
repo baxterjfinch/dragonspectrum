@@ -207,9 +207,10 @@ ProjectEventListener.importFile = function (file) {
 
     fileReader.onload = function(fileLoadedEvent) {
         var text = fileLoadedEvent.target.result;
+        var ajax_data;
 
         if (file_type == 'text/html') {
-            var ajax_data = {"command": "import html", "html": text, 'title': title};
+            ajax_data = {"command": "import html", "html": text, 'title': title};
         } else if (file_type == 'text/plain') {
             ajax_data = {"command": "import text", "text": text, "title": title};
         }
@@ -413,10 +414,10 @@ ProjectEventListener.removeGroupCollab = function (user, message) {
 
     var perms = project.getPermissions();
     if (action_data.hidden) {
-        var hidden = perms.getPermissions()['hidden'];
+        var hidden = perms.getPermissions().hidden;
         if (!hidden) {
             hidden = [];
-            perms.getPermissions()['hidden'] = hidden;
+            perms.getPermissions().hidden = hidden;
         }
         hidden.push(action_data.group);
     }
@@ -468,10 +469,10 @@ ProjectEventListener.addPermCollab = function (user, message) {
 
     var perms = project.getPermissions();
     if (action_data.hidden) {
-        var hidden = perms.getPermissions()['hidden'];
+        var hidden = perms.getPermissions().hidden;
         if (!hidden) {
             hidden = [];
-            perms.getPermissions()['hidden'] = hidden;
+            perms.getPermissions().hidden = hidden;
         }
         hidden.push(action_data.group);
     }
@@ -526,10 +527,10 @@ ProjectEventListener.removePermCollab = function (user, message) {
 
     var perms = project.getPermissions();
     if (action_data.hidden) {
-        var hidden = perms.getPermissions()['hidden'];
+        var hidden = perms.getPermissions().hidden;
         if (!hidden) {
             hidden = [];
-            perms.getPermissions()['hidden'] = hidden;
+            perms.getPermissions().hidden = hidden;
         }
         hidden.push(action_data.group);
     }

@@ -28,8 +28,6 @@ ProjectTable.world_tab = $('#world-tab');
 ProjectTable.search_tab = $('#search-tab');
 
 ProjectTable.checkbox_column_classes = 'project-checkbox';
-ProjectTable.voter_column_classes = 'project-voter';
-ProjectTable.score_column_classes = 'project-score';
 ProjectTable.title_column_classes = 'project-title';
 ProjectTable.owner_column_classes = 'project-owner';
 ProjectTable.date_column_classes = 'project-date';
@@ -429,7 +427,6 @@ ProjectTable.addToUserTable = function (project) {
     if (!row)
         row = ProjectTable.buildTableRow(ProjectTable.USER, project);
     ProjectTable.my_table_body.append(row.getTableRow());
-
 };
 
 ProjectTable.addToSharedTable = function (project) {
@@ -549,8 +546,6 @@ ProjectTable.deleteCheckedProjects = function () {
 function ProjectTableRow () {
     this.tr = null;
     this.checkbox_td = null;
-    this.vote_td = null;
-    this.score_td = null;
     this.title_td = null;
     this.owner_td = null;
     this.last_modified_td = null;
@@ -571,21 +566,6 @@ ProjectTableRow.prototype.setCheckboxColumn = function (checkbox) {
 
 ProjectTableRow.prototype.getCheckbox = function () {
     return this.checkbox_td;
-};
-
-ProjectTableRow.prototype.setVoterColumn = function (vote) {
-    this.vote_td = vote;
-};
-
-ProjectTableRow.prototype.getVoterColumn = function () {
-    return this.vote_td;
-};
-ProjectTableRow.prototype.setScoreColumn = function (score) {
-    this.score_td = score;
-};
-
-ProjectTableRow.prototype.getScoreColumn = function () {
-    return this.score_td;
 };
 
 ProjectTableRow.prototype.setTitleColumn = function (name) {
@@ -627,4 +607,3 @@ ProjectTableRow.prototype.hide = function () {
 ProjectTableRow.prototype.show = function () {
     this.tr.removeClass('hidden');
 };
-

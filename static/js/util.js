@@ -641,8 +641,6 @@ function logout() {
     });
 }
 
-ZeroClipboard.config({swfPath: STATIC_URLS.zeroclipboard});
-
 function show_keybindings() {
     Shortcut.pause();
     $('#keybindings-modal').modal();

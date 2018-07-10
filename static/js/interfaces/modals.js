@@ -1085,27 +1085,23 @@ ConceptShareURLModal.show = function (concept) {
 
     var url = concept.getSharedURL(nav, depth, limit);
     ConceptShareURLModal.url_input.val(url);
-    ConceptShareURLModal.copy_btn.attr('data-clipboard-text', url);
 
     ConceptShareURLModal.navigation_checkbox.click(function (e) {
         nav = $(e.currentTarget).is(':checked');
         var url = concept.getSharedURL(nav, depth, limit);
         ConceptShareURLModal.url_input.val(url);
-        ConceptShareURLModal.copy_btn.attr('data-clipboard-text', url);
     });
 
     ConceptShareURLModal.limit_checkbox.click(function (e) {
         limit = $(e.currentTarget).is(':checked');
         var url = concept.getSharedURL(nav, depth, limit);
         ConceptShareURLModal.url_input.val(url);
-        ConceptShareURLModal.copy_btn.attr('data-clipboard-text', url);
     });
 
     ConceptShareURLModal.depth_selector.change(function (e) {
         depth = $(this).val();
         var url = concept.getSharedURL(nav, depth, limit);
         ConceptShareURLModal.url_input.val(url);
-        ConceptShareURLModal.copy_btn.attr('data-clipboard-text', url);
     });
 
     ConceptShareURLModal.modal.on('shown.bs.modal', ConceptShareURLModal._onShow);
@@ -1119,14 +1115,6 @@ ConceptShareURLModal.show = function (concept) {
 
 ConceptShareURLModal._onShow = function () {
     Shortcut.pause();
-    if (!ConceptShareURLModal.clip_client) {
-        ConceptShareURLModal.clip_client = new ZeroClipboard(document.getElementById("concept-share-url-copy-btn"));
-        ConceptShareURLModal.clip_client.on('ready', function (readyEvent) {
-            ConceptShareURLModal.clip_client.on('aftercopy', function (event) {
-                Notify.alert('Share URL Copied to Clipboard.');
-            });
-        });
-    }
 };
 
 ConceptShareURLModal._onHide = function () {
@@ -1149,13 +1137,11 @@ DocumentShareURLModal.show = function (documment) {
 
     var url = documment.getSharedURL(nav);
     DocumentShareURLModal.url_input.val(url);
-    DocumentShareURLModal.copy_btn.attr('data-clipboard-text', url);
 
     DocumentShareURLModal.navigation_checkbox.click(function (e) {
         nav = $(e.currentTarget).is(':checked');
         var url = documment.getSharedURL(nav);
         DocumentShareURLModal.url_input.val(url);
-        DocumentShareURLModal.copy_btn.attr('data-clipboard-text', url);
     });
 
     DocumentShareURLModal.modal.on('shown.bs.modal', DocumentShareURLModal._onShow);
@@ -1169,14 +1155,6 @@ DocumentShareURLModal.show = function (documment) {
 
 DocumentShareURLModal._onShow = function () {
     Shortcut.pause();
-    if (!DocumentShareURLModal.clip_client) {
-        DocumentShareURLModal.clip_client = new ZeroClipboard(document.getElementById("document-share-url-copy-btn"));
-        DocumentShareURLModal.clip_client.on('ready', function (readyEvent) {
-            DocumentShareURLModal.clip_client.on('aftercopy', function (event) {
-                Notify.alert('Share URL Copied to Clipboard.');
-            });
-        });
-    }
 };
 
 DocumentShareURLModal._onHide = function () {

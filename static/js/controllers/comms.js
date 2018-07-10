@@ -230,7 +230,7 @@ comms._prepareRequest = function (ajax) {
         ajax.data = {};
 
     ajax.data.an_token = Page.getAnalyticId();
-    ajax.data.client_id = Channel.getClientId();
+    ajax.data.channel_id = Channel.channel_id;
 
     if (Channel.inUse())
         ajax.data.token_id = get_channel_token_id();
@@ -244,9 +244,9 @@ comms._prepareRequest = function (ajax) {
         delete ajax.data;
         ajax.contentType = 'text/plain';
         if (ajax.url.indexOf('?') >= 0)
-            ajax.url += '&client_id=' + Channel.getClientId();
+            ajax.url += '&channel_id=' + Channel.channel_id;
         else
-            ajax.url += '?client_id=' + Channel.getClientId();
+            ajax.url += '?channel_id=' + Channel.channel_id;
         if (Page.isProjectPage())
             ajax.url += '&project=' + Project.getId();
         ajax.url += '&an_token=' + Page.getAnalyticId();

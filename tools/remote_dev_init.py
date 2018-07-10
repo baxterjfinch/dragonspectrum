@@ -46,8 +46,6 @@ def main(project_id):
     print 'Flushing all memcache'
     memcache.flush_all()
 
-    print 'Checking for super users'
-
     global_conf = tt_logging.LoggingConfig.get_by_id(config.logging_config_id)
     if not global_conf:
         tt_logging.LoggingConfig.new()
@@ -63,146 +61,146 @@ def main(project_id):
         wordshare.put()
 
     print 'Checking for super users'
-    corpus = Organization.get_by_id('corpus.io')
-    if corpus is None:
-        corpus = Organization(id='corpus.io', name='corpus.io', description='corpus.io',
-                              domain='corpus.io', owner='Joe Roets', webpage='www.corpus.io',
-                              point_of_contact='Joe Roets', email='support@corpus.io',
-                              phone='+1 650 731 2223', account_type='super_account')
-        corpus.groups.append(wordshare.key)
-        corpus.put()
+    dragonchain = Organization.get_by_id('DragonChain')
+    if dragonchain is None:
+        dragonchain = Organization(id='DragonChain', name='DragonChain', description='DragonChain',
+                              domain='dragonchain.com', owner='Joe Roets', webpage='https://dragonchain.com/',
+                              point_of_contact='Joe Roets', email='support@dragonchain.com',
+                              phone='+1 111 111 1111', account_type='super_account')
+        dragonchain.groups.append(wordshare.key)
+        dragonchain.put()
 
     super_admin = Group.get_by_id('super_admin')
     if super_admin is None:
         super_admin = Group(id='super_admin', name='Super Administrator',
-                            description='Super Administrator', organization=corpus.key)
+                            description='Super Administrator', organization=dragonchain.key)
         super_admin.active = True
         super_admin.put()
 
-    org = Group.query(Group.name == 'corpus.io')
+    org = Group.query(Group.name == 'DragonChain')
     if org.get() is None:
-        org = Group(key=Group.create_key(), name='corpus.io',
-                    description='corpus.io organization group', organization=corpus.key)
+        org = Group(key=Group.create_key(), name='DragonChain',
+                    description='DragonChain organization group', organization=dragonchain.key)
         org.active = True
-        org.organization = corpus.key
-        corpus.groups.append(org.key)
-        corpus.org_group = org.key
+        org.organization = dragonchain.key
+        dragonchain.groups.append(org.key)
+        dragonchain.org_group = org.key
         org.put()
 
     tech = Group.query(Group.name == 'Tech')
     if tech.get() is None:
         tech = Group(key=Group.create_key(), name='Tech',
-                     description='Tech', organization=corpus.key)
+                     description='Tech', organization=dragonchain.key)
         tech.active = True
-        tech.organization = corpus.key
-        corpus.groups.append(tech.key)
+        tech.organization = dragonchain.key
+        dragonchain.groups.append(tech.key)
         tech.put()
 
     legal = Group.query(Group.name == 'Legal')
     if legal.get() is None:
         legal = Group(key=Group.create_key(), name='Legal',
-                      description='Legal', organization=corpus.key)
+                      description='Legal', organization=dragonchain.key)
         legal.active = True
-        legal.organization = corpus.key
-        corpus.groups.append(legal.key)
+        legal.organization = dragonchain.key
+        dragonchain.groups.append(legal.key)
         legal.put()
 
     finance = Group.query(Group.name == 'Finance')
     if finance.get() is None:
         finance = Group(key=Group.create_key(), name='Finance',
-                        description='Finance', organization=corpus.key)
+                        description='Finance', organization=dragonchain.key)
         finance.active = True
-        finance.organization = corpus.key
-        corpus.hidden_groups.append(finance.key)
+        finance.organization = dragonchain.key
+        dragonchain.hidden_groups.append(finance.key)
         finance.put()
 
     marketing = Group.query(Group.name == 'Marketing')
     if marketing.get() is None:
         marketing = Group(key=Group.create_key(), name='Marketing',
-                          description='Marketing', organization=corpus.key)
+                          description='Marketing', organization=dragonchain.key)
         marketing.active = True
-        marketing.organization = corpus.key
-        corpus.groups.append(marketing.key)
+        marketing.organization = dragonchain.key
+        dragonchain.groups.append(marketing.key)
         marketing.put()
 
     topsec = Group.query(Group.name == 'Top Secret')
     if topsec.get() is None:
         topsec = Group(key=Group.create_key(), name='Top Secret',
-                       description='Top Secret', organization=corpus.key)
+                       description='Top Secret', organization=dragonchain.key)
         topsec.active = True
-        topsec.organization = corpus.key
-        corpus.hidden_groups.append(topsec.key)
+        topsec.organization = dragonchain.key
+        dragonchain.hidden_groups.append(topsec.key)
         topsec.put()
 
     secret = Group.query(Group.name == 'Secret')
     if secret.get() is None:
         secret = Group(key=Group.create_key(), name='Secret',
-                       description='Secret', organization=corpus.key)
+                       description='Secret', organization=dragonchain.key)
         secret.active = True
-        secret.organization = corpus.key
-        corpus.hidden_groups.append(secret.key)
+        secret.organization = dragonchain.key
+        dragonchain.hidden_groups.append(secret.key)
         secret.put()
 
     confid = Group.query(Group.name == 'Confidential')
     if confid.get() is None:
         confid = Group(key=Group.create_key(), name='Confidential',
-                       description='Confidential', organization=corpus.key)
+                       description='Confidential', organization=dragonchain.key)
         confid.active = True
-        tech.organization = corpus.key
-        corpus.groups.append(confid.key)
+        tech.organization = dragonchain.key
+        dragonchain.groups.append(confid.key)
         confid.put()
 
     amiller_su = User.get_by_id('amiller_su')
     if amiller_su is None:
         print 'Super user amiller not found, creating him now'
         User.new({'username': 'amiller_su', 'password': 'pass', 'first_name': 'Andrew',
-                  'last_name': 'Miller', 'email': 'andrew.miller@createtank.com',
+                  'last_name': 'Miller', 'email': 'amiller_su@dragonchain.com',
                   'phone_numbers': {'main': '304-123-1234'}},
-                 verify_email=False, organization=corpus, worldshare_group=Group.get_worldshare_key())
+                 verify_email=False, organization=dragonchain, worldshare_group=Group.get_worldshare_key())
         amiller_su = User.get_by_id('amiller_su')
-        amiller_su.organization = corpus.key
+        amiller_su.organization = dragonchain.key
         amiller_su.require_password_change = True
         amiller_su.groups = [super_admin.key]
         amiller_su.put()
-        corpus.admins.append(amiller_su.key)
+        dragonchain.admins.append(amiller_su.key)
+
+    baxter_su = User.get_by_id('baxter_su')
+    if baxter_su is None:
+        print 'Super user joe not found, creating him now'
+        User.new({'username': 'baxter_su', 'password': 'pass', 'first_name': 'Baxter',
+                  'last_name': 'Finch', 'email': 'baxter_su@dragonchain.com',
+                  'phone_numbers': {'main': '304-123-1234'}},
+                 verify_email=False, organization=dragonchain, worldshare_group=Group.get_worldshare_key())
+        baxter_su = User.get_by_id('baxter_su')
+        baxter_su.groups.append(super_admin.key)
+        baxter_su.organization = dragonchain.key
+        baxter_su.require_password_change = True
+        baxter_su.put()
+        dragonchain.admins.append(baxter_su.key)
 
     joe_su = User.get_by_id('joe_su')
     if joe_su is None:
         print 'Super user joe not found, creating him now'
         User.new({'username': 'joe_su', 'password': 'pass', 'first_name': 'Joe',
-                  'last_name': 'Roets', 'email': 'joe@corpus.com',
+                  'last_name': 'Roets', 'email': 'joe_su@dragonchain.com',
                   'phone_numbers': {'main': '304-123-1234'}},
-                 verify_email=False, organization=corpus, worldshare_group=Group.get_worldshare_key())
+                 verify_email=False, organization=dragonchain, worldshare_group=Group.get_worldshare_key())
         joe_su = User.get_by_id('joe_su')
         joe_su.groups.append(super_admin.key)
-        joe_su.organization = corpus.key
+        joe_su.organization = dragonchain.key
         joe_su.require_password_change = True
         joe_su.put()
-        corpus.admins.append(joe_su.key)
-
-    mgreenman_su = User.get_by_id('mgreenman_su')
-    if mgreenman_su is None:
-        print 'Super user mgreenman not found, creating him now'
-        User.new({'username': 'mgreenman_su', 'password': 'pass', 'first_name': 'Martin',
-                  'last_name': 'Greenman', 'email': 'mgreenman@corpus.com',
-                  'phone_numbers': {'main': '304-123-1234'}},
-                 verify_email=False, organization=corpus, worldshare_group=Group.get_worldshare_key())
-        mgreenman_su = User.get_by_id('mgreenman_su')
-        mgreenman_su.groups.append(super_admin.key)
-        mgreenman_su.organization = corpus.key
-        mgreenman_su.require_password_change = True
-        mgreenman_su.put()
-        corpus.admins.append(mgreenman_su.key)
+        dragonchain.admins.append(joe_su.key)
 
     amiller = User.get_by_id('amiller')
     if amiller is None:
         print 'User amiller not found, creating him now'
         User.new({'username': 'amiller', 'password': 'pass', 'first_name': 'Andrew',
-                  'last_name': 'Miller', 'email': 'andrew.miller@createtank.com',
+                  'last_name': 'Miller', 'email': 'andrew@dragonchain.com',
                   'phone_numbers': {'main': '304-123-1234'}},
-                 verify_email=False, organization=corpus, worldshare_group=Group.get_worldshare_key())
+                 verify_email=False, organization=dragonchain, worldshare_group=Group.get_worldshare_key())
         amiller = User.get_by_id('amiller')
-        amiller.organization = corpus.key
+        amiller.organization = dragonchain.key
         amiller.require_password_change = True
         amiller.groups.append(tech.key)
         amiller.groups.append(legal.key)
@@ -212,39 +210,39 @@ def main(project_id):
     if joe is None:
         print 'User joe not found, creating him now'
         User.new({'username': 'joe', 'password': 'pass', 'first_name': 'Joe',
-                  'last_name': 'Roets', 'email': 'joe@corpus.com',
+                  'last_name': 'Roets', 'email': 'joe@dragonchain.com',
                   'phone_numbers': {'main': '304-123-1234'}},
-                 verify_email=False, organization=corpus, worldshare_group=Group.get_worldshare_key())
+                 verify_email=False, organization=dragonchain, worldshare_group=Group.get_worldshare_key())
         joe = User.get_by_id('joe')
         joe.groups.append(tech.key)
         joe.groups.append(legal.key)
-        joe.organization = corpus.key
+        joe.organization = dragonchain.key
         joe.require_password_change = True
         joe.put()
 
-    mgreenman = User.get_by_id('mgreenman')
-    if mgreenman is None:
-        print 'User mgreenman not found, creating him now'
-        User.new({'username': 'mgreenman', 'password': 'pass', 'first_name': 'Martin',
-                  'last_name': 'Greenman', 'email': 'mgreenman@createtank.com',
+    baxter = User.get_by_id('baxter')
+    if baxter is None:
+        print 'User baxter not found, creating him now'
+        User.new({'username': 'baxter', 'password': 'pass', 'first_name': 'Baxter',
+                  'last_name': 'Finch', 'email': 'baxter@dragonchain.com',
                   'phone_numbers': {'main': '304-123-1234'}},
-                 verify_email=False, organization=corpus, worldshare_group=Group.get_worldshare_key())
-        mgreenman = User.get_by_id('mgreenman')
-        mgreenman.groups.append(tech.key)
-        mgreenman.groups.append(legal.key)
-        mgreenman.organization = corpus.key
-        mgreenman.require_password_change = True
-        mgreenman.put()
+                 verify_email=False, organization=dragonchain, worldshare_group=Group.get_worldshare_key())
+        baxter = User.get_by_id('baxter')
+        baxter.groups.append(tech.key)
+        baxter.groups.append(legal.key)
+        baxter.organization = dragonchain.key
+        baxter.require_password_change = True
+        baxter.put()
 
     bob = User.get_by_id('bob')
     if bob is None:
         print 'User bob not found, creating him now'
         User.new({'username': 'bob', 'password': 'pass', 'first_name': 'bob',
-                  'last_name': 'bob', 'email': 'bob@corpus.com',
+                  'last_name': 'bob', 'email': 'bob@dragonchain.com',
                   'phone_numbers': {'main': '304-123-1234'}},
-                 verify_email=False, organization=corpus, worldshare_group=Group.get_worldshare_key())
+                 verify_email=False, organization=dragonchain, worldshare_group=Group.get_worldshare_key())
         bob = User.get_by_id('bob')
-        bob.organization = corpus.key
+        bob.organization = dragonchain.key
         bob.require_password_change = True
         bob.groups.append(tech.key)
         bob.groups.append(legal.key)
@@ -254,11 +252,11 @@ def main(project_id):
     if tom is None:
         print 'User tom not found, creating him now'
         User.new({'username': 'tom', 'password': 'pass', 'first_name': 'tom',
-                  'last_name': 'tom', 'email': 'tom@corpus.com',
+                  'last_name': 'tom', 'email': 'tom@dragonchain.com',
                   'phone_numbers': {'main': '304-123-1234'}},
-                 verify_email=False, organization=corpus, worldshare_group=Group.get_worldshare_key())
+                 verify_email=False, organization=dragonchain, worldshare_group=Group.get_worldshare_key())
         tom = User.get_by_id('tom')
-        tom.organization = corpus.key
+        tom.organization = dragonchain.key
         tom.require_password_change = True
         tom.groups.append(tech.key)
         tom.groups.append(legal.key)
@@ -268,17 +266,17 @@ def main(project_id):
     if sam is None:
         print 'User sam not found, creating him now'
         User.new({'username': 'sam', 'password': 'pass', 'first_name': 'sam',
-                  'last_name': 'sam', 'email': 'sam@corpus.com',
+                  'last_name': 'sam', 'email': 'sam@dragonchain.com',
                   'phone_numbers': {'main': '304-123-1234'}},
-                 verify_email=False, organization=corpus, worldshare_group=Group.get_worldshare_key())
+                 verify_email=False, organization=dragonchain, worldshare_group=Group.get_worldshare_key())
         sam = User.get_by_id('sam')
-        sam.organization = corpus.key
+        sam.organization = dragonchain.key
         sam.require_password_change = True
         sam.groups.append(tech.key)
         sam.groups.append(secret.key)
         sam.put()
 
-    corpus.put()
+    dragonchain.put()
 
 
 if __name__ == '__main__':
