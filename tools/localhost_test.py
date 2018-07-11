@@ -30,37 +30,7 @@ def app_func():
 def main():
     remote_api_stub.ConfigureRemoteApi(None, '/_ah/remote_api', auth_func, app_func())
 
-    # pro = Project.get_by_id('')
-    # con = Concept.get_by_id('')
-    # par = Concept.get_by_id('')
-    #
-    # print 'Con:', con.id, con.phrasings[0].get().text
-    # print 'Par:', par.id, par.phrasings[0].get().text
-    # print ''
-    #
-    # q = Concept.query()
-    # q = q.filter(Concept.project == pro.key)
-    # for c in q.iter():
-    #     if c.id == '':
-    #         continue
-    #
-    #     print c.id, con.key in c.children, c.phrasings[0].get().text
-
-    # con = Concept.get_by_id('')
-    # for child in con.get_children():
-    #     print child.id
-    #
-    # print ''
-    #
-    # con = Concept.get_by_id('')
-    # for child in con.get_children():
-    #     print child.id
-
-    q = Concept.query()
-    q = q.filter()
-    for c in q.iter():
-        print c.id, c.phrasings[0].get().text
-
+    print Permission.get_by_id('56082847852611e8a90fe9cd3e90132f')
 
 if __name__ == '__main__':
     main()

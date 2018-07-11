@@ -200,9 +200,9 @@ Concept.prototype.initConcept = function (concept) {
 
 
     concept_downvote_icon = $("#concept-down");
-    concept_downvote_class = $("fas fa-chevron-circle-down")
+    concept_downvote_class = $("fa fa-chevron-circle-down")
     concept_upvote_icon = $("#concept-up");
-    concept_upvote_class = $("fas fa-chevron-circle-up")
+    concept_upvote_class = $("fa fa-chevron-circle-up")
     concept_total_score = $("#pscorer");
 
     concept_downvote_icon.click(function (){

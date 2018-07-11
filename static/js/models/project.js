@@ -20,6 +20,8 @@ function Project() {
     this.current_document = null;
     this.documents = {};
     this.import_url = null;
+    this.project_score = 0;
+    this.user_vote = null;
     this.operations_list = ['admin', 'read', 'write', 'delete', 'edit_children'];
 
     this.is_owned = false;
@@ -65,6 +67,8 @@ Project.prototype.initProject = function (project, conceptLoaderConfigs, loadDvs
     this.distilled_document  = this.getDocument(project.distilled_document);
     this.current_document = this.distilled_document;
     this.import_url = project.inportURL;
+    this.project_score = project.project_score;
+    this.user_vote = project.user_vote;
     this.pw_modified_ts = project.pw_modified_ts;
 
     if (project.shared)
@@ -143,6 +147,14 @@ Project.prototype.setInputURL = function (url) {
 
 Project.prototype.getImportURL = function () {
     return this.import_url;
+};
+
+Project.prototype.setProjectScore = function (project_score) {
+    this.project_score = project_score;
+};
+
+Project.prototype.getProjectScore = function () {
+    return this.project_score;
 };
 
 Project.prototype.getProjectWideModifiedTs = function () {
@@ -500,6 +512,7 @@ Project.setupPage = function (children, act_con) {
         TVS.initialize();
     var loader = Project.getConceptLoader();
     loader.stay_ahead = false;
+    var link_data;
 
     if (children && children.length > 0) {
             var parent = Project.project;
@@ -509,7 +522,7 @@ Project.setupPage = function (children, act_con) {
                     if (data.link.length > 0) {
                         for (var j = 0; j < data.link.length; j++) {
                             if (data.link[i].parent == parent.getId()) {
-                                var link_data = data.link[j];
+                                link_data = data.link[j];
                             }
                         }
                         data.is_linked = true;
@@ -554,11 +567,11 @@ Project.setupPage = function (children, act_con) {
         Util.startSlideShow();
     });
 
-    downvote_icon = $("#voter_down");
-    downvote_class = $("fas fa-chevron-circle-down")
-    upvote_icon = $("#voterrrrr_up");
-    upvote_class = $("fas fa-chevron-circle-up")
-    total_score = $("#pscorer");
+    var downvote_icon = $("#voter_down");
+    var downvote_class = $("fa fa-chevron-circle-down");
+    var upvote_icon = $("#voterrrrr_up");
+    var upvote_class = $("fa fa-chevron-circle-up");
+    var total_score = $("#pscorer");
 
     downvote_icon.click(function (){
       ProjectEventListener.downvote(Project.project, null, function () {
@@ -604,7 +617,3 @@ Project.getUserProjects = function (user, cb) {
         }
     })
 };
-
-//Side Button Popovers
-
-$("[data-toggle=popover]").popover();

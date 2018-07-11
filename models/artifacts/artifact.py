@@ -630,7 +630,7 @@ class ProjectNode(SecureArtifact):
         return self.has_attr('img', doc_key)
 
     def num_of_children(self, user=None):
-            return len(self.get_children(user=user))
+        return len(self.get_children(user=user))
 
     def get_concept_index(self, concept):
         index = 0

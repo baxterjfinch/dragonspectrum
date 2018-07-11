@@ -4,7 +4,6 @@ import time
 import logging
 import datetime
 
-from google.appengine.api import memcache
 from google.appengine.ext import ndb, deferred
 from google.appengine.api import channel, memcache
 from cerberus import handlers as cerberus_handlers
@@ -498,8 +497,13 @@ class ProjectHandler(AuthorizationRequestHanlder):
             self._add_attribute()
         if self.json_request.get('title'):
             self._set_title()
+        if self.json_request.get('up_vote'):
+            self._up_vote()
+        if self.json_request.get('down_vote'):
+            self._down_vote()
         if self.json_request.get('shared'):
             self._shared()
+
         self.project.pw_modified_ts = datetime.datetime.now()
         self.project.put()
 

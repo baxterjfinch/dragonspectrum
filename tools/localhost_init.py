@@ -1,13 +1,22 @@
 #!/usr/bin/python
-import init_remote_script
-init_remote_script.init_paths()
 
-import getpass
+# import init_remote_script
+# init_remote_script.init_paths()
 
+import sys
+sys.path.insert(0, '/opt/google/google-cloud-sdk/platform/google_appengine/')
+
+import dev_appserver
+dev_appserver.fix_sys_path()
+
+
+from google.appengine.ext import vendor
 from google.appengine.ext.remote_api import remote_api_stub
+vendor.add('lib')
 
-import setup_paths
-setup_paths.fix_path()
+# import setup_paths
+# setup_paths.fix_path()
+
 from server import GlobalConfig, config
 from server import tt_logging
 from models.account import *

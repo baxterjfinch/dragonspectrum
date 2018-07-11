@@ -35,6 +35,16 @@ CollaborationEventListener.ACTIONS = {
         description: '',
         callback: AttributeEventListener.addCollab
     },
+    pro_up_vote: {
+        name: '',
+        description: '',
+        callback: ProjectEventListener.upvoteCollab
+    },
+    pro_down_vote: {
+        name: '',
+        description: '',
+        callback: ProjectEventListener.downvoteCollab
+    },
 
     // Document
     doc_new: {
