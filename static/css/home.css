@@ -460,30 +460,6 @@ a {
     overflow-y: scroll;
 }
 
-.profile-jumbotron-left:hover {
-     transform: scale(1.004);
-}
-
-.profile-jumbotron-center:hover {
-     transform: scale(1.004);
-}
-
-.profile-jumbotron-right:hover {
-     transform: scale(1.004);
-}
-
-.profile-alert:hover {
-     transform: scale(1.004);
-}
-
-.profile-user-information-form:hover {
-    transform: scale(1.002);
-}
-
-.profile-bottom-right-form:hover {
-    transform: scale(1.004);
-}
-
 .profile-form-class {
     padding: 50px;
 }

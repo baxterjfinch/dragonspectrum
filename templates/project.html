@@ -201,10 +201,19 @@
                   </div>
                 </div>
     </div>
-    <div class="body-right-container col-md-8">
-            <div class="col-md-12 jumbotron profile-jumbotron profile-jumbotron-center">
+    <div class="col-md-8">
+            <div class="col-md-12">
                 <h5 class="lead panel-titles">{{ project.title }}</h5>
-                    <div id="right-pane" class="col-md-11">
+                    <div class="voting-buttons-div">
+                          <button type="button" class="btn btn-secondary btn-sm voting-buttons" data-toggle="button" aria-pressed="false" autocomplete="off" id="voterrrrr_up">
+                            <i class="fas fa-chevron-circle-up"></i>
+                          </button>
+                            <h4 id="pscorer"></h4>
+                          <button type="button" class="btn btn-secondary btn-sm voting-buttons" data-toggle="button" aria-pressed="false" autocomplete="off" id="voter_down">
+                            <i class="fas fa-chevron-circle-down"></i>
+                          </button>
+                    </div>
+                    <div id="right-pane" class="col-md-12 document-pane" style="padding: 10px;">
                         <!-- Doc Tabs -->
                             <div class="col-lg-* project-panel-header">
                                 <div id="dvs-tabs" class="tabbable">
@@ -270,77 +279,8 @@
                                 </div>
                             </div>
                     </div>
-                    <div class="voting-buttons-div col-md-1">
-                          <button type="button" class="btn btn-secondary btn-sm voting-buttons" data-toggle="button" aria-pressed="false" autocomplete="off" id="voterrrrr_up">
-                            <i class="fa fa-chevron-circle-up"></i>
-                          </button>
-                            <h4 id="pscorer"></h4>
-                          <button type="button" class="btn btn-secondary btn-sm voting-buttons" data-toggle="button" aria-pressed="false" autocomplete="off" id="voter_down">
-                            <i class="fa fa-chevron-circle-down"></i>
-                          </button>
-                    </div>
              </div>
-        <div class="col-md-12 jumbotron profile-jumbotron profile-jumbotron-right">
-            <ul class="nav nav-tabs" id="myTab" role="tablist">
-              <li class="nav-item">
-                <a class="nav-link active" id="comments-tab" data-toggle="tab" href="#comments" role="tab" aria-controls="comments" aria-selected="true">Comments</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" id="activity-tab" data-toggle="tab" href="#activity" role="tab" aria-controls="activity" aria-selected="false">Activity</a>
-              </li>
-            </ul>
-            <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade active in" id="comments" role="tabpanel" aria-labelledby="comments-tab">
-                <!-- COMMENTS TAB -->
-                    <div class="col-lg-12 comments-section" id="pvs_comments_tab">
-                        <div class="row">
-                            <!-- Annotation list -->
-                            <div class="col-xs-12 pvs-properties pvs-annotations">
-                                <div id="pvs-annos-list-panel" class="panel panel-info pvs-panel comments-section-background">
-                                    <div>
-                                        <button href="#" id="crt_new_anno_btn" class="anno-act-btn btn btn-primary btn-xs pull-right"><i class="fa fa-plus"></i></button>
-                                    </div>
-                                    <div id="anno_panel" class="panel-body pvs-panel-body pvs-scroll">
-                                        <table id="pvs_annos_table" class="table table-condensed">
-                                            <tbody id="pvs_annos_table_body">
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
 
-                            <!-- Comment thread -->
-                            <div class="col-xs-12 pvs-properties pvs-thread ">
-                                <div id="pvs-thread-list-panel" class="panel panel-info pvs-panel comments-section-background">
-                                    <div class="panel-heading pvs-panel-heading">
-                                        <h5 class="panel-title">Thread</h5>
-                                    </div>
-                                    <div class="panel-body pvs-panel-body">
-                                        <div id="comment-view">
-                                            <table id="pvs_comments_table" class="table table-condensed">
-                                                <tbody id="pvs_comments_table_body">
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <div id="comment_input_div" class="chat_input">
-                                            <div class="input-group">
-                                                <input id="comment_input" type="text" class="form-control" >
-                                                <span class="input-group-btn">
-                                                    <button id="comment_input_send" class="btn btn-primary" type="button"><i class="fa fa-reply"></i></button>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="tab-pane fade" id="activity" role="tabpanel" aria-labelledby="activity-tab">
-                </div>
-            </div>
-        </div>
     </div>
 
     <div class="body-farright-container col-md-2 profile-jumbotron-farright">
