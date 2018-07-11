@@ -63,8 +63,8 @@ Concept.con_phr_span_context_url_classes = 'concept_url_link';
 Concept.con_span_dbclick = null;
 Concept.default_attr_engine = new AutoAttributeEngine();
 Concept.more_icon_classes = 'fa fa-angle-double-right expand_child_inc';
-Concept.loading_icon_classes = 'fa fa-spinner fa-spin';
-Concept.loading_queued_icon_classes = 'fa fa-clock-o';
+Concept.loading_icon_classes = 'fa fa-spinner fa-spin expand_child_inc';
+Concept.loading_queued_icon_classes = 'fa fa-clock-o expand_child_inc';
 Concept.figure_classes = 'img-figure';
 Concept.figure_caption_classes = 'caption';
 Concept.figure_icon_classes = 'fa fa-2x fa-picture-o';
@@ -200,9 +200,9 @@ Concept.prototype.initConcept = function (concept) {
 
 
     concept_downvote_icon = $("#concept-down");
-    concept_downvote_class = $("fas fa-chevron-circle-down")
+    concept_downvote_class = $("fa fa-chevron-circle-down")
     concept_upvote_icon = $("#concept-up");
-    concept_upvote_class = $("fas fa-chevron-circle-up")
+    concept_upvote_class = $("fa fa-chevron-circle-up")
     concept_total_score = $("#pscorer");
 
     concept_downvote_icon.click(function (){

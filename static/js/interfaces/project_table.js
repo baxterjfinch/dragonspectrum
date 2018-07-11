@@ -168,7 +168,7 @@ ProjectTable.buildTableRow = function (table, project) {
     td.append(score);
     tr.append(td);
     project_row.setScoreColumn(score);
-    
+
     td = $('<td></td>');
     var title = $('<a></a>');
     title.attr('href', project.getURL());
@@ -217,14 +217,14 @@ ProjectTable.buildSideTableRow = function (table, project) {
     var td = $('<td></td>');
 
     var upvote_icon = $('<i></i>');
-    upvote_icon.addClass('fas fa-chevron-circle-up');
+    upvote_icon.addClass('fa fa-chevron-circle-up');
     td.append(upvote_icon);
     td.append($('<br>'));
 
     var downvote_icon = $('<i></i>');
 
     td.append(downvote_icon);
-    downvote_icon.addClass('fas fa-chevron-circle-down');
+    downvote_icon.addClass('fa fa-chevron-circle-down');
     var vote = $('<a></a>');
     vote.attr('type', 'checkbox');
     td.addClass(ProjectTable.voter_column_classes);
@@ -315,14 +315,14 @@ ProjectTable.buildSideTableRankedRow = function (table, project) {
     var td = $('<td></td>');
 
     var upvote_icon = $('<i></i>');
-    upvote_icon.addClass('fas fa-chevron-circle-up');
+    upvote_icon.addClass('fa fa-chevron-circle-up');
     td.append(upvote_icon);
     td.append($('<br>'));
 
     var downvote_icon = $('<i></i>');
 
     td.append(downvote_icon);
-    downvote_icon.addClass('fas fa-chevron-circle-down');
+    downvote_icon.addClass('fa fa-chevron-circle-down');
     var vote = $('<a></a>');
     vote.attr('type', 'checkbox');
     td.addClass(ProjectTable.voter_column_classes);
@@ -588,6 +588,21 @@ ProjectTableRow.prototype.getScoreColumn = function () {
     return this.score_td;
 };
 
+ProjectTableRow.prototype.setVoterColumn = function (vote) {
+    this.vote_td = vote;
+};
+
+ProjectTableRow.prototype.getVoterColumn = function () {
+    return this.vote_td;
+};
+ProjectTableRow.prototype.setScoreColumn = function (score) {
+    this.score_td = score;
+};
+
+ProjectTableRow.prototype.getScoreColumn = function () {
+    return this.score_td;
+};
+
 ProjectTableRow.prototype.setTitleColumn = function (name) {
     this.title_td = name;
 };
@@ -627,4 +642,3 @@ ProjectTableRow.prototype.hide = function () {
 ProjectTableRow.prototype.show = function () {
     this.tr.removeClass('hidden');
 };
-

@@ -139,20 +139,21 @@ AbstractRender.render = function (par_cnt, root, doc) {
 
     AbstractRender.setRunning(false);
 
-    if (AbstractRender.clip_client)
-        AbstractRender.clip_client.destroy();
-    AbstractRender.clip_client = new ZeroClipboard(document.getElementById("summary-copy-btn"));
-    AbstractRender.clip_client.on('ready', function (readyEvent) {
-        AbstractRender.clip_client.on('copy', function (event) {
-            var clipboard = event.clipboardData;
-            clipboard.setData('text/plain',
-                Document.getCurrent().getDvsDiv().html()
-                    .replace(/<\/p>/gm, '\n\n')
-                    .replace(/<(?:.|\n)*?>/gm, '')
-            );
-        });
-        AbstractRender.clip_client.on('aftercopy', function (event) {
-            Notify.alert('Summary Copied to Clipboard.');
-        });
-    });
+    // TODO: ZeroClipboard no longer works and need to be switched over to Clipboard.js
+    // if (AbstractRender.clip_client)
+    //     AbstractRender.clip_client.destroy();
+    // AbstractRender.clip_client = new ZeroClipboard(document.getElementById("summary-copy-btn"));
+    // AbstractRender.clip_client.on('ready', function (readyEvent) {
+    //     AbstractRender.clip_client.on('copy', function (event) {
+    //         var clipboard = event.clipboardData;
+    //         clipboard.setData('text/plain',
+    //             Document.getCurrent().getDvsDiv().html()
+    //                 .replace(/<\/p>/gm, '\n\n')
+    //                 .replace(/<(?:.|\n)*?>/gm, '')
+    //         );
+    //     });
+    //     AbstractRender.clip_client.on('aftercopy', function (event) {
+    //         Notify.alert('Summary Copied to Clipboard.');
+    //     });
+    // });
 };

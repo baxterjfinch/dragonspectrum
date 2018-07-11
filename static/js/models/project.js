@@ -512,6 +512,7 @@ Project.setupPage = function (children, act_con) {
         TVS.initialize();
     var loader = Project.getConceptLoader();
     loader.stay_ahead = false;
+    var link_data;
 
     if (children && children.length > 0) {
             var parent = Project.project;
@@ -521,7 +522,7 @@ Project.setupPage = function (children, act_con) {
                     if (data.link.length > 0) {
                         for (var j = 0; j < data.link.length; j++) {
                             if (data.link[i].parent == parent.getId()) {
-                                var link_data = data.link[j];
+                                link_data = data.link[j];
                             }
                         }
                         data.is_linked = true;
@@ -566,11 +567,11 @@ Project.setupPage = function (children, act_con) {
         Util.startSlideShow();
     });
 
-    downvote_icon = $("#voter_down");
-    downvote_class = $("fas fa-chevron-circle-down")
-    upvote_icon = $("#voterrrrr_up");
-    upvote_class = $("fas fa-chevron-circle-up")
-    total_score = $("#pscorer");
+    var downvote_icon = $("#voter_down");
+    var downvote_class = $("fa fa-chevron-circle-down");
+    var upvote_icon = $("#voterrrrr_up");
+    var upvote_class = $("fa fa-chevron-circle-up");
+    var total_score = $("#pscorer");
 
     downvote_icon.click(function (){
       ProjectEventListener.downvote(Project.project, null, function () {
@@ -616,7 +617,3 @@ Project.getUserProjects = function (user, cb) {
         }
     })
 };
-
-//Side Button Popovers
-
-$("[data-toggle=popover]").popover();

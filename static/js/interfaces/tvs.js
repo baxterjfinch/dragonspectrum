@@ -194,7 +194,7 @@ TVS._onCustomRender = function (tvsNode) {
     else
         classes = 'node_context';
 
-    return ' ' + '<i class="fas fa-chevron-circle-up concept-up"  data-concept="' + concept.id + '"' + 'id="change-vote-up-' + concept.id + '" onclick="ConceptEventListener.upvoteMouseClick(this)" ></i>' +
+    return ' ' + '<i class="fa fa-chevron-circle-up concept-up"  data-concept="' + concept.id + '"' + 'id="change-vote-up-' + concept.id + '" onclick="ConceptEventListener.upvoteMouseClick(this)" ></i>' +
         '<span id="cscore-' + concept.id + '">' + cscore + '</span>' + '<i class="fas fa-chevron-circle-down concept-down" data-concept="' + concept.id + '"' + 'id="change-vote-down-' + concept.id +  '"  onclick="ConceptEventListener.downvoteMouseClick(this)" ></i>' + ' ' +
         '<a class="' + classes + ' ' + user_classes + '" id="' + concept.getId() + '-tvs" class="dynatree-title" href="#">' + title + '</a>';
 };

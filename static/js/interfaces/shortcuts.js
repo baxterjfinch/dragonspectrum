@@ -663,6 +663,22 @@ Shortcut.initialize = function () {
                     description: ''
                 }
             },
+            import_project_modal: {
+                cancel: {
+                    name: 'Cancel Create Project',
+                    binding: ['esc'],
+                    callback: ProjectImportModal.hide,
+                    preventDefault: true,
+                    description: ''
+                },
+                import: {
+                    name: 'Import Project',
+                    binding: ['enter'],
+                    callback: ProjectImportModal.create,
+                    preventDefault: true,
+                    description: ''
+                }
+            },
             restore_project_modal: {
                 close_restore_project: {
                     name: 'Close Permissions',

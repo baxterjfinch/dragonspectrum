@@ -6,10 +6,9 @@ import datetime
 
 from google.appengine.ext import ndb, deferred
 from google.appengine.api import channel, memcache
-
-
-# noinspection PyUnresolvedReferences
 from cerberus import handlers as cerberus_handlers
+
+from firebase_admin import auth
 
 import server
 from server import spectra
@@ -22,8 +21,8 @@ from server.importer.restore import ProjectRestore
 from models.account.organization import Organization
 from server.httperrorexception import HttpErrorException
 from server.handlers import AuthorizationRequestHanlder, JINJA_ENVIRONMENT
-from models.artifacts import Project, ProjectUserVotes, Document, Concept, Phrasing, Permission, \
-    Attributes, ChannelToken, Transaction
+from models.artifacts import Project, Document, Concept, Phrasing, Permission, \
+    Attributes, ChannelToken, Transaction, ProjectUserVotes
 
 log = logging.getLogger('tt')
 
@@ -481,14 +480,12 @@ class ProjectHandler(AuthorizationRequestHanlder):
     @cerberus_handlers.exception_callback
     def post(self, project_id=None):
         self.get_channel_token()
-
         if not project_id and not Project.valid_id(project_id):
             raise HttpErrorException.bad_request('no project id')
 
         self.project = Project.get_by_id(project_id)
         if not self.project:
             raise HttpErrorException.bad_request('invalid project id')
-
         self.get_analytic_session()
         if self.json_request.get('permission'):
             self._add_perm()
@@ -511,7 +508,6 @@ class ProjectHandler(AuthorizationRequestHanlder):
         self.project.put()
 
         self.user.put()
-
         self.write_json_response(self.project.to_dict(self.user))
 
     def _add_perm(self):
@@ -555,7 +551,6 @@ class ProjectHandler(AuthorizationRequestHanlder):
             if (not self.project.has_permission_read(channel_token.user.get()) and not
                     self.project.had_permission_read(channel_token.user.get())):
                 continue
-
             if not ach_user.is_super_admin and not \
                     (ach_user.is_org_admin and org.key == ach_user.organization) and \
                     org.is_hidden_group(group):
@@ -1001,8 +996,8 @@ class ChannelConnectHandler(AuthorizationRequestHanlder):
 
     @cerberus_handlers.exception_callback
     def post(self):
-        client_id = self.request.get('from')
-        channel_token = ChannelToken.get_by_id(client_id)
+        channel_id = self.request.get('from')
+        channel_token = ChannelToken.get_by_id(channel_id)
         if not channel_token:
             log.warning('No channel token found to connect')
         else:
@@ -1015,9 +1010,9 @@ class ChannelDisconnectedHandler(AuthorizationRequestHanlder):
 
     @cerberus_handlers.exception_callback
     def post(self):
-        client_id = self.request.get('from')
-        log.debug('User Disconnected: %s', client_id)
-        channel_token = ChannelToken.get_by_id(client_id)
+        channel_id = self.request.get('from')
+        log.debug('User Disconnected: %s', channel_id)
+        channel_token = ChannelToken.get_by_id(channel_id)
 
         if channel_token:
             log.debug('Found Channel Token')
@@ -1026,7 +1021,7 @@ class ChannelDisconnectedHandler(AuthorizationRequestHanlder):
             channel_tokens = ChannelToken.get_by_project_key(channel_token.project, channel_token)
             log.debug('Messaging Other Project Users')
             log.debug(channel_tokens)
-            ChannelToken.broadcast_message(channel_tokens, {'channel_op': 'remove_user', 'user': client_id})
+            ChannelToken.broadcast_message(channel_tokens, {'channel_op': 'remove_user', 'user': channel_id})
         else:
             log.debug('Did Not Find Channel Token')
 
@@ -1040,23 +1035,29 @@ class ChannelTokenHandler(AuthorizationRequestHanlder):
         if not project:
             raise HttpErrorException.bad_request('invalid project id')
 
-        client_id = server.create_uuid()
-        token = self._create_custom_token(self.user.user_id + '_' + project.id)
+        channel_id = server.create_uuid()
+        client_auth_token = auth.create_custom_token(self.user.key.id())
 
         color = self.get_previous_color(project)
         if not color:
             color = ChannelToken.generate_color()
 
         channel_token = ChannelToken(
-            key=ChannelToken.create_key(client_id),
+            key=ChannelToken.create_key(channel_id),
             project=project.key,
             user=self.user.key,
             color=color,
-            token=token
         )
 
+        channel_token.set_status(True)
+        channel_token.send_message({'channel_op': 'ping'})
+
         channel_token.put()
-        self.write_json_response({'token': token, 'client_id': client_id})
+
+        self.write_json_response({
+            'channel_id': channel_id,
+            'auth_token': client_auth_token,
+        })
 
     def get_previous_color(self, project):
         channel_tokens = ChannelToken.query(ChannelToken.user == self.user.key,
@@ -1097,7 +1098,7 @@ class ChannelUsersHandler(AuthorizationRequestHanlder):
                 channel_tokens_list.append({
                     'username': user.username,
                     'display_name': user.display_name,
-                    'client_id': channel_token.client_id,
+                    'channel_id': channel_token.id,
                     'link_id': channel_token.link_id,
                     'color': channel_token.color,
                     'concept': channel_token.concept.id() if channel_token.concept else '',
@@ -1119,7 +1120,7 @@ def check_ping_replies(project_key):
 
         channel_tokens = ChannelToken.get_by_project_key(project_key)
         for channel_token in channel_tokens:
-                channel.send_message(channel_token.client_id, json.dumps({'channel_op': 'ping'}))
+            channel_token.send_message({'channel_op': 'ping'})
 
         time.sleep(10)
 
@@ -1127,18 +1128,18 @@ def check_ping_replies(project_key):
         good_channel_tokens_ids = []
 
         for chan_token in channel_tokens:
-            reply = memcache.get(chan_token.client_id)
-            memcache.delete(chan_token.client_id)
+            reply = memcache.get(chan_token.id)
+            memcache.delete(chan_token.id)
 
             if not reply:
                 chan_token.key.delete()
             else:
                 good_channel_tokens.append(chan_token)
-                good_channel_tokens_ids.append(chan_token.client_id)
+                good_channel_tokens_ids.append(chan_token.id)
 
-        for chan_token in good_channel_tokens:
-            channel.send_message(chan_token.client_id, json.dumps({'channel_op': 'valid_users',
-                                                                   'users': good_channel_tokens_ids}))
+        for channel_token in good_channel_tokens:
+            channel_token.send_message({'channel_op': 'valid_users', 'users': good_channel_tokens_ids})
+
     except Exception as e:
         log.error('Error ping channel users: %s', e.message)
     finally:
@@ -1150,7 +1151,7 @@ class ChannelPingHandler(AuthorizationRequestHanlder):
     def post(self):
         self.get_channel_token()
         if self.user_channel_token:
-            memcache.set(self.user_channel_token.client_id, 'here', time=60*5)
+            memcache.set(self.user_channel_token.id, 'here', time=60*5)
 
 
 class SearchLibraryHandler(AuthorizationRequestHanlder):

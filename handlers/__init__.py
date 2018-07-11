@@ -2,6 +2,21 @@ import setup_paths
 setup_paths.fix_path()
 import webapp2
 
+
+import requests_toolbelt.adapters.appengine
+requests_toolbelt.adapters.appengine.monkeypatch()
+
+
+import firebase_admin
+from firebase_admin import credentials
+
+
+cred = credentials.Certificate("firebase-serviceAccountKey.json")
+firebase_admin.initialize_app(cred, {
+    'databaseURL': 'https://dragonspectra-dev.firebaseio.com'
+})
+
+
 from account import account_url_mapping
 from payment import payment_url_mapping
 from artifacts import artifact_url_mapping

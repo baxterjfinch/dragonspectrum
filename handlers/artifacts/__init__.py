@@ -10,8 +10,6 @@ from miscellaneous import *
 from selectedphrasing import *
 from webapp2 import Route
 
-from firetactoe import *
-
 
 artifact_url_mapping = [
     ('/?', ProjectHomeHandler),
@@ -79,9 +77,4 @@ artifact_url_mapping = [
     ('/channel/ping/?', ChannelPingHandler),
     ('/_ah/channel/connected/?', ChannelConnectHandler),
     ('/_ah/channel/disconnected/?', ChannelDisconnectedHandler),
-
-    Route('/move', FBTestMove, methods=['POST']),
-    Route('/delete', FBTestDelete, methods=['POST']),
-    Route('/opened', FBTestOpened, methods=['POST']),
-    Route('/fb', FBTestMainPage),
 ]

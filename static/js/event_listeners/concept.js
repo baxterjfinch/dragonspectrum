@@ -252,16 +252,6 @@ ConceptEventListener.activate = function (concept, notifyTVS, notifyServer, skip
 
     ConceptEventListener.link_btn.attr('data-clipboard-text', concept.getId() + '_' + Document.getCurrent().getId());
 
-    if (ConceptEventListener.clip_client != null)
-        ConceptEventListener.clip_client.destroy();
-    ConceptEventListener.clip_client = new ZeroClipboard(document.getElementById("copy_link"));
-    ConceptEventListener.clip_client.on('ready', function (readyEvent) {
-        ConceptEventListener.clip_client.on('aftercopy', function (event) {
-            Notify.alert('Concept Link ID Copied.');
-        });
-    });
-
-
     if (notifyTVS && TVS.inUse()) {
         concept.getTvsNode().activate();
         TVS.updateScrollPosition(concept);

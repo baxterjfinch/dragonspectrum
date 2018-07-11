@@ -102,11 +102,11 @@ class AuthorizationRequestHanlder(cerberus_handlers.AuthenticatedRequestHandler)
 
     def get_channel_token(self):
         if self.json_request:
-            client_id = self.json_request.get('client_id', None)
+            channel_id = self.json_request.get('channel_id', None)
         else:
-            client_id = self.request.get('client_id', None)
-        if client_id:
-            self.user_channel_token = ChannelToken.get_by_id(client_id)
+            channel_id = self.request.get('channel_id', None)
+        if channel_id:
+            self.user_channel_token = ChannelToken.get_by_id(channel_id)
 
     def get_user_channel_data(self):
         if not self.user_channel_token:
@@ -114,7 +114,7 @@ class AuthorizationRequestHanlder(cerberus_handlers.AuthenticatedRequestHandler)
         return {
             'username': self.user.username,
             'display_name': self.user.display_name,
-            'client_id': self.user_channel_token.client_id if self.user_channel_token else '',
+            'channel_id': self.user_channel_token.id if self.user_channel_token else '',
             'color': self.user_channel_token.color if self.user_channel_token else '',
             'concept': self.user_channel_token.concept.id() if self.user_channel_token.concept else '',
             'link_id': self.user_channel_token.link_id if self.user_channel_token.link_id else '',

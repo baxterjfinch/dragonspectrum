@@ -144,9 +144,9 @@ class AuthenticatedRequestHandler(webapp2.RequestHandler):
     strict_parsing = True
     
     """Should this Handler log requests as they come in?"""
-    log_requests = True
-    log_responses = True
-    log_headers = True
+    log_requests = False
+    log_responses = False
+    log_headers = False
     
     """Instance variable populated with Python version of parsed JSON request body"""
     json_request = None

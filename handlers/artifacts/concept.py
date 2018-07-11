@@ -200,8 +200,7 @@ class ConceptHandler(AuthorizationRequestHanlder):
 
         parent_keys = Concept.ids_to_keys(parent_ids)
         parents = ndb.get_multi(parent_keys)
-        children_keys = []
-        num_of_children = 0
+        children = []
         first = True
         unprocessed_parent_ids = []
         index = -1
@@ -212,9 +211,8 @@ class ConceptHandler(AuthorizationRequestHanlder):
                 parent = Project.get_by_id(parent_keys[index].id())
                 if not parent:
                     continue
-            if first or len(parent.children) + num_of_children < max_return_size:
-                children_keys += parent.children
-                num_of_children += len(parent.children)
+            if first or len(parent.children) + len(children) < max_return_size:
+                children += parent.get_children()
             elif len(parent.children) > 0:
                 unprocessed_parent_ids.append(parent.key.id())
             if len(parent.children) == 0:
@@ -222,7 +220,6 @@ class ConceptHandler(AuthorizationRequestHanlder):
             first = False
 
         children_processed = []
-        children = ndb.get_multi(children_keys)
         dist_doc = project.distilled_document.id()
 
         for child in children:

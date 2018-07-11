@@ -12,7 +12,7 @@
                 <form role="form">
                     <div class="form-group">
                         <label for="url">URL</label>
-                        <input type="text" class="form-control" id="concept-share-url-url" disabled>
+                        <input type="text" class="form-control" id="concept-share-url-url" readonly>
                     </div>
                     <div class="checkbox">
                         <label>
@@ -37,7 +37,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" id="concept-share-url-copy-btn" class="btn btn-primary">Copy</button>
+                <button type="button" id="concept-share-url-copy-btn" data-clipboard-target="#concept-share-url-url" class="btn btn-primary copy-btn">Copy</button>
             </div>
         </div>
     </div>

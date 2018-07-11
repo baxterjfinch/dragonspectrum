@@ -256,7 +256,7 @@ html {
 }
 body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1.42857143;
   color: #333333;
   background-color: #ffffff;
@@ -1202,7 +1202,7 @@ pre code {
     width: 83.33333333%;
   }
   .col-lg-9 {
-    width: 70%;
+    width: 75%;
   }
   .col-lg-8 {
     width: 66.66666667%;
@@ -3649,7 +3649,7 @@ textarea.input-group-sm > .input-group-btn > .btn {
   position: relative;
   min-height: 50px;
   margin-bottom: 20px;
-  border: 0px solid transparent;
+  border: 1px solid transparent;
 }
 .navbar:before,
 .navbar:after {
@@ -3669,7 +3669,7 @@ textarea.input-group-sm > .input-group-btn > .btn {
 }
 @media (min-width: 1235px) {
   .navbar {
-    border-radius: 0px;
+    border-radius: 4px;
   }
 }
 .navbar-header:before,

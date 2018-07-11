@@ -630,29 +630,19 @@ class ProjectNode(SecureArtifact):
         return self.has_attr('img', doc_key)
 
     def num_of_children(self, user=None):
-        if user is None:
-            return len(self.children)
-        else:
-            count = 0
-            children = ndb.get_multi(self.children)
-
-            for child in children:
-                if child and child.has_permission(user, 'read'):
-                    count += 1
-
-            return count
+        return len(self.get_children(user=user))
 
     def get_concept_index(self, concept):
         index = 0
-        for child in self.children:
-            if child.id() == concept.key.id():
+        for child in self.get_children():
+            if child.id == concept.key.id():
                 break
             index += 1
         return index
 
     def get_concept_index_adjusted(self, user, concept):
         index = 0
-        children = ndb.get_multi(self.children)
+        children = self.get_children()
 
         for child in children:
             if child is not None:
@@ -665,32 +655,34 @@ class ProjectNode(SecureArtifact):
         return index
 
     def get_next_sibling_for_col_user(self, con, user):
-        index = self.children.index(con.key)
-        if index == len(self.children) - 1:
+        children = self.get_children()
+        index = children.index(con)
+
+        if index == len(children) - 1:
             return None
 
         index += 1
-        while not self.children[index].get().has_permission(user, 'read'):
+        while not children[index].has_permission(user, 'read'):
             index += 1
-
-            if index == len(self.children):
+            if index == len(children):
                 return None
 
-        return self.children[index].get()
+        return children[index]
 
     def get_prev_sibling_for_col_user(self, con, user):
-        index = self.children.index(con.key)
+        children = self.get_children()
+        index = children.index(con)
         if index == 0:
             return None
 
         index -= 1
-        while not self.children[index].get().has_permission(user, 'read'):
+        while not children[index].has_permission(user, 'read'):
             index -= 1
 
             if index <= 0:
                 return None
 
-        return self.children[index].get()
+        return children[index]
 
     def adjust_col_index(self, user, index, parent=None):
         if not parent:
@@ -701,7 +693,7 @@ class ProjectNode(SecureArtifact):
 
         adjusted_index = index
 
-        children = ndb.get_multi(parent.children)
+        children = parent.get_children()
         for child in children:
             if child == self:
                 break
@@ -712,8 +704,10 @@ class ProjectNode(SecureArtifact):
         return adjusted_index
 
     def adjust_index(self, index, request_user):
+        children = self.get_children()
+
         if index is None:
-            index = len(self.children) + 1
+            index = len(children) + 1
 
         new_index = 0
         cur_index = 0
@@ -745,6 +739,13 @@ class ProjectNode(SecureArtifact):
         else:
             return self.project.get()
 
+    def _check_children_dups(self):
+        if len(self.children) != len(set(self.children)):
+            cs = set()
+            self.children = [x for x in self.children if not (x in cs or cs.add(x))]
+            return True
+        return False
+
     def get_children(self, user=None):
         children = ndb.get_multi(self.children)
 
@@ -773,16 +774,8 @@ class ProjectNode(SecureArtifact):
 
         del d['children']
 
-        children = ndb.get_multi(self.children)
-        for child in children:
-            if child is None:
-                continue
-
-            if child.has_permission_read(user):
-                d['is_parent'] = True
-                break
-        else:
-            d['is_parent'] = False
+        children = self.get_children(user)
+        d['is_parent'] = len(children) > 0
 
         d['attributes'] = []
 

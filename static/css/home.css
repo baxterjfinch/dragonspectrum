@@ -347,19 +347,19 @@ a {
   color: #77b2ff;
 }
 
-// Mixin itself
-@mixin clearfix() {
-  &::after {
-    display: block;
-    content: "";
-    clear: both;
-  }
-}
+/*!* Mixin itself *!*/
+/*@mixin clearfix() {*/
+  /*&::after {*/
+    /*display: block;*/
+    /*content: "";*/
+    /*clear: both;*/
+  /*}*/
+/*}*/
 
-// Usage as a mixin
-.element {
-  @include clearfix;
-}
+/*!* Usage as a mixin *!*/
+/*.element {*/
+  /*@include clearfix;*/
+/*}*/
 
 .main-title-header {
   background-color: #ededed !important;
@@ -462,8 +462,8 @@ a {
 
 .profile-form-class {
     padding: 50px;
+}
 
 .project-table-side tbody tr:hover td, .table-hover tbody tr:hover th {
   background-color: pink !important;
 }
-

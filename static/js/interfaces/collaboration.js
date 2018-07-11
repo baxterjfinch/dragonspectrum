@@ -5,12 +5,11 @@ CollaborationTable._count_badge = $('#coll_count_badge');
 
 CollaborationTable.initialize = function () {
     var user;
-    var client_id = Channel.getClientId();
     comms.get({
         url: ARTIFACT_URLS.channel_users,
         success: function (users) {
             for (var i = 0; i < users.length; i++) {
-                if (users[i].client_id == client_id)
+                if (users[i].channel_id == Channel.channel_id)
                     continue;
                 user = new CollaborationUser();
                 user.initialize(users[i]);
@@ -77,12 +76,12 @@ CollaborationTable.addUser = function (user, notify) {
     }
 };
 
-CollaborationTable.validUsers = function (client_ids) {
+CollaborationTable.validUsers = function (channel_ids) {
     var remove_users = [];
     var users = CollaborationUser.getAll();
 
     for (var i = 0; i < users.length; i++) {
-        if (client_ids.indexOf(users[i].getClientId()) < 0)
+        if (channel_ids.indexOf(users[i].channel_id) < 0)
             remove_users.push(users[i])
     }
 

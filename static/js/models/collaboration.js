@@ -1,23 +1,23 @@
 function CollaborationUser () {
+    this.channel_id = null;
     this.username = null;
     this.display_name = null;
-    this.client_id = null;
     this.color = null;
 
     this.table_row = null;
 }
 
 CollaborationUser.users = [];
-CollaborationUser.users_by_client_id = {};
+CollaborationUser.users_by_channel_id = {};
 CollaborationUser.users_by_concept_id = {};
 
 CollaborationUser.prototype.initialize = function (data) {
     console.debug('New Collab User: %O', data);
+    this.channel_id = data.channel_id;
     this.username = data.username;
     this.display_name = data.display_name;
-    this.client_id = data.client_id;
     this.color = data.color;
-    if (data.link_id && data.link_id != '') {
+    if (data.link_id && data.link_id !== '') {
         this.concept = Concept.get(data.link_id);
         this.concept_id = data.link_id;
     } else {
@@ -26,8 +26,8 @@ CollaborationUser.prototype.initialize = function (data) {
     }
     this.document = Document.get(data.document);
 
-    this.color_class_span = 'collab-' + this.client_id + '-color-span';
-    this.color_class_image = 'collab-' + this.client_id + '-color-image';
+    this.color_class_span = 'collab-' + this.channel_id + '-color-span';
+    this.color_class_image = 'collab-' + this.channel_id + '-color-image';
 
     var head = $("head");
 
@@ -60,14 +60,6 @@ CollaborationUser.prototype.setDisplayName = function (display_name) {
 
 CollaborationUser.prototype.getDisplayName = function () {
     return this.display_name;
-};
-
-CollaborationUser.prototype.setClientId = function (id) {
-    this.client_id = id;
-};
-
-CollaborationUser.prototype.getClientId = function () {
-    return this.client_id;
 };
 
 CollaborationUser.prototype.setColor = function (color) {
@@ -127,7 +119,7 @@ CollaborationUser.prototype.getTableRow = function () {
 };
 
 CollaborationUser.prototype.activateConcept = function () {
-    if (this.getDocument() != Document.getCurrent())
+    if (this.getDocument() !== Document.getCurrent())
             return;
 
     var concept = this.getConcept();
@@ -184,8 +176,8 @@ CollaborationUser.prototype.deactivateConcept = function () {
     }
 };
 
-CollaborationUser.get = function (client_id) {
-    return CollaborationUser.users_by_client_id[client_id];
+CollaborationUser.get = function (channel_id) {
+    return CollaborationUser.users_by_channel_id[channel_id];
 } ;
 
 CollaborationUser.getAll = function () {
@@ -194,7 +186,7 @@ CollaborationUser.getAll = function () {
 
 CollaborationUser.add = function (user) {
     CollaborationUser.users.push(user);
-    CollaborationUser.users_by_client_id[user.getClientId()] = user;
+    CollaborationUser.users_by_channel_id[user.channel_id] = user;
     var concept = user.getConcept();
     if (concept) {
         if (CollaborationUser.users_by_concept_id[concept.getId()])
@@ -209,8 +201,8 @@ CollaborationUser.remove = function (user) {
     if (index >= 0)
         CollaborationUser.users.splice(index, 1);
 
-    if (CollaborationUser.users_by_client_id[user.getClientId()] != null)
-        delete CollaborationUser.users_by_client_id[user.getClientId()]
+    if (CollaborationUser.users_by_channel_id[user.channel_id] != null)
+        delete CollaborationUser.users_by_channel_id[user.channel_id]
 };
 
 CollaborationUser.activateAll = function () {

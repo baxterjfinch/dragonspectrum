@@ -96,10 +96,44 @@ class Concept(ProjectNode):
             par = par.get().parent
         return depth
 
+    def get_children(self, user=None):
+        q = Concept.query()
+        q = q.filter(Concept.parent == self.key)
+
+        children_by_id = {}
+        for child in q.iter():
+            children_by_id[child.id] = child
+
+        changed = self._check_children_dups()
+        children = []
+        for child_key in self.children:
+            c = children_by_id.get(child_key.id())
+            if c is not None:
+                children.append(c)
+                del children_by_id[child_key.id()]
+            else:
+                self.children.remove(child_key)
+                changed = True
+
+        children = children + children_by_id.values()
+
+        if changed:
+            self.put()
+
+        if not user:
+            return children
+        c = []
+        for child in children:
+            if child and child.has_permission_read(user):
+                c.append(child)
+        return c
+
     # noinspection PyUnusedLocal
     def set_parent(self, new_parent, next_sibling, user, link=None):
         if next_sibling:
             index = new_parent.children.index(next_sibling.key)
+            if index < 0:
+                index = len(new_parent.children)
             if (self.parent == new_parent.key) or (self.parent is None and new_parent.node_type == 'Project'):
                 self_index = new_parent.get_concept_index(self) + 1
                 if self_index < index:
@@ -228,7 +262,7 @@ class Concept(ProjectNode):
             for link in links:
                 link.delete(user, False, True)
 
-        children_list = ndb.get_multi(self.children)
+        children_list = self.get_children()
         for child in children_list:
             if child.rdelete(user, indexes):
                 child.key.delete()
@@ -513,8 +547,8 @@ class Concept(ProjectNode):
         self.parent_perms.append(parent.permissions)
         self.put()
 
-        if len(self.children) > 0:
-            children = ndb.get_multi(self.children)
+        children = self.get_children()
+        if len(children) > 0:
             for child in children:
                 child.update_parent_permissions(self)
 
@@ -585,7 +619,7 @@ class Concept(ProjectNode):
                     self.attributes.remove(a.key)
                     a.key.delete()
 
-        children = ndb.get_multi(self.children)
+        children = self.get_children()
         for child in children:
             child.remove_link_setting(document_ids)
             child.put()
@@ -629,7 +663,7 @@ class Concept(ProjectNode):
         for phr in phrasings:
             phr.index(indexes, concept=self)
         if index_children:
-            children = ndb.get_multi(self.children)
+            children = self.get_children()
             for child in children:
                 if child:
                     child.index_phrasings(indexes, index_children=index_children)

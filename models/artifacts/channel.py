@@ -3,23 +3,30 @@ import server
 import random
 from datetime import datetime, timedelta
 from artifact import Artifact
+
+from firebase_admin import db
 from google.appengine.ext import ndb
-from google.appengine.api import channel
 from colour.colour import make_color_factory, HSL_equivalence, RGB_color_picker
 
 
 class ChannelToken(Artifact):
-    token = ndb.StringProperty()
     user = ndb.KeyProperty()
     color = ndb.StringProperty()
     concept = ndb.KeyProperty()
     link_id = ndb.StringProperty()
     document = ndb.KeyProperty()
-    connected = ndb.BooleanProperty(default=False)  # Tell if the client ever connected not if they are connected
+    connected = ndb.BooleanProperty(default=False)
 
-    @property
-    def client_id(self):
-        return self.key.id()
+    def send_message(self, message):
+        return ChannelToken.broadcast_message([self], message)
+
+    def set_status(self, value):
+        status = db.reference(path='collaboration/' + self.user.id() + '/' + self.id + '/status')
+        status.set(True)
+
+    def check_connection_status(self):
+        status = db.reference(path='collaboration/' + self.user.id() + '/' + self.id + '/status')
+        return status.get()
 
     @staticmethod
     def generate_color():
@@ -34,29 +41,61 @@ class ChannelToken(Artifact):
                              luminance=server.config.channel_user_luminance_adjustment).hex_l)
 
     @staticmethod
-    def get_by_project_key(key, request_user_token=None):
-        channel_tokens = ChannelToken.query(ChannelToken.project == key).fetch()
+    def delete_user_old_channels(user):
+        deleted_channels = []
+        if user is not None:
+            user_channels = db.reference(path='collaboration/' + user.user.id()).get()
+            for channel_id in user_channels:
+                channel = db.reference(path='collaboration/' + user.user.id() + '/' + channel_id)
+                if not channel.get().get('status', False):
+                    channel.delete()
+                    deleted_channels.append(channel_id)
+        return deleted_channels
+
+    @staticmethod
+    def get_by_project_key(pro_key, request_user_token=None):
+        deleted_channels = ChannelToken.delete_user_old_channels(request_user_token)
+        channel_tokens = ChannelToken.query(ChannelToken.project == pro_key).fetch()
 
         cut_off_time1 = datetime.now() - timedelta(hours=2, minutes=15)
         cut_off_time2 = datetime.now() - timedelta(minutes=3)
 
         valid_tokens = []
-        invalid_tokens = []
+        invalid_token = []
+        invalid_token_keys = []
 
         for channel_token in channel_tokens:
-            # Remove expired tokens
-            if request_user_token and request_user_token.client_id == channel_token.client_id:
+            if request_user_token and request_user_token.id == channel_token.id:
                 continue
-            elif channel_token.created_ts < cut_off_time1:
-                invalid_tokens.append(channel_token.key)
 
-            # Remove token that were never used older than 3 minutes
-            elif not channel_token.connected and channel_token.created_ts < cut_off_time2:
-                invalid_tokens.append(channel_token.key)
+            # Remove expired tokens
+            elif channel_token.id in deleted_channels:
+                invalid_token.append(channel_token)
+                invalid_token_keys.append(channel_token.key)
+
+            elif channel_token.created_ts < cut_off_time1:
+                invalid_token.append(channel_token)
+                invalid_token_keys.append(channel_token.key)
+
+            elif not channel_token.check_connection_status() and channel_token.created_ts < cut_off_time2:
+                invalid_token.append(channel_token)
+                invalid_token_keys.append(channel_token.key)
+
             else:
                 valid_tokens.append(channel_token)
 
-        ndb.delete_multi(invalid_tokens)
+        deleted_channels = set(deleted_channels)
+        for channel_token in invalid_token:
+            deleted_channels.add(channel_token.id)
+
+        vt = valid_tokens
+        if request_user_token is not None:
+            vt = vt + [request_user_token]
+        for cid in deleted_channels:
+            ChannelToken.broadcast_message(vt, {'channel_op': 'remove_user', 'user': cid})
+
+        ndb.delete_multi(invalid_token_keys)
+
         return valid_tokens
 
     @staticmethod
@@ -82,4 +121,5 @@ class ChannelToken(Artifact):
             message = json.dumps(message)
 
         for channel_token in channel_tokens:
-            channel.send_message(channel_token.client_id, message)
+            root = db.reference(path='collaboration/' + channel_token.user.id())
+            root.child(channel_token.id).push(message)
