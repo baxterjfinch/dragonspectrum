@@ -1993,7 +1993,7 @@ Jmpress END
 }
 
 .main-document-viewer {
-    max-height: 400px !important;
+    max-height: 900px !important;
     margin-top: 2%;
 }
 
@@ -2054,3 +2054,29 @@ Jmpress END
     font-size: 12px;
     overflow-y: scroll;
 }
+
+.right-menu-dropper {
+    text-align: right;
+    float: right;
+}
+
+.dropdown-menu-right {
+    right: 0;
+    left: -150px;
+    height: 800px;
+    position: absolute;
+    top: 100%;
+    z-index: 1000;
+    display: none;
+    float: left;
+    min-width: 160px;
+    padding: 5px 0;
+    margin: 2px 0 0;
+    list-style: none;
+    font-size: 14px;
+}
+
+.right-side-bar {
+
+}
+
