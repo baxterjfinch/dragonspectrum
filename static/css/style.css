@@ -1955,13 +1955,12 @@ Jmpress END
 }
 
 .document-pane {
-    margin-top: -50px;
+    margin-top: -130px;
 }
 .panel-titles {
     color: black;
     text-align: center;
-    display: inline;
-    margin-left: 50%;
+    display: block;
 }
 
 .profile-page-container {
@@ -2033,6 +2032,7 @@ Jmpress END
 }
 .body-left-container {
     float: left;
+    padding-top: 40px;
 }
 
 .body-right-container {
@@ -2054,15 +2054,25 @@ Jmpress END
     overflow-y: scroll;
 }
 
-.right-menu-dropper {
+.profile-menu-dropper {
     text-align: right;
+    position: absolute;
     float: right;
+    right: 25px;
+    bottom: 5px;
 }
 
+.reply-menu-dropper {
+    text-align: right;
+    position: absolute;
+    float: right;
+    right: 100px;
+    bottom: 5px;
+}
 .dropdown-menu-right {
     right: 0;
-    left: -150px;
-    height: 800px;
+    left: -350px;
+    height: 500px;
     position: absolute;
     top: 100%;
     z-index: 1000;

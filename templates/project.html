@@ -8,7 +8,8 @@
     <link href="/css/summernote.css" rel="stylesheet">
     <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
-
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.css" rel="stylesheet">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.js"></script>
 </head>
 
 <body>
@@ -145,147 +146,143 @@
 </div>
 
 <div class="container-fluid body-row">
-        <div class="body-left-container jumbotron profile-jumbotron profile-jumbotron-left col-md-2">
-                <ul class="nav nav-tabs" id="myTab" role="tablist">
-                  <li class="nav-item">
-                    <a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Projects</a>
-                  </li>
-                  <li class="nav-item active">
-                    <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Concepts</a>
-                  </li>
-                </ul>
-                <div class="tab-content" id="myTabContent">
-                  <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
-                      <table id="my_project_table_side_ranked" class="table table table-hover table-condensed project-table-side">
-                          <thead>
-                              <tr>
-                                  <th class="project-voter"></th>
-                                  <th class="project-score">Score</th>
-                                  <th class="project-title" id="sidetitle">Title</th>
-                                  <th class="project-owner">Owner</th>
-                                  <th class="project-date">Date Created</th>
-                              </tr>
-                          </thead>
-                          <tbody id="my-project-table-body-ranked">
-                          </tbody>
-                      </table>
+    <div class="body-left-container col-md-3">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Projects</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Concepts</a>
+          </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+          <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
+              <table id="my_project_table_side_ranked" class="table table table-hover table-condensed project-table-side">
+                  <thead>
+                      <tr>
+                          <th class="project-voter"></th>
+                          <th class="project-score">Score</th>
+                          <th class="project-title" id="sidetitle">Title</th>
+                          <th class="project-owner">Owner</th>
+                          <th class="project-date">Date Created</th>
+                      </tr>
+                  </thead>
+                  <tbody id="my-project-table-body-ranked">
+                  </tbody>
+              </table>
 
-                  </div>
-                  <div class="tab-pane fade active in" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+          </div>
+          <div class="tab-pane fade active in" id="profile" role="tabpanel" aria-labelledby="profile-tab">
 
-                      <div id="tvs-wrapper" class="hidden-xs col-sm-4 col-md-3 col-lg-3">
+              <div id="tvs-wrapper" class="hidden-xs col-sm-4 col-md-3 col-lg-3">
 
-                          <div id="tvs" class="container">
-                            <div id="tvs-toolbar" style="margin-bottom: 2px; text-align: center;">
+                  <div id="tvs">
+                    <div id="tvs-toolbar" style="margin-bottom: 2px; text-align: center;">
 
-                              <div id="tvs-buttons" class="btn-group">
-                                  <button type="button" class="btn btn-xs" id="tvs-tool-bar-new" data-toggle="tooltip" data-placement="top" data-container="body" title="New Concept &lt;Enter&gt;"><i class="fa fa-plus"></i></button>
-                                  <button type="button" class="btn btn-xs" id="tvs-tool-bar-del" data-toggle="tooltip" data-placement="top" data-container="body" title="Delete Concept &lt;Delete&gt;"><i class="fa fa-minus"></i></button>
-                                  <button type="button" class="btn btn-xs" id="tvs-tool-bar-indent" data-toggle="tooltip" data-placement="top" data-container="body" title="Indent Concept &lt;Tab&gt;"><i class="fa fa-arrow-right"></i></button>
-                                  <button type="button" class="btn btn-xs" id="tvs-tool-bar-outdent" data-toggle="tooltip" data-placement="top" data-container="body" title="Outdent Concept &lt;Shift-Tab&gt;"><i class="fa fa-arrow-left"></i></button>
-                                  <button type="button" class="btn btn-xs" id="tvs-tool-bar-move-up" data-toggle="tooltip" data-placement="top" data-container="body" title="Move Concept Up &lt;Ctrl+Up&gt;"><i class="fa fa-arrow-up"></i></button>
-                                  <button type="button" class="btn btn-xs" id="tvs-tool-bar-move-down" data-toggle="tooltip" data-placement="top" data-container="body" title="Move Concept Down &lt;Ctrl+Down&gt;"><i class="fa fa-arrow-down"></i></button>
-                                  <button type="button" class="btn btn-xs" id="tvs-tool-bar-expand" data-toggle="tooltip" data-placement="top" data-container="body" title="Expand Children"><i class="fa fa-angle-double-down"></i></button>
-                                  <button type="button" class="btn btn-xs" id="tvs-tool-bar-collapse" data-toggle="tooltip" data-placement="top" data-container="body" title="Collapse Children"><i class="fa fa-angle-double-up"></i></button>
-                                  <button type="button" class="btn btn-xs" id="tvs-tool-bar-security" data-toggle="tooltip" data-placement="top" data-container="body" title="Project Security"><i id="project-security-icon" class="fa fa-shield"></i></button>
-                              </div>
-                            </div>
-                            <br>
-                        <div id="scrollbar-tv">
-                            <div id="loading_tree_status"></div>
-                            <div id="tree"></div>
-                        </div>
-
+                      <div id="tvs-buttons" class="btn-group">
+                          <button type="button" class="btn btn-xs" id="tvs-tool-bar-new" data-toggle="tooltip" data-placement="top" data-container="body" title="New Concept &lt;Enter&gt;"><i class="fa fa-plus"></i></button>
+                          <button type="button" class="btn btn-xs" id="tvs-tool-bar-del" data-toggle="tooltip" data-placement="top" data-container="body" title="Delete Concept &lt;Delete&gt;"><i class="fa fa-minus"></i></button>
+                          <button type="button" class="btn btn-xs" id="tvs-tool-bar-indent" data-toggle="tooltip" data-placement="top" data-container="body" title="Indent Concept &lt;Tab&gt;"><i class="fa fa-arrow-right"></i></button>
+                          <button type="button" class="btn btn-xs" id="tvs-tool-bar-outdent" data-toggle="tooltip" data-placement="top" data-container="body" title="Outdent Concept &lt;Shift-Tab&gt;"><i class="fa fa-arrow-left"></i></button>
+                          <button type="button" class="btn btn-xs" id="tvs-tool-bar-move-up" data-toggle="tooltip" data-placement="top" data-container="body" title="Move Concept Up &lt;Ctrl+Up&gt;"><i class="fa fa-arrow-up"></i></button>
+                          <button type="button" class="btn btn-xs" id="tvs-tool-bar-move-down" data-toggle="tooltip" data-placement="top" data-container="body" title="Move Concept Down &lt;Ctrl+Down&gt;"><i class="fa fa-arrow-down"></i></button>
+                          <button type="button" class="btn btn-xs" id="tvs-tool-bar-expand" data-toggle="tooltip" data-placement="top" data-container="body" title="Expand Children"><i class="fa fa-angle-double-down"></i></button>
+                          <button type="button" class="btn btn-xs" id="tvs-tool-bar-collapse" data-toggle="tooltip" data-placement="top" data-container="body" title="Collapse Children"><i class="fa fa-angle-double-up"></i></button>
+                          <button type="button" class="btn btn-xs" id="tvs-tool-bar-security" data-toggle="tooltip" data-placement="top" data-container="body" title="Project Security"><i id="project-security-icon" class="fa fa-shield"></i></button>
                       </div>
                     </div>
-                  </div>
+                    <br>
+                <div id="scrollbar-tv">
+                    <div id="loading_tree_status"></div>
+                    <div id="tree"></div>
                 </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
     </div>
-    <div class="col-md-8">
-            <div class="col-md-12">
-                <h5 class="lead panel-titles">{{ project.title }}</h5>
-                    <div class="voting-buttons-div">
-                          <button type="button" class="btn btn-secondary btn-sm voting-buttons" data-toggle="button" aria-pressed="false" autocomplete="off" id="voterrrrr_up">
-                            <i class="fas fa-chevron-circle-up"></i>
-                          </button>
-                            <h4 id="pscorer"></h4>
-                          <button type="button" class="btn btn-secondary btn-sm voting-buttons" data-toggle="button" aria-pressed="false" autocomplete="off" id="voter_down">
-                            <i class="fas fa-chevron-circle-down"></i>
-                          </button>
+    <div class="col-md-9">
+            <h5 class="lead panel-titles">{{ project.title }}</h5>
+                <div class="voting-buttons-div">
+                      <button type="button" class="btn btn-secondary btn-sm voting-buttons" data-toggle="button" aria-pressed="false" autocomplete="off" id="voterrrrr_up">
+                        <i class="fas fa-chevron-circle-up"></i>
+                      </button>
+                        <h4 id="pscorer"></h4>
+                      <button type="button" class="btn btn-secondary btn-sm voting-buttons" data-toggle="button" aria-pressed="false" autocomplete="off" id="voter_down">
+                        <i class="fas fa-chevron-circle-down"></i>
+                      </button>
+                </div>
+                <div id="right-pane" class="col-md-12 document-pane" style="padding: 10px;">
+                <!-- Doc Tabs -->
+                    <div class="col-lg-* project-panel-header">
+                        <div id="dvs-tabs" class="tabbable">
+                            <ul class="nav nav-tabs" id="document_tab"></ul>
+                        </div>
                     </div>
-                    <div id="right-pane" class="col-md-12 document-pane" style="padding: 10px;">
-                        <!-- Doc Tabs -->
-                            <div class="col-lg-* project-panel-header">
-                                <div id="dvs-tabs" class="tabbable">
-                                    <ul class="nav nav-tabs" id="document_tab"></ul>
+                    <!-- DVs -->
+                    <div class="col-lg-12">
+                        <div id="scrollbar-dv" class="dvs main-document-viewer">
+                            <div id="summary-well" class="well hidden">
+                                <h4 id="summary-heading">Summary</h4>
+                                <span> <span id="summary-current-word-count">0</span> of <span id="summary-word-count">250</span> words</span>
+                                <span id="summary-progress" class="color-pulse"> Loading, Please wait... <i class="fa fa-spinner fa-spin"></i></span>
+                                <div id="summary-slider" class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all">
+                                    <span id="summary-slider-handle" class="slider-handle ui-slider-handle ui-state-default ui-corner-all" tabindex="0" style="left: 20%;"></span>
+                                    <div id="summary-slider-progress"></div>
+                                </div>
+                                <div id="summary-btn">
+                                    <button id="summary-copy-btn" class="btn btn-default btn-xs summary-btn">Copy</button>
+    {#                                <button class="btn btn-default btn-xs summary-btn">Share</button>#}
                                 </div>
                             </div>
-
-                        <!-- DVs -->
-                            <div class="col-lg-12">
-                                <div id="scrollbar-dv" class="dvs main-document-viewer">
-                                    <div id="summary-well" class="well hidden">
-                                        <h4 id="summary-heading">Summary</h4>
-                                        <span> <span id="summary-current-word-count">0</span> of <span id="summary-word-count">250</span> words</span>
-                                        <span id="summary-progress" class="color-pulse"> Loading, Please wait... <i class="fa fa-spinner fa-spin"></i></span>
-                                        <div id="summary-slider" class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all">
-                                            <span id="summary-slider-handle" class="slider-handle ui-slider-handle ui-state-default ui-corner-all" tabindex="0" style="left: 20%;"></span>
-                                            <div id="summary-slider-progress"></div>
+                            <div id="presentation-well" class="well hidden">
+                                <h4 id="presentation-heading">Presentation <small>Beta</small></h4>
+                                <span>
+                                        <div class="pull-right">
+                                            <span id="pres-position">Slide: <span id="current-slide-num">0</span> of <span class="presentation-current-slide-count">0</span></span>
+                                            <a id="presentation-settings-button" class="btn btn-xs btn-default" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Presentation Settings"><i class="fa fa-sliders"></i></a>
+                                            <a id="presentation-fullscreen-button" class="btn btn-xs btn-default" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Presentation Full Screen"><i class="fa fa-play"></i></a>
+                                            <a class="btn btn-xs btn-default disabled"><i class="fa fa-share-alt"></i></a>
                                         </div>
-                                        <div id="summary-btn">
-                                            <button id="summary-copy-btn" class="btn btn-default btn-xs summary-btn">Copy</button>
-            {#                                <button class="btn btn-default btn-xs summary-btn">Share</button>#}
-                                        </div>
-                                    </div>
-                                    <div id="presentation-well" class="well hidden">
-                                        <h4 id="presentation-heading">Presentation <small>Beta</small></h4>
-                                        <span>
-                                                <div class="pull-right">
-                                                    <span id="pres-position">Slide: <span id="current-slide-num">0</span> of <span class="presentation-current-slide-count">0</span></span>
-                                                    <a id="presentation-settings-button" class="btn btn-xs btn-default" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Presentation Settings"><i class="fa fa-sliders"></i></a>
-                                                    <a id="presentation-fullscreen-button" class="btn btn-xs btn-default" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Presentation Full Screen"><i class="fa fa-play"></i></a>
-                                                    <a class="btn btn-xs btn-default disabled"><i class="fa fa-share-alt"></i></a>
-                                                </div>
+                                </span>
+                                <div id="presentation-settings">
+                                    <div>
+                                        <i class="fa fa-hand-o-right"></i> Generated <span class="presentation-current-slide-count">0</span> of <span class="presentation-slide-count">15</span> requested slides with
+                                        <span id="presentation-bullet-count">
+                                            <span id="presentation-slider-bullet-min"></span> to <span id="presentation-slider-bullet-max"></span> bullets per slide.
                                         </span>
-                                        <div id="presentation-settings">
-                                            <div>
-                                                <i class="fa fa-hand-o-right"></i> Generated <span class="presentation-current-slide-count">0</span> of <span class="presentation-slide-count">15</span> requested slides with
-                                                <span id="presentation-bullet-count">
-                                                    <span id="presentation-slider-bullet-min"></span> to <span id="presentation-slider-bullet-max"></span> bullets per slide.
-                                                </span>
-                                            </div>
+                                    </div>
 
-                                            <div>
-                                                <div id="presentation-settings-slides" class="row">
-                                                    <div class="col-sm-1">Slides</div>
-                                                    <div id="presentation-slider" class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all col-sm-10">
-                                                        <span id="presentation-slider-handle" class="slider-handle ui-slider-handle ui-state-default ui-corner-all" tabindex="0" style="left: 20%;"></span>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row">
-                                                    <div class="col-sm-1">Bullets</div>
-                                                    <div id="presentation-slider-bullet" class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all col-sm-10">
-                                                        <div id="presentation-slider-bullet-progress"></div>
-                                                    </div>
-                                                </div>
+                                    <div>
+                                        <div id="presentation-settings-slides" class="row">
+                                            <div class="col-sm-1">Slides</div>
+                                            <div id="presentation-slider" class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all col-sm-10">
+                                                <span id="presentation-slider-handle" class="slider-handle ui-slider-handle ui-state-default ui-corner-all" tabindex="0" style="left: 20%;"></span>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div id="document_text" class="document-text-class">
-                                        <div class="tab-content dvs-tab dvs-anno-margin" id="document_tab_content">
+
+                                        <div class="row">
+                                            <div class="col-sm-1">Bullets</div>
+                                            <div id="presentation-slider-bullet" class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all col-sm-10">
+                                                <div id="presentation-slider-bullet-progress"></div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            <div id="document_text" class="document-text-class">
+                                <div class="tab-content dvs-tab dvs-anno-margin" id="document_tab_content">
+                                </div>
+                            </div>
+                        </div>
                     </div>
-             </div>
-
+                </div>
+         </div>
     </div>
-    <div class="col-md-2 right-side-bar">
-        <div class="btn-group dropleft right-menu-dropper">
+        <div class="btn-group dropup profile-menu-dropper">
           <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Dropleft
+            Profile
           </button>
           <div class="dropdown-menu dropdown-menu-right">
             <ul class="nav nav-tabs" id="myTabs" role="tablist">
@@ -311,10 +308,19 @@
                     test
                   </div>
                 </div>
-          </div>
+            </div>
         </div>
 
-    </div>
+        <div class="btn-group dropup reply-menu-dropper">
+          <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Reply
+          </button>
+          <div class="dropdown-menu dropdown-menu-right">
+            <div id="summernote">Hello Summernote</div>
+
+
+            </div>
+        </div>
 </div>
 
 <!-- Modals -->
@@ -399,6 +405,10 @@
     window.onload = function () {
         initialize(server_data);
     };
+
+    $(document).ready(function() {
+        $('#summernote').summernote();
+    });
 </script>
 </body>
 </html>
